@@ -1,0 +1,74 @@
+<form id="editForm" name="editForm" class="layui-form"  action="/sys/systemVersionEdit.html">
+	<input type="hidden" name="id"  th:value="${systemVersion}?${systemVersion.id}"/>
+	<div class="layui-form-item">
+		<div class="layui-inline">		
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-inline">		
+			<label class="layui-form-label">版本名称</label>
+			<div class="layui-input-inline">
+				<input type="text" name="name" th:value="${systemVersion}?${systemVersion.name}:''" class="layui-input" lay-verify="required" placeholder="请输入版本名称"/>
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-inline">		
+			<label class="layui-form-label">版本编号</label>
+			<div class="layui-input-inline">
+				<input type="text" name="code" th:value="${systemVersion}?${systemVersion.code}:''" class="layui-input" lay-verify="required" placeholder="请输入版本编号"/>
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-inline">		
+			<label class="layui-form-label">下载地址</label>
+			<div class="layui-input-inline">
+				<input type="text" name="resourceUrl" th:value="${systemVersion}?${systemVersion.resourceUrl}:''" class="layui-input" lay-verify="required" placeholder="请输入下载地址"/>
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-inline">		
+			<label class="layui-form-label">发布时间</label>
+			<div class="layui-input-inline">
+				<input type="text" name="releaseTime" th:value="${systemVersion}?${#dates.format(systemVersion.releaseTime,'yyyy-MM-dd HH:mm:ss')}:''" class="layui-input" id="releaseTime" lay-verify="required" placeholder="请输入下载地址"/>
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-inline">		
+			<label class="layui-form-label">版本描述</label>
+			<div class="layui-input-inline">
+				<textarea placeholder="请输入版本描述" class="layui-textarea" id="description" name="description" th:text="${systemVersion}?${systemVersion.description}:''" style="width: 413px;"></textarea>
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-form-item">
+			<div class="layui-input-block">
+				<button class="layui-btn" lay-submit="" lay-filter="editForm">立即提交</button>
+			    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+		    </div>
+		</div>
+	</div>
+</form>
+<script>
+      layui.use(['form', 'laydate'], function(){
+   	   var form = layui.form
+   	   ,layer = layui.layer
+   	   ,laydate = layui.laydate;
+   	   //监听提交
+   	   form.on('submit(editForm)', function(data){
+   	     return true;
+   	   });
+   	});
+      layui.use('laydate', function(){
+        	  var laydate = layui.laydate;
+        	  //执行一个laydate实例
+        	  laydate.render({
+        	    elem: '#releaseTime' //指定元素
+        	    ,format: 'yyyy-MM-dd HH:mm:ss'
+        	  });
+        	});  
+</script>

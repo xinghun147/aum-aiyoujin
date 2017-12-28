@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<form class="layui-form">
+    <div class="layui-form-item">
+        <div class="layui-inline">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">标题</label>
+            <div class="layui-input-inline">
+                <input name="title" lay-verify="required" autocomplete="off" placeholder="请输入标题" class="layui-input"/>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">类型</label>
+            <div class="layui-input-inline">
+                <select name="type" id="type" lay-filter="type" lay-verify="required">
+                    <option value="">请选择消息类型</option>
+                    <option value="0" >黄金资讯</option>
+                    <option value="1" >系统公告</option>
+                    <option value="2" >营销活动</option>
+                    <!-- <option value="3"  th:selected="${message}ne null and ${message.type==3}">金豆收取</option> -->
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item" style="display:none;" id="toUsers">
+        <div class="layui-inline">
+            <label class="layui-form-label">指定用户</label>
+            <div class="layui-input-block">
+                <textarea placeholder="请输入用户手机号，多用户需用逗号分隔" name="userId" rows="3" cols="60" class="layui-textarea"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item ">
+        <div class="layui-inline">
+            <label class="layui-form-label">活动地址</label>
+            <div class="layui-input-inline">
+                <input type="text" name="hrefUrl" lay-verify="title" autocomplete="off" placeholder="图片跳转链接地址" class="layui-input" style="width: 459px;">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">内容</label>
+            <div class="layui-input-block">
+                <textarea placeholder="请输入内容" lay-verify="required" name="content" rows="7" cols="60" class="layui-textarea"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="layui-upload">
+        <label class="layui-form-label">消息图片</label>
+        <button type="button" class="layui-btn" id="fileUp"><i class="layui-icon"></i>上传文件</button>
+        <div class="layui-upload-list">
+            <input type="hidden" id="picUrl" name="picUrl">
+            <img class="layui-upload-img" id="imgSrc" style="width: 180px;margin-left: 169px;margin-top: 9px;font-size: 15px;color: red;">
+            <p id="fileUpText"></p>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit="" lay-filter="instantSubmint">立即提交</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </div>
+</form>
+<script>
+    layui.use(['form', 'laydate','upload'], function () {
+        var form = layui.form, layer = layui.layer, $ = layui.jquery, laydate = layui.laydate;
+        form.render();
+        var upload = layui.upload;
+        //普通图片上传
+        var uploadInst = upload.render({
+            elem: '#fileUp'
+            ,url: '/advertise/uploadAdPic.html'
+            ,accept: 'file'
+            ,before: function(obj){
+                //预读本地文件示例，不支持ie8
+                obj.preview(function(index, file, result){
+                    $('#imgSrc').attr('width', '574px');
+//                    $('#imgSrc').attr('height', '92px');
+                    $('#imgSrc').attr('src', result); //图片链接（base64）
+                });
+            }
+            ,done: function(res){
+                //如果上传失败
+                if(res.code > 0){
+                    return layer.msg(res.msg);
+                }else{
+                    console.log(res.imgURL);
+                    layer.msg("文件上传成功", {icon: 1, anim: 0, time: 2500});
+                    $("#picUrl").val(res.imgURL)
+                }
+                //上传成功
+            }
+            ,error: function(){
+                //演示失败状态，并实现重传
+                var fileUpText = $('#fileUpText');
+                fileUpText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-mini up-reload">重试</a>');
+                fileUpText.find('.up-reload').on('click', function(){
+                    uploadInst.upload();
+                });
+            }
+        });
+        form.on('select(type)', function (data) {
+            if (data.value == 1) {
+                $("#toUsers").show();
+            } else {
+                $("#toUsers").hide();
+            }
+        });
+        // action="/message/messageEdit.html"
+        //监听提交
+        form.on('submit(instantSubmint)', function(data){
+            console.log(data.field)
+            $.post("insert.html",data.field,function (result) {
+                var jsonData = JSON.parse(result);
+                console.log(jsonData);
+                if(jsonData.code>0){
+                    layer.alert(jsonData.msg, {
+                        title: 'Result',
+                        time:3500
+                    })
+                } else {
+                    setTimeout(function () {
+                        layer.open({
+                            title: '提示!',
+                            content: jsonData.msg,
+                            time:2000
+                        });
+                        setTimeout(function () {
+                            location.href = "message.html"
+                        },2000)
+                    },500);
+                }
+            })
+            return false;
+        });
+    });
+</script>
+</body>
+</html>

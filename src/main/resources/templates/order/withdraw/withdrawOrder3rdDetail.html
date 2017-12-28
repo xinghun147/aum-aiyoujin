@@ -1,0 +1,102 @@
+   <form id="editForm" name="editForm" class="layui-form withdraw3rdDetail">
+	<input type="hidden" name="id"  th:value="${mcp}?${mcp.id}"/>
+	<div class="layui-form-item">
+		<div class="layui-inline">
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-inline">
+			<label class="layui-form-label">用户编号</label>
+			<div class="layui-input-inline">
+				<input type="text" name="expressCompany"  class="layui-input"  id="expressCompany" disabled=""/>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">订单编号</label>
+			<div class="layui-input-inline">
+				<input type="text" name="expressNo" class="layui-input" id="expressNo" disabled=""/>
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-inline">
+			<label class="layui-form-label">提现金额</label>
+			<div class="layui-input-inline">
+				<input type="text" name="expressNo" class="layui-input" id="expressNo" disabled=""/>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">手续费</label>
+			<div class="layui-input-inline">
+				<input type="text" name="expressNo" class="layui-input" id="expressNo" disabled=""/>
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-inline">
+			<label class="layui-form-label">绑定银行卡</label>
+			<div class="layui-input-inline">
+				<input type="text" name="expressNo" class="layui-input" id="expressNo" disabled=""/>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">状态</label>
+			<div class="layui-input-inline">
+				<input type="text" name="expressNo" class="layui-input" id="expressNo" disabled=""/>
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-inline">
+			<label class="layui-form-label">审核人</label>
+			<div class="layui-input-inline">
+				<input type="text" name="expressNo" class="layui-input" id="expressNo" disabled=""/>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">审核时间</label>
+			<div class="layui-input-inline">
+				<input type="text" name="expressNo" class="layui-input" id="expressNo" disabled=""/>
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-inline">
+			<label class="layui-form-label">修改时间</label>
+			<div class="layui-input-inline">
+				<input type="text" name="expressNo" class="layui-input" id="expressNo" disabled=""/>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">创建时间</label>
+			<div class="layui-input-inline">
+				<input type="text" name="expressNo" class="layui-input" id="expressNo" disabled=""/>
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-inline">
+			<label class="layui-form-label">失败原因</label>
+			<div class="layui-input-inline">
+				<textarea value="" name=""  class="layui-input" required="required" style="min-height:40px;" disabled=""></textarea>
+			</div>
+		</div>
+	</div>
+</form>
+<style>
+	.withdraw3rdDetail .layui-form-label{width:140px;text-align: right;}
+	.withdraw3rdDetail .layui-input{border:none;background-color: #eee;}
+</style>
+<script>
+	layui.use(['jquery','form', 'laydate','table'], function(){
+		var form = layui.form
+				,layer = layui.layer
+				,laydate = layui.laydate
+				,button = layui.button;
+
+		//监听提交
+		form.on('submit(editForm)', function(data){
+			return true;
+		});
+	});
+</script>

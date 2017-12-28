@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8"/>
+	<title>提金产品列表--layui后台管理模板</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/layui/css/layui.css}" media="all" />
+	<link rel="stylesheet" type="text/css" th:href="@{/css/news.css}" media="all" />
+	<style>
+		.layui-upload-img{width: 92px; height: 92px; margin: 0 10px 10px 0;}
+		/*列表table*/
+		.list-table{width: 100%; margin: 10px 0;}
+		.list-table thead{background-color:#f2f2f2; }
+		.list-table tr{transition: all 0.3s;
+			-moz-transition: all 0.3s; /* Firefox 4 */
+			-webkit-transition: all 0.3s; /* Safari 和 Chrome */
+			-o-transition: all 0.3s; /* Opera */}
+		.list-table tr:nth-child(even){background: #fbfbfb;}
+		.list-table tr:hover{background-color:#f8f8f8;}
+		.list-table th{height: 24px}
+		.list-table .can_click a{text-decoration: underline;}
+		.list-table .can_click a:hover{color:#009688;}
+		.list-table th,
+		.list-table td{padding: 6px 15px;line-height: 20px;border:1px solid #ddd;font-size: 14px;font-weight: 400;}
+		.list-table td .layui-input{height: 30px;line-height: 30px}
+		.list-table td .thumb{cursor:pointer;position: relative;width:16px;height: 16px;}
+		.list-table td .thumb .thumb-show{position: absolute;left:30px;bottom:-13px;z-index: 10;max-height:150px;max-width: 300px; border:1px solid #009688;background-image: url(../images/touming_bg.png);}
+		.list-table td .link{cursor:pointer;}
+		.list-table td .list-title:hover{color:#009688;}
+		.list-table td .list-switch{font-size: 24px;font-weight: bold;color:#009688;}
+		.list-table td .list-switch-off{font-size: 24px;font-weight: bold;color:#f00;}
+	</style>
+</head>
+<body class="childrenBody" style="width:1400px;">
+	<blockquote class="layui-elem-quote news_search">
+	<form id="searchForm" name="searchForm" class="layui-form" action="/product/physical/physicalList.html">
+		<input type="hidden" id="pageNum" name="pageNum" th:value="${page.pageNum}"/>
+		<div class="layui-form-item">
+			<label class="layui-form-label">产品编号:</label>
+			<div class="layui-input-inline">
+				<input type="text" placeholder="请输入关键字" name="code" th:value="${params}?${params['code']}" class="layui-input search_input"/>
+			</div>
+			<label class="layui-form-label">产品名称:</label>
+			<div class="layui-input-inline">
+				<input type="text" placeholder="请输入关键字" name="name" th:value="${params}?${params['name']}" class="layui-input search_input"/>
+			</div>
+			<label class="layui-form-label">产品状态</label>
+			<div class="layui-input-inline">
+				<select name="status"  lay-filter="status">
+					<option value="">请选择查询产品状态</option>
+					<option value="0" th:selected="${params}ne null  and ${params['status'] == 0}">草稿未上架</option>
+					<option value="1" th:selected="${params}ne null  and ${params['status'] == 1}">上架未开售</option>
+					<option value="2" th:selected="${params}ne null  and ${params['status'] == 2}">正在销售中</option>
+					<option value="3" th:selected="${params}ne null  and ${params['status'] == 3}">售磬未下架</option>
+					<option value="4" th:selected="${params}ne null  and ${params['status'] == 4}">下架</option>
+				  </select>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">品牌:</label>
+			<div class="layui-input-inline">
+				<input type="text" placeholder="请输入关键字" name="brand" th:value="${params}?${params['brand']}" class="layui-input search_input"/>
+			</div>
+			<label class="layui-form-label">纯度:</label>
+			<div class="layui-input-inline">
+				<input type="text" placeholder="请输入关键字" name="fineness" th:value="${params}?${params['fineness']}" class="layui-input search_input"/>
+			</div>
+			<label class="layui-form-label">分类</label>
+			<div class="layui-input-inline">
+				<select name="category"  lay-filter="status">
+					<option value="">请选择查询产品分类</option>
+					<option value="1" th:selected="${params}ne null  and ${params['category'] == 1}">投资金条</option>
+					<option value="2" th:selected="${params}ne null  and ${params['category'] == 2}">投资金币</option>
+					<option value="3" th:selected="${params}ne null  and ${params['category'] == 3}">饰品项链</option>
+					<option value="4" th:selected="${params}ne null  and ${params['category'] == 4}">饰品吊坠</option>
+				</select>
+			</div>
+			<button class="layui-btn search_btn"><i class="layui-icon">&#xe615;</i>查询</button>
+			<a class="layui-btn layui-btn-normal newsAdd_btn" id="add"><i class="layui-icon">&#xe608;</i>添加</a>
+		</div>
+	</form>
+	</blockquote>
+	<div class="layui-form news_list">
+	  	<table class="layui-table">
+		    <colgroup>
+				<col/>
+				<col/>
+				<col/>
+				<col/>
+		    </colgroup>
+		    <thead>
+				<tr>
+					<th>产品编号</th>
+					<th>产品名称</th>
+					<th>库存数量</th>
+					<th>状态</th>
+					<th>图片</th>
+					<th>品牌</th>
+					<th>纯度</th>
+					<th>分类</th>
+					<th>创建时间</th>
+					<th style="width:30%;">操作</th>
+				</tr> 
+		    </thead>
+		    <tbody class="news_content">
+		  	  <th:block th:if="${not #lists.isEmpty(page.list)}">
+			    	<tr th:each="item:${page.list}">
+				    	<td  th:text="${item.code}"></td>
+						<td  th:text="${item.name}"></td>
+						<td  th:text="${item.quantity}"></td>
+						<th:block th:switch="${item.status}">
+							<td  th:case="0">草稿未上架</td>
+							<td  th:case="1">上架未开售</td>
+							<td  th:case="2">正在销售中</td>
+							<td  th:case="3">售磬未下架</td>
+							<td  th:case="4">下架</td>
+						</th:block>
+						<td><img th:src="${item.imageUrl}" width="30" height="20"/></td>
+						<td  th:text="${item.brand}"></td>
+						<td  th:text="${item.fineness}"></td>
+						<th:block th:switch="${item.category}">
+							<td  th:case="1">投资金条</td>
+							<td  th:case="2">投资金币</td>
+							<td  th:case="3">饰品项链</td>
+							<td  th:case="4">饰品吊坠</td>
+						</th:block>
+						<td  th:text="${#dates.format(item.createTime,'yyyy-MM-dd HH:mm:ss')}"></td>
+				    	<td>
+							<a th:data="${item.id}" th:remove="${item.status == 0 or item.status == 4}?none:all" class="layui-btn layui-btn-mini shelves">上架</a>
+							<a th:data="${item.id}" th:remove="${item.status == 1}?none:all" class="layui-btn layui-btn-mini sale">开售</a>
+							<a th:data="${item.id}" th:remove="${item.status == 1 or item.status == 2 or item.status == 3}?none:all" class="layui-btn layui-btn-mini offShelf">下架</a>
+                            <a th:data="${item.id}"  class="layui-btn layui-btn-mini physical_info">查看</a>
+					    	<a th:data="${item.id}" th:remove="${item.status == 0 or item.status == 4}?none:all"   class="layui-btn layui-btn-mini physical_edit">编辑</a>
+							<!-- <a th:data="${item.id}"  class="layui-btn layui-btn-danger layui-btn-mini physical_del">删除</a> -->
+						</td>
+					</tr>
+				</th:block>
+		    </tbody>
+		</table>
+	</div>
+	<div id="paged" align="right"></div>
+	<script type="text/javascript" th:src="@{/layui/layui.js}"></script>
+	<script type="text/javascript" th:src="@{/jquery/jquery-3.2.1.min.js}"></script>
+	</body>
+	<script th:inline="javascript">
+         layui.use('laypage', function(){
+        	  var laypage = layui.laypage;
+        	  //执行一个laypage实例
+        	  laypage.render({
+        	    elem: 'paged', //注意，这里的 test1 是 ID，不用加 # 号
+        	    curr: [[${page.pageNum}]],
+        	    count: [[${page.total}]], //数据总数，从服务端得到
+        	    layout: ['count', 'prev', 'page', 'next'],
+                jump: function(obj, first){
+                    //得到了当前页，用于向服务端请求对应数据
+                    var curr = obj.curr;
+                    $("#pageNum").val(curr);
+                    if(!first) {
+                        $("#searchForm").submit();
+					}
+                }
+        	  });
+        	});
+        
+        layui.use('layer',function(){
+            var layer = layui.layer,$=layui.jquery;
+            //删除
+            $(".physical_del").bind("click",function() {
+                var id = $(this).attr("data");
+                layer.confirm('确定要删除吗?', {icon: 3, title:'提示'}, function(index){
+                	  location.href="productPhysicalDel.html?id="+id;
+                });
+            });
+
+			//上架
+			$(".shelves").bind("click",function() {
+				var id = $(this).attr("data");
+				layer.confirm('确定要上架吗?', {icon: 3, title:'提示'}, function(index){
+					$.post('productPhysicalStatus.html', {id:id,status:1}, function(data){
+						location.reload();
+					});
+				});
+			});
+
+			//下架
+			$(".offShelf").bind("click",function() {
+				var id = $(this).attr("data");
+				layer.confirm('确定要下架吗?', {icon: 3, title:'提示'}, function(index){
+					$.post('productPhysicalStatus.html', {id:id,status:4}, function(data){
+						location.reload();
+					});
+				});
+			});
+
+			//开售
+			$(".sale").bind("click",function() {
+				var id = $(this).attr("data");
+				layer.confirm('确定要开售吗?', {icon: 3, title:'提示'}, function(index){
+					$.post('productPhysicalStatus.html', {id:id,status:2}, function(data){
+						location.reload();
+					});
+				});
+			});
+
+			//查看
+            $(".physical_info").bind("click",function() {
+                var id = $(this).attr("data");
+                //Ajax获取
+            	$.post('infoView.html', {id:id}, function(data){
+            	  	layer.open({
+            	  	  type: 1,
+              		  title: "查看提金产品"
+              		  ,area: ['920px', '460px']
+              		  ,shade: 0
+              		  ,content: data
+           			  ,yes: function(index, layero){
+           				  layer.close(index);
+           				}
+              		}); 
+            	}); 
+            });
+
+            //编辑
+            $(".physical_edit").bind("click",function() {
+                var id = $(this).attr("data");
+                //Ajax获取
+            	form_html(id,'编辑提金产品');
+            });
+
+            /**
+			 * 添加
+             */
+            $("#add").bind("click",function() {
+            	//Ajax获取
+            	form_html("",'添加提金产品');
+            });
+            
+             function form_html(id,title){
+              	$.post('addView.html', {id:id}, function(data){
+            	  	layer.open({
+            	  	  type: 1,
+              		  title: title
+              		  ,area: ['920px', '460px']
+              		  ,shade: 0
+              		  ,content: data
+           			  ,yes: function(index, layero){
+           				  layer.close(index);
+           				}
+              		}); 
+            	}); 
+            };
+
+			function form_state_html(id){
+				$.post('productPhysicalStatusView.html', {id:id}, function(data){
+					layer.open({
+						type: 1,
+						title:'添加开售时间'
+						,area: ['420px', '320px']
+						,shade: 0
+						,content: data
+						,yes: function(index, layero){
+							layer.close(index);
+						}
+					});
+				});
+			};
+        });
+        
+        layui.use('form', function(){
+            var form = layui.form;
+            form.render();
+        });
+     
+        
+        layui.use('laydate', function(){
+        	  var laydate = layui.laydate;
+        	  //执行一个laydate实例
+        	  laydate.render({
+        	    elem: '#startTime' //指定元素
+        	  });
+        	  //执行一个laydate实例
+        	  laydate.render({
+        	    elem: '#endTime' //指定元素
+        	  });
+        	});
+	</script>
+</html>

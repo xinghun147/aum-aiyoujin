@@ -1,0 +1,224 @@
+ <form id="editForm" name="editForm" class="layui-form withdrawDetail">
+	<input type="hidden" name="id"  th:value="${vo}?${vo.id}"/>
+	<div class="layui-form-item">
+		<div class="layui-inline">
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-inline">
+			<label class="layui-form-label">用户</label>
+			<div class="layui-input-inline">
+				<input type="text" name="expressCompany"  class="layui-input"  disabled="" th:value="${vo.mobile}"/>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">订单编号</label>
+			<div class="layui-input-inline">
+				<input type="text" name="expressNo" class="layui-input" disabled="" th:value="${vo.code}"/>
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-inline">
+			<label class="layui-form-label">提现金额</label>
+			<div class="layui-input-inline">
+				<input type="text" name="expressNo" class="layui-input"  disabled="" th:value="${vo.amount}"/>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">手续费</label>
+			<div class="layui-input-inline">
+				<input type="text" name="expressNo" class="layui-input"  disabled="" th:value="${vo.fee}"/>
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-inline">
+			<label class="layui-form-label">提现银行卡</label>
+			<div class="layui-input-inline">
+				<input type="text" name="expressNo" class="layui-input"  disabled="" th:value="${vo.bankCardNo}"/>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">提现银行</label>
+			<div class="layui-input-inline">
+				<input type="text" name="expressNo" class="layui-input"  disabled="" th:value="${vo.bankName}"/>
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-inline">
+			<label class="layui-form-label">状态</label>
+			<div class="layui-input-inline" th:switch="${vo.status}">
+				<input type="text" name="expressNo" class="layui-input" disabled="" th:case="0" value="待运营审核"/>
+				<input type="text" name="expressNo" class="layui-input" disabled="" th:case="1" value="运营审核不通过"/>
+				<input type="text" name="expressNo" class="layui-input" disabled="" th:case="2" value="待财务审核"/>
+				<input type="text" name="expressNo" class="layui-input" disabled="" th:case="3" value="财务审核不通过"/>
+				<input type="text" name="expressNo" class="layui-input" disabled="" th:case="4" value="打款中"/>
+				<input type="text" name="expressNo" class="layui-input" disabled="" th:case="5" value="成功"/>
+				<input type="text" name="expressNo" class="layui-input" disabled="" th:case="6" value="失败"/>
+				<input type="text" name="expressNo" class="layui-input" disabled="" th:case="7" value="取消订单"/>
+				<input type="text" name="expressNo" class="layui-input" disabled="" th:case="*" value="未知订单状态"/>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label"></label>
+			<div class="layui-input-inline">
+				<!-- <input type="text" name="expressNo" class="layui-input"  disabled="" th:value="${vo.bankCardNo}"/> -->
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-inline">
+			<label class="layui-form-label">运营审核人</label>
+			<div class="layui-input-inline">
+				<input type="text" name="expressNo" class="layui-input" disabled="" th:value="${vo.operateAuditBy}"/>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">运营审核时间</label>
+			<div class="layui-input-inline">
+				<th:block th:if="${not #strings.isEmpty(vo.operateAuditTime)}">
+			 		<input type="text" name="expressNo" class="layui-input" disabled="" th:value="${#dates.format(vo.operateAuditTime, 'yyyy-MM-dd HH:mm:ss')}"/>
+                </th:block>
+                <th:block th:if="${#strings.isEmpty(vo.operateAuditTime)}">
+			 		<input type="text" value="" class="layui-input" disabled="">
+                </th:block>
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-inline">
+			<label class="layui-form-label">运营审核备注</label>
+			<div class="layui-input-inline">
+				<input type="text" name="expressNo" class="layui-input" disabled="" th:value="${vo.operateAuditRemark}"/>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label"></label>
+			<div class="layui-input-inline">
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-inline">
+			<label class="layui-form-label">财务审核人</label>
+			<div class="layui-input-inline">
+				<input type="text" name="expressNo" class="layui-input" disabled="" th:value="${vo.financialAuditBy}"/>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">财务审核时间</label>
+			<div class="layui-input-inline">
+				<th:block th:if="${not #strings.isEmpty(vo.financialAuditTime)}">
+			 		<input type="text" name="expressNo" class="layui-input" disabled="" th:value="${#dates.format(vo.financialAuditTime, 'yyyy-MM-dd HH:mm:ss')}"/>
+                </th:block>
+                <th:block th:if="${#strings.isEmpty(vo.financialAuditTime)}">
+			 		<input type="text" value="" class="layui-input" disabled="">
+                </th:block>
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-inline">
+			<label class="layui-form-label">财务审核备注</label>
+			<div class="layui-input-inline">
+				<input type="text" name="expressNo" class="layui-input" disabled="" th:value="${vo.financialAuditRemark}"/>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label"></label>
+			<div class="layui-input-inline">
+			</div>
+		</div>
+	</div>
+	
+	<div class="layui-form-item">
+		<div class="layui-inline">
+			<label class="layui-form-label">取消订单人</label>
+			<div class="layui-input-inline">
+				<input type="text" name="expressNo" class="layui-input" disabled="" th:value="${vo.cancelBy}"/>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">取消时间</label>
+			<div class="layui-input-inline">
+			 	<th:block th:if="${not #strings.isEmpty(vo.cancelTime)}">
+			 		<input type="text" name="expressNo" class="layui-input" disabled="" th:value="${#dates.format(vo.cancelTime, 'yyyy-MM-dd HH:mm:ss')}"/>
+                </th:block>
+                <th:block th:if="${#strings.isEmpty(vo.cancelTime)}">
+			 		<input type="text" value="" class="layui-input" disabled="">
+                </th:block>
+				
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-inline">
+			<label class="layui-form-label">取消备注</label>
+			<div class="layui-input-inline">
+				<input type="text" name="expressNo" class="layui-input" disabled="" th:value="${vo.cancelRemark}"/>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label"></label>
+			<div class="layui-input-inline">
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-inline">
+			<label class="layui-form-label">取消原因</label>
+			<div class="layui-input-inline">
+				<textarea th:value="" name=""  class="layui-input"  style="min-height:40px;" disabled="" th:value="${vo.cancelRemark}"></textarea>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">订单失败原因</label>
+			<div class="layui-input-inline">
+				<textarea th:value="" name=""  class="layui-input" style="min-height:40px;" disabled="" th:value="${vo.remark}"></textarea>
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-inline">
+			<label class="layui-form-label">创建时间</label>
+			<div class="layui-input-inline">
+				<th:block th:if="${not #strings.isEmpty(vo.createTime)}">
+			 		<input type="text" name="expressNo" class="layui-input" disabled="" th:value="${#dates.format(vo.createTime, 'yyyy-MM-dd HH:mm:ss')}"/>
+                </th:block>
+                <th:block th:if="${#strings.isEmpty(vo.createTime)}">
+			 		<input type="text" value="" class="layui-input" disabled="">
+                </th:block>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">修改时间</label>
+			<div class="layui-input-inline">
+				<th:block th:if="${not #strings.isEmpty(vo.updateTime)}">
+			 		<input type="text" name="expressNo" class="layui-input" disabled="" th:value="${#dates.format(vo.updateTime, 'yyyy-MM-dd HH:mm:ss')}"/>
+                </th:block>
+                <th:block th:if="${#strings.isEmpty(vo.updateTime)}">
+			 		<input type="text" value="" class="layui-input" disabled="">
+                </th:block>
+			</div>
+		</div>
+	</div>
+</form>
+<style>
+	.withdrawDetail .layui-form-label{width:140px;text-align: right;}
+	.withdrawDetail .layui-input{border:none;background-color: #eee;}
+</style>
+<script>
+	layui.use(['jquery','form', 'laydate','table'], function(){
+		var form = layui.form
+				,layer = layui.layer
+				,laydate = layui.laydate
+				,button = layui.button;
+
+		//监听提交
+		form.on('submit(editForm)', function(data){
+			return true;
+		});
+	});
+</script>

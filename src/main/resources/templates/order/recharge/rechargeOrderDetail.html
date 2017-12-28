@@ -1,0 +1,107 @@
+ <form id="editForm" name="editForm" class="layui-form withdrawDetail">
+	<input type="hidden" name="id"  th:value="${vo}?${vo.id}"/>
+	<div class="layui-form-item">
+		<div class="layui-inline">
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-inline">
+			<label class="layui-form-label">用户</label>
+			<div class="layui-input-inline">
+				<input type="text" name="expressCompany"  class="layui-input"  disabled="" th:value="${vo.mobile}"/>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">订单编号</label>
+			<div class="layui-input-inline">
+				<input type="text" name="expressNo" class="layui-input" disabled="" th:value="${vo.code}"/>
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-inline">
+			<label class="layui-form-label">充值金额</label>
+			<div class="layui-input-inline">
+				<input type="text" name="expressNo" class="layui-input"  disabled="" th:value="${vo.amount}"/>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">手续费</label>
+			<div class="layui-input-inline">
+				<input type="text" name="expressNo" class="layui-input"  disabled="" th:value="${vo.fee}"/>
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-inline">
+			<label class="layui-form-label">充值银行卡</label>
+			<div class="layui-input-inline">
+				<input type="text" name="expressNo" class="layui-input"  disabled="" th:value="${vo.bankCardNo}"/>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">充值银行</label>
+			<div class="layui-input-inline">
+				<input type="text" name="expressNo" class="layui-input"  disabled="" th:value="${vo.bankName}"/>
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-inline">
+			<label class="layui-form-label">状态</label>
+			<div class="layui-input-inline" th:switch="${vo.status}">
+				<input type="text" name="expressNo" class="layui-input" disabled="" th:case="0" value="处理中"/>
+				<input type="text" name="expressNo" class="layui-input" disabled="" th:case="1" value="成功"/>
+				<input type="text" name="expressNo" class="layui-input" disabled="" th:case="2" value="失败"/>
+				<input type="text" name="expressNo" class="layui-input" disabled="" th:case="*" value="未知订单类型"/>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">失败原因</label>
+			<div class="layui-input-inline">
+				<textarea th:value="" name=""  class="layui-input" style="min-height:40px;" disabled="" th:value="${vo.remark}"></textarea>
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-inline">
+			<label class="layui-form-label">创建时间</label>
+			<div class="layui-input-inline">
+				<th:block th:if="${not #strings.isEmpty(vo.createTime)}">
+			 		<input type="text" name="expressNo" class="layui-input" disabled="" th:value="${#dates.format(vo.createTime, 'yyyy-MM-dd HH:mm:ss')}"/>
+                </th:block>
+                <th:block th:if="${#strings.isEmpty(vo.createTime)}">
+			 		<input type="text" value="" class="layui-input" disabled="">
+                </th:block>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">修改时间</label>
+			<div class="layui-input-inline">
+				<th:block th:if="${not #strings.isEmpty(vo.updateTime)}">
+			 		<input type="text" name="expressNo" class="layui-input" disabled="" th:value="${#dates.format(vo.updateTime, 'yyyy-MM-dd HH:mm:ss')}"/>
+                </th:block>
+                <th:block th:if="${#strings.isEmpty(vo.updateTime)}">
+			 		<input type="text" value="" class="layui-input" disabled="">
+                </th:block>
+			</div>
+		</div>
+	</div>
+</form>
+<style>
+	.withdrawDetail .layui-form-label{width:140px;text-align: right;}
+	.withdrawDetail .layui-input{border:none;background-color: #eee;}
+</style>
+<script>
+	layui.use(['jquery','form', 'laydate','table'], function(){
+		var form = layui.form
+				,layer = layui.layer
+				,laydate = layui.laydate
+				,button = layui.button;
+
+		//监听提交
+		form.on('submit(editForm)', function(data){
+			return true;
+		});
+	});
+</script>

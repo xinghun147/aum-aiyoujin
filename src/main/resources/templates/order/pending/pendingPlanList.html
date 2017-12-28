@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8"/>
+	<title>挂单计划订单列表</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/layui/css/layui.css}" media="all" />
+	<link rel="stylesheet" type="text/css" th:href="@{/css/news.css}" media="all" />
+</head>
+<body class="childrenBody" style="width:1500px">
+	<blockquote class="layui-elem-quote news_search">
+	<form id="searchForm" name="searchForm" class="layui-form" action="">
+		<input type="hidden" id="pageNum" name="pageNum" th:value="${page.pageNum}"/>
+		<div class="layui-form-item">
+		 	<label class="layui-form-label">订单编号:</label>
+		    <div class="layui-input-inline">
+		    	<input  type="text" class="layui-input" name="code"/>
+		    </div>
+			<label class="layui-form-label">用户名:</label>
+		    <div class="layui-input-inline">
+		    	 <input  type="text" class="layui-input" name="userName"/>
+		    </div>
+		   <!--  <label class="layui-form-label">产品名称:</label>
+		    <div class="layui-input-inline">
+		    	 <input  type="text" class="layui-input" name="name"/>
+		    </div> -->
+		    <label class="layui-form-label">订单状态</label>
+		  	<div class="layui-input-inline">
+			  	<select name="status"  lay-filter="status">
+				 	<option value="">请选择查询订单状态</option>
+				  	<option value="0">挂单中</option>
+				  	<option value="1">已成交</option>
+				  	<option value="2">已到期</option>
+				  	<option value="2">已终止</option>
+			  	</select>
+		  	</div>
+		  	<label class="layui-form-label">挂单类型</label>
+		  	<div class="layui-input-inline">
+			  	<select name="type"  lay-filter="type">
+				 	<option value="">请选择查询挂单类型</option>
+				  	<option value="0">买入</option>
+				  	<option value="1">卖出</option>
+			  	</select>
+		  	</div>
+            <button class="layui-btn search_btn"><i class="layui-icon">&#xe615;</i>查询</button>
+		</div>
+		<!-- <div class="layui-form-item">
+			
+        </div> -->
+	</form>
+	</blockquote>
+	<div class="layui-form news_list">
+	  	<table class="layui-table">
+		    <colgroup>
+				<col/>
+				<col/>
+				<col/>
+				<col/>
+		    </colgroup>
+		    <thead>
+				<tr>
+					<th>订单编号</th>
+					<th>用户名</th>
+					<th>挂单类型</th>
+					<th>挂单金额</th>
+					<th>最高买入价</th>
+					<th>最低卖出价</th>
+					<th>挂单克重</th>
+					<th>有效期</th>
+					<th>状态</th>
+					<th>创建时间</th>
+					<th>备注</th>
+					<th>操作</th>
+				</tr> 
+		    </thead>
+		    <tbody class="news_content">
+		  	  	<th:block th:if="${not #lists.isEmpty(page.list)}">
+			    	<tr th:each="item:${page.list}">
+				    	<td th:text="${item.code}"></td>
+						<td th:text="${item.userName}"></td>
+						<th:block th:switch="${item.type}">
+							<td  th:case="0">买入</td>
+							<td  th:case="1">卖出</td>
+							<td  th:case="*">未知类型</td>
+						</th:block>
+						<td th:text="${item.amount}"></td>
+						<th:block th:switch="${item.type}">
+							<td  th:case="0" th:text="${item.acceptMaxBuyPrice}"></td>
+							<td  th:case="*" >--</td>
+						</th:block>
+						<th:block th:switch="${item.type}">
+							<td  th:case="1" th:text="${item.acceptMinSellPrice}"></td>
+							<td  th:case="*">--</td>
+						</th:block>
+						<td th:text="${item.weight}"></td>
+						<td th:text="${item.term}"></td>
+						<th:block th:switch="${item.status}">
+							<td  th:case="0">挂单中</td>
+							<td  th:case="1">已成交</td>
+							<td  th:case="2">已到期</td>
+							<td  th:case="3">已终止</td>
+							<td  th:case="*">未知状态</td>
+						</th:block>
+						<td th:text="${#dates.format(item.createTime,'yyyy-MM-dd HH:mm:ss')}"></td>
+						<td  th:text="${item.remark}"></td>
+				    	<td>
+					    	<a th:data="${item.id}" class="layui-btn layui-btn-mini detail_view">查看</a>
+							<!-- <th:block th:if="${item.status eq 0}">
+		                     <a th:data="${item.id}" class="layui-btn layui-btn-danger layui-btn-mini news_del" >人工确认</a>   
+		                    </th:block> -->
+						</td>
+					</tr>
+				</th:block>
+		    </tbody>
+		</table>
+	</div>
+	<div id="paged" align="right"></div>
+	<script type="text/javascript" th:src="@{/layui/layui.js}"></script>
+	<script type="text/javascript" th:src="@{/jquery/jquery-3.2.1.min.js}"></script>
+	</body>
+	<script th:inline="javascript">
+		layui.use('form', function(){
+		    var form = layui.form;
+		    form.render();
+		});
+         layui.use('laypage', function(){
+        	  var laypage = layui.laypage;
+        	  //执行一个laypage实例
+        	  laypage.render({
+        	    elem: 'paged', //注意，这里的 test1 是 ID，不用加 # 号
+        	    curr: [[${page.pageNum}]],
+        	    count: [[${page.total}]], //数据总数，从服务端得到
+        	    layout: ['count', 'prev', 'page', 'next'],
+                jump: function(obj, first){
+                    //得到了当前页，用于向服务端请求对应数据
+                    var curr = obj.curr;
+                    $("#pageNum").val(curr);
+                    if(!first) {
+                        $("#searchForm").submit();
+					}
+                }
+        	  });
+        	});
+        
+         layui.use('layer',function(){
+             var layer = layui.layer,$=layui.jquery;
+             /* 查看  */
+ 			$(".detail_view").bind("click",function(){
+ 				let id = $(this).attr("data");
+ 				form_html(id, "查看")
+ 			})
+
+              function form_html(id,title){
+               	$.post('orderPlanDetail.html', {id:id}, function(data){
+             	  	layer.open({
+             	  	  type: 1,
+               		  title: title
+               		  ,area: ['420px', '320']
+               		  ,shade: 0
+               		  ,content: data
+            			  ,yes: function(index, layero){
+            				  layer.close(index);
+            				}
+               		}); 
+             	}); 
+             };
+         });
+	</script>
+</html>

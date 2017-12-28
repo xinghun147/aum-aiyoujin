@@ -1,0 +1,63 @@
+<form id="editForm" name="editForm" class="layui-form"  action="/sys/dictionaryEdit.html">
+	<input type="hidden" name="id"  th:value="${dictionary}?${dictionary.id}"/>
+	<div class="layui-form-item">
+		<div class="layui-inline">		
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-inline">		
+			<label class="layui-form-label">名称</label>
+			<div class="layui-input-inline">
+				<input type="text" name="name" th:value="${dictionary}?${dictionary.name}:''" class="layui-input" lay-verify="required" placeholder="请输入名称"/>
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-inline">		
+			<label class="layui-form-label">编码</label>
+			<div class="layui-input-inline">
+				<input type="text" name="code"  placeholder="请输入编码" th:value="${dictionary}?${dictionary.code}:''"  lay-verify="required"  class="layui-input" />
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-inline">		
+			<label class="layui-form-label">值</label>
+			<div class="layui-input-inline">
+				<textarea placeholder="请输入值"  lay-verify="required"  class="layui-textarea" id="description" name="value" th:text="${dictionary}?${dictionary.value}:''" style="width: 400px;"></textarea>
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-inline">		
+			<label class="layui-form-label">选择上级</label>
+			<div class="layui-input-inline">
+			   <select name="parentId">
+			  		 <option value="">请选择上级</option>  
+					  <option th:each="item:${dictionarys}" th:value="${item.id}"  th:text="${item.name}" th:selected="${dictionary}ne null and ${dictionary.parentId==item.id}"></option>
+				 </select>
+			</div>
+		</div>
+	 </div>
+	
+	<div class="layui-form-item">
+		<div class="layui-form-item">
+			<div class="layui-input-block">
+				<button class="layui-btn" lay-submit="" lay-filter="editForm">立即提交</button>
+			    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+		    </div>
+		</div>
+	</div>
+</form>
+<script>
+      layui.use(['form', 'laydate'], function(){
+   	   var form = layui.form
+   	   ,layer = layui.layer
+   	   ,laydate = layui.laydate;
+   		form.render();
+   	   //监听提交
+   	   form.on('submit(editForm)', function(data){
+   	     return true;
+   	   });
+   	});
+</script>

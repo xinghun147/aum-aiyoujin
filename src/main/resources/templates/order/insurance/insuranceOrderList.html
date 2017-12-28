@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8"/>
+	<title>保险购买订单</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/layui/css/layui.css}" media="all" />
+	<link rel="stylesheet" type="text/css" th:href="@{/css/news.css}" media="all" />
+</head>
+<body class="childrenBody" style="width:1500px">
+	<blockquote class="layui-elem-quote news_search">
+	<form id="searchForm" name="searchForm" class="layui-form" action="">
+		<input type="hidden" id="pageNum" name="pageNum" th:value="${page.pageNum}"/>
+		<div class="layui-form-item">
+		 	<label class="layui-form-label">订单编号:</label>
+		    <div class="layui-input-inline">
+		    	<input  type="text" class="layui-input" name="code"/>
+		    </div>
+			<label class="layui-form-label">用户名:</label>
+		    <div class="layui-input-inline">
+		    	 <input  type="text" class="layui-input" name="name"/>
+		    </div>
+		    <label class="layui-form-label">产品名称:</label>
+		    <div class="layui-input-inline">
+		    	 <input  type="text" class="layui-input" name="name"/>
+		    </div>
+		    <label class="layui-form-label">支付状态</label>
+		  	<div class="layui-input-inline">
+			  	<select name="status"  lay-filter="status">
+				 	<option value="">请选择查询执行结果</option>
+				  	<option value="0">执行成功</option>
+				  	<option value="1">执行失败</option>
+			  	</select>
+		  	</div>
+		</div>
+		<div class="layui-form-item">
+		    <label class="layui-form-label">创建时间:</label>
+			<div class="layui-input-inline">
+				<input  type="text" class="layui-input" name="setUpTimeStart" id="startTime"/>
+			</div>
+			<div class="layui-form-mid">-</div>
+			<div class="layui-input-inline">
+				<input  type="text" class="layui-input" name="setUpTimeEnd" id="endTime"/>
+			</div>
+			<label class="layui-form-label">执行结果</label>
+		  	<div class="layui-input-inline">
+			  	<select name="status"  lay-filter="status">
+				 	<option value="">请选择查询执行结果</option>
+				  	<option value="0">执行成功</option>
+				  	<option value="1">执行失败</option>
+			  	</select>
+		  	</div>
+            <button class="layui-btn search_btn"><i class="layui-icon">&#xe615;</i>查询</button>
+        </div>
+	</form>
+	</blockquote>
+	<div class="layui-form news_list">
+	  	<table class="layui-table">
+		    <colgroup>
+				<col/>
+				<col/>
+				<col/>
+				<col/>
+		    </colgroup>
+		    <thead>
+				<tr>
+					<th>订单编号</th>
+					<th>用户名</th>
+					<th>购买份数</th>
+					<th>交易金额</th>
+					<th>余额支付金额</th>
+					<th>现金支付金额</th>
+					<th>优惠券抵扣金额</th>
+					<th>状态</th>
+					<th>创建时间</th>
+					<th>操作</th>
+				</tr> 
+		    </thead>
+		    <tbody class="news_content">
+		  	  <th:block th:if="${not #lists.isEmpty(page.list)}">
+			    	<tr th:each="item:${page.list}">
+				    	<td  th:text="${item.code}"></td>
+						<td  th:text="${item.userName}"></td>
+						<td  th:text="${item.productName}"></td>
+						<td  th:text="${item.quantity}"></td>
+						<td  th:text="${item.totalWeight}"></td>
+						<td  th:text="${item.expressCompany}"></td>
+						<td  th:text="${item.expressNo}"></td>
+						<td  th:text="${item.createTime}"></td>
+						<td  th:text="${item.createTime}"></td>
+				    	<td>
+							<a class="layui-btn layui-btn-danger layui-btn-mini news_del">删除</a>
+						</td>
+					</tr>
+				</th:block>
+		    </tbody>
+		</table>
+	</div>
+	<div id="paged" align="right"></div>
+	<script type="text/javascript" th:src="@{/layui/layui.js}"></script>
+	<script type="text/javascript" th:src="@{/jquery/jquery-3.2.1.min.js}"></script>
+	</body>
+	<script th:inline="javascript">
+		layui.use('form', function(){
+		    var form = layui.form;
+		    form.render();
+		});
+         layui.use('laypage', function(){
+        	  var laypage = layui.laypage;
+        	  //执行一个laypage实例
+        	  laypage.render({
+        	    elem: 'paged', //注意，这里的 test1 是 ID，不用加 # 号
+        	    curr: [[${page.pageNum}]],
+        	    count: [[${page.total}]], //数据总数，从服务端得到
+        	    layout: ['count', 'prev', 'page', 'next'],
+                jump: function(obj, first){
+                    //得到了当前页，用于向服务端请求对应数据
+                    var curr = obj.curr;
+                    $("#pageNum").val(curr);
+                    if(!first) {
+                        $("#searchForm").submit();
+					}
+                }
+        	  });
+        	});
+        
+        layui.use('layer',function(){
+            var layer = layui.layer,$=layui.jquery;
+            layui.use('laydate', function(){
+        	  	var laydate = layui.laydate;
+        	  	//执行一个laydate实例
+        	  	laydate.render({
+        	    	elem: '#startTime', //指定元素
+                	type: 'datetime'
+        	  	});
+        	});
+        	layui.use('laydate', function(){
+        	  	var laydate = layui.laydate;
+        	  	//执行一个laydate实例
+        	  	laydate.render({
+        	    	elem: '#endTime', //指定元素
+                	type: 'datetime'
+        	  	});
+        	});
+            //删除
+            $(".layui-btn-danger").bind("click",function() {
+                var id = $(this).attr("data");
+                layer.confirm('确定要删除吗?', {icon: 3, title:'提示'}, function(index){
+                	  location.href="delete.html?id="+id;
+                });
+            });
+
+			//发货
+			$(".order_send").bind("click",function() {
+				var id = $(this).attr("data");
+				form_html(id,'发货');
+			});
+
+			//收货
+			$(".order_received").bind("click",function() {
+				var id = $(this).attr("data");
+				layer.confirm('确定是否收货?', {icon: 3, title:'提示'}, function(index){
+					$.post('receivedGoods.html', {id:id}, function(data){
+						location.reload();
+					});
+				});
+			});
+
+             function form_html(id,title){
+              	$.post('orderDetail.html', {id:id}, function(data){
+            	  	layer.open({
+            	  	  type: 1,
+              		  title: title
+              		  ,area: ['420px', '320']
+              		  ,shade: 0
+              		  ,content: data
+           			  ,yes: function(index, layero){
+           				  layer.close(index);
+           				}
+              		}); 
+            	}); 
+            };
+        });
+	</script>
+</html>

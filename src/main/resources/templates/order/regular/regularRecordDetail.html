@@ -1,0 +1,93 @@
+   <form id="editForm" name="editForm" class="layui-form regularRecordDetail">
+	<div class="layui-form-item">
+		<div class="layui-inline">
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-inline">
+			<label class="layui-form-label">用户名</label>
+			<div class="layui-input-inline">
+				<input type="text" name="expressCompany" th:value="${regularRecordVo}?${regularRecordVo.username}:''"  class="layui-input" disabled="" />
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">计划编号</label>
+			<div class="layui-input-inline">
+				<input type="text" name="expressNo" th:value="${regularRecordVo}?${regularRecordVo.planCode}:''" class="layui-input" disabled=""/>
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-inline">
+			<label class="layui-form-label">订单编号</label>
+			<div class="layui-input-inline">
+				<input type="text" name="expressNo" th:value="${regularRecordVo}?${regularRecordVo.orderCode}:''" class="layui-input" disabled=""/>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">定投金额</label>
+			<div class="layui-input-inline">
+				<input type="text" name="expressNo" th:value="${regularRecordVo}?${regularRecordVo.amount}:''" class="layui-input" disabled=""/>
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-inline">
+			<label class="layui-form-label">成交金价</label>
+			<div class="layui-input-inline">
+				<input type="text" name="expressNo" th:value="${regularRecordVo}?${regularRecordVo.price}:''" class="layui-input" disabled=""/>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">定投克重</label>
+			<div class="layui-input-inline">
+				<input type="text" name="expressNo" th:value="${regularRecordVo}?${regularRecordVo.weight}:''" class="layui-input" disabled=""/>
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-inline">
+			<label class="layui-form-label">执行结果</label>
+			<div class="layui-input-inline">
+				<input type="text" name="expressNo" th:value="${regularRecordVo}?${regularRecordVo.status == 1?'失败':'成功'}:''" class="layui-input" disabled=""/>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">修改时间</label>
+			<div class="layui-input-inline">
+				<input type="text" name="expressNo" th:value="${regularRecordVo}?(${regularRecordVo.updateTime}?${#dates.format(regularRecordVo.updateTime,'yyyy-MM-dd HH:mm:ss')}:''):''" class="layui-input" disabled=""/>
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-inline">
+			<label class="layui-form-label">创建时间</label>
+			<div class="layui-input-inline">
+				<input type="text" name="expressNo" th:value="${regularRecordVo}?(${regularRecordVo.createTime}?${#dates.format(regularRecordVo.createTime,'yyyy-MM-dd HH:mm:ss')}:''):''" class="layui-input" disabled=""/>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">失败原因</label>
+			<div class="layui-input-inline">
+				<input type="text" name="expressNo" th:value="${regularRecordVo}?${regularRecordVo.remark}:''" class="layui-input" disabled=""/>
+			</div>
+		</div>
+	</div>
+</form>
+<style>
+    .regularRecordDetail .layui-form-label{width:140px;text-align: right;}
+	.regularRecordDetail .layui-input{border:none;background-color:#eee;}
+</style>
+<script>
+	layui.use(['jquery','form', 'laydate','table'], function(){
+		var form = layui.form
+				,layer = layui.layer
+				,laydate = layui.laydate
+				,button = layui.button;
+
+		//监听提交
+		form.on('submit(editForm)', function(data){
+			return true;
+		});
+	});
+</script>

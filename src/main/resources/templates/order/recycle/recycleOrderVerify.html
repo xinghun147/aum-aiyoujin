@@ -1,0 +1,220 @@
+<form id="verifyForm" name="verifyForm" class="layui-form"
+	action="/recycle/recycleProductEdit.html">
+	<input type="hidden" id="verifyId" name="verifyId"
+		th:value="${data}?${data.id}:''" />
+	<div class="layui-form-item">
+		<div class="layui-inline">
+			<label class="layui-form-label">实测总毛重</label>
+			<div class="layui-input-inline">
+				<input type="text" id="realGrossWeight" name="realGrossWeight"
+					class="layui-input" th:value="${data}?${data.realGrossWeight}:''"
+					placeholder="请输入实测总毛重" />
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">克重损耗</label>
+			<div class="layui-input-inline">
+				<input type="text" id="realLoss" name="realLoss" class="layui-input"
+					th:value="${data}?${data.realLoss}:''" placeholder="请输入克重损耗" />
+			</div>
+		</div>
+	</div>
+
+	<div class="layui-form-item">
+		<div class="layui-inline">
+			<label class="layui-form-label">实测总净重</label>
+			<div class="layui-input-inline">
+				<input type="text" id="realNetWeight" name="realNetWeight"
+					class="layui-input" th:value="${data}?${data.realNetWeight}:''"
+					placeholder="请输入实测总净重" />
+			</div>
+		</div>
+	<!-- 	<div class="layui-inline">
+			<label class="layui-form-label">实收金价</label>
+			<div class="layui-input-inline">
+				<input type="text" id="realPrice" name="realPrice"
+					class="layui-input" th:value="${data}?${data.realPrice}:''"
+					placeholder="请输入实收金价" />
+			</div>
+		</div> -->
+	</div>
+
+	<div class="layui-form-item">
+		<div class="layui-inline">
+			<label class="layui-form-label">检测人</label>
+			<div class="layui-input-inline">
+				<input type="text" id="verifyBy" name="verifyBy" class="layui-input"
+					th:value="${data}?${data.verifyBy}:''" placeholder="请输入检测人" />
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">检测时间</label>
+			<div class="layui-input-inline">
+				<input type="text" id="verifyTime" name="verifyTime"
+					class="layui-input"
+					th:value="${data.verifyTime}?${#dates.format(data.verifyTime,'yyyy-MM-dd hh:mm:ss')}:''"
+					placeholder="请选择检测时间" />
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-inline">
+			<label class="layui-form-label">检测结果</label>
+			<div class="layui-input-inline">
+				<input type="radio" id="verifyResult" name="verifyResult" value="0" th:checked="${data.verifyResult == 0}" title="通过"> 
+				<input type="radio" id="verifyResult1" name="verifyResult" value="1" th:checked="${data.verifyResult == 1}" title="不通过">
+				<input type="radio" id="verifyResult1" name="verifyResult" value="2" th:checked="${data.verifyResult == 2}" title="免用户确认,直接存入">
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-inline">
+			<label class="layui-form-label">检测说明</label>
+			<div class="layui-input-inline">
+				<!--<input type="text" id="verifyRemark" name="verifyRemark" class="layui-input" th:value="${data}?${data.verifyRemark}:''" placeholder="检测说明"/>-->
+				<textarea placeholder="请输入检测说明" class="layui-textarea"
+					id="verifyRemark" name="verifyRemark"
+					th:text="${data}?${data.verifyRemark}:''" style="width: 513px;"></textarea>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<div class="layui-form-item">
+				<div class="layui-input-block">
+					<th:block th:if="${data.status eq 4}">
+		                  <button class="layui-btn" lay-submit="" lay-filter="verifyForm">提交检测</button>
+		            </th:block>
+				</div>
+			</div>
+		</div>
+</form>
+
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 10px;">
+	<legend>检测文件</legend>
+</fieldset>
+<div class="layui-upload">
+	<div class="layui-upload-list">
+		<table class="layui-table">
+			<thead>
+				<tr>
+					<th>文件类型</th>
+					<th>文件名称</th>
+					<th>状态</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+			<tbody id="demoList">
+				<th:block th:if="${not #lists.isEmpty(data.recycleDocuments)}">
+					<tr th:each="item:${data.recycleDocuments}">
+						<th:block th:if="${item.type eq 2}">
+							<td>检测报告</td>
+							<td th:text="${item.name}"></td>
+							<td>已上传</td>
+							<td>
+								<button class="layui-btn layui-btn-mini demo-reload layui-hide">重传</button>
+								<button th:data="${item.id}"
+									class="layui-btn layui-btn-mini layui-btn-danger demo-delete">删除</button>
+							</td>
+						</th:block>
+					</tr>
+				</th:block>
+			</tbody>
+		</table>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-form-item">
+			<div class="layui-input-block">
+				<button type="button" class="layui-btn" id="testListAction">开始上传</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!--</form>-->
+<script>
+    layui.use(['jquery', 'form', 'laydate'], function () {
+        var $ = layui.jquery;
+        var form = layui.form
+            , layer = layui.layer
+            , laydate = layui.laydate;
+        //日期
+        laydate.render({
+            elem: '#verifyTime',
+            type: 'datetime'
+        });
+        form.render();
+        form.on('submit(verifyForm)', function (data) {
+            var data = data.field;
+            $.post('verifyRecycleOrder.html', data, function (result) {
+                if (result != null) {
+                    if (result == 0) {
+                        layer.msg('提交检测结果成功');
+                        location.reload();
+                        return false;
+                    }
+                }
+                layer.msg('提交检测结果失败');
+            });
+            return false;
+        });
+      	//删除文件
+		$(".demo-delete").bind("click",function() {
+			var thisObj = $(this);
+			var a = confirm("确认删除吗?");
+			if(a==1){
+				var id = $(this).attr("data");
+				var orderId = $("#verifyId").val();
+				 $.post("orderDocumentDelete.html",{id:id,orderId:orderId},function (result) {
+                      var jsonData = JSON.parse(result);
+                      //layer.closeAll();
+                      if(jsonData.code==0){
+                    	  thisObj.parent().parent().remove();
+                      }
+                      layer.alert(jsonData.msg, {
+                          title: '操作结果',
+                          content: jsonData.msg
+                      })
+                  })
+                  return false;
+			}
+		});
+    });
+
+        layui.use('upload', function () {
+            //多文件列表示例
+            var $ = layui.jquery
+                , upload = layui.upload,
+                layer = layui.layer;
+            var orderNo = $('#verifyId').val();
+           // console.log(orderNo);
+            var demoListView = $('#demoList')
+                , uploadListIns = upload.render({
+                elem: '#testListAction'
+                , url: '/recycleOrder/uploadRecycleRemark.html?orderNo=' + orderNo
+                , accept: 'file'
+                , multiple: false
+                /*,auto: false
+             ,bindAction: '#testListAction'*/
+            ,
+                done: function (res, index, upload) {
+                if (res != null) { //上传成功
+                    layer.msg('上传成功！');
+                    var demoListView = $('#demoList');
+                    var tr = $(['<tr>'
+                        , '<td>检测报告</td>'
+                        , '<td>' + res.name + '</td>'
+                        , '<td>已上传</td>'
+                        , '<td>'
+                        , '<button class="layui-btn layui-btn-mini layui-btn-danger demo-delete" data="' + res.id + '">删除</button>'
+                        , '</td>'
+                        , '</tr>'].join(''));
+                    demoListView.append(tr);
+                    return;
+                }
+                this.error(index, upload);
+            }
+            , error: function (index, upload) {
+                layer.msg('上传失败，请重新尝试！');
+            }
+        });
+    });
+
+</script>

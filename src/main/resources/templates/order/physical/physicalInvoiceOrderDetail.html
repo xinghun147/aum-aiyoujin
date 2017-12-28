@@ -1,0 +1,124 @@
+<form id="editForm" name="editForm" class="layui-form">
+	<input type="hidden" name="id"  th:value="${mcp}?${mcp.id}"/>
+	<div class="layui-form-item">
+		<div class="layui-inline">
+		</div>
+	</div>
+	<div class="layui-inline">
+		<label class="layui-form-label">用户编号</label>
+		<div class="layui-input-inline">
+			<input type="text" name="expressCompany"  class="layui-input" lay-verify="required" placeholder="" id="expressCompany"/>
+		</div>
+	</div>
+	<div class="layui-inline">
+		<label class="layui-form-label">发票编号</label>
+		<div class="layui-input-inline">
+			<input type="text" name="expressNo" class="layui-input" lay-verify="required" id="expressNo" placeholder=""/>
+		</div>
+	</div>
+	<div class="layui-inline">
+		<label class="layui-form-label">发票抬头</label>
+		<div class="layui-input-inline">
+			<input type="text" name="expressNo" class="layui-input" lay-verify="required" id="expressNo" placeholder=""/>
+		</div>
+	</div>
+	<div class="layui-inline">
+		<label class="layui-form-label">发票内容</label>
+		<div class="layui-input-inline">
+			<input type="text" name="expressNo" class="layui-input" lay-verify="required" id="expressNo" placeholder=""/>
+		</div>
+	</div>
+	<div class="layui-inline">
+		<label class="layui-form-label">票面金额</label>
+		<div class="layui-input-inline">
+			<input type="text" name="expressNo" class="layui-input" lay-verify="required" id="expressNo" placeholder=""/>
+		</div>
+	</div>
+	<div class="layui-inline">
+		<label class="layui-form-label">联系人</label>
+		<div class="layui-input-inline">
+			<input type="text" name="expressNo" class="layui-input" lay-verify="required" id="expressNo" placeholder=""/>
+		</div>
+	</div>
+	<div class="layui-inline">
+		<label class="layui-form-label">联系电话</label>
+		<div class="layui-input-inline">
+			<input type="text" name="expressNo" class="layui-input" lay-verify="required" id="expressNo" placeholder=""/>
+		</div>
+	</div>
+	<div class="layui-inline">
+		<label class="layui-form-label">地址</label>
+		<div class="layui-input-inline">
+			<input type="text" name="expressNo" class="layui-input" lay-verify="required" id="expressNo" placeholder=""/>
+		</div>
+	</div>
+	<div class="layui-inline">
+		<label class="layui-form-label">状态</label>
+		<div class="layui-input-inline">
+			<input type="text" name="expressNo" class="layui-input" lay-verify="required" id="expressNo" placeholder=""/>
+		</div>
+	</div>
+	<div class="layui-inline">
+		<label class="layui-form-label">快递公司</label>
+		<div class="layui-input-inline">
+			<input type="text" name="expressNo" class="layui-input" lay-verify="required" id="expressNo" placeholder=""/>
+		</div>
+	</div>
+	<div class="layui-inline">
+		<label class="layui-form-label">快递单号</label>
+		<div class="layui-input-inline">
+			<input type="text" name="expressNo" class="layui-input" lay-verify="required" id="expressNo" placeholder=""/>
+		</div>
+	</div>
+	<div class="layui-inline">
+		<label class="layui-form-label">修改人</label>
+		<div class="layui-input-inline">
+			<input type="text" name="expressNo" class="layui-input" lay-verify="required" id="expressNo" placeholder=""/>
+		</div>
+	</div>
+	<div class="layui-inline">
+		<label class="layui-form-label">修改时间</label>
+		<div class="layui-input-inline">
+			<input type="text" name="expressNo" class="layui-input" lay-verify="required" id="expressNo" placeholder=""/>
+		</div>
+	</div>
+	<div class="layui-inline">
+		<label class="layui-form-label">创建人</label>
+		<div class="layui-input-inline">
+			<input type="text" name="expressNo" class="layui-input" lay-verify="required" id="expressNo" placeholder=""/>
+		</div>
+	</div>
+	<div class="layui-inline">
+		<label class="layui-form-label">创建时间</label>
+		<div class="layui-input-inline">
+			<input type="text" name="expressNo" class="layui-input" lay-verify="required" id="expressNo" placeholder=""/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-input-block">
+			<button class="layui-btn" id="confirm" lay-submit="" lay-filter="editForm">立即提交</button>
+			<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+		</div>
+	</div>
+</form>
+<style>
+	#editForm .layui-inline{
+		margin-bottom:10px;
+	}
+	#editForm .layui-form-label{
+		width:120px;
+	}
+</style>
+<script>
+	layui.use(['jquery','form', 'laydate','table'], function(){
+		var form = layui.form
+				,layer = layui.layer
+				,laydate = layui.laydate
+				,button = layui.button;
+
+		//监听提交
+		form.on('submit(editForm)', function(data){
+			return true;
+		});
+	});
+</script>

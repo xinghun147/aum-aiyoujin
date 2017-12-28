@@ -1,0 +1,82 @@
+<form id="editForm" name="editForm" class="layui-form" action="/message/messageEdit.html">
+    <input type="hidden" name="id" th:value="${message}?${message.id}"/>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">标题</label>
+            <div class="layui-input-inline">
+                <input name="title" lay-verify="required" autocomplete="off" placeholder="请输入标题"
+                       th:value="${message}?${message.title}:''" class="layui-input"/>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">类型</label>
+            <div class="layui-input-inline">
+                <select name="type" id="type" lay-filter="type" lay-verify="required">
+                    <option value="">请选择消息类型</option>
+                    <option value="0" th:selected="${message}ne null and ${message.type==0}">黄金资讯</option>
+                    <option value="1" th:selected="${message}ne null and ${message.type==1}">系统公告</option>
+                    <option value="2" th:selected="${message}ne null and ${message.type==2}">营销活动</option>
+                    <!-- <option value="3"  th:selected="${message}ne null and ${message.type==3}">金豆收取</option> -->
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item" style="display:none;" id="toUsers">
+        <div class="layui-inline">
+            <label class="layui-form-label">指定用户</label>
+            <div class="layui-input-block">
+                <textarea placeholder="请输入用户手机号，多用户需用逗号分隔" name="userId" rows="3" cols="60"
+                          th:text="${message}?${message.userId}" class="layui-textarea"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item ">
+        <div class="layui-inline">
+            <label class="layui-form-label">活动地址</label>
+            <div class="layui-input-inline">
+                <input type="text" name="hrefUrl" lay-verify="title" autocomplete="off" placeholder="图片跳转链接地址"
+                       class="layui-input" style="width: 459px;" th:value="${message}?${message.hrefUrl}">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">内容</label>
+            <div class="layui-input-block">
+                <textarea placeholder="请输入内容" lay-verify="required" name="content" rows="7" cols="60"
+                          th:text="${message}?${message.content}" class="layui-textarea"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit="" lay-filter="editForm">立即提交</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </div>
+</form>
+<script>
+    layui.use(['form', 'laydate'], function () {
+        var form = layui.form, layer = layui.layer, $ = layui.jquery, laydate = layui.laydate;
+        form.render();
+        form.on('select(type)', function (data) {
+            if (data.value == 1) {
+                $("#toUsers").show();
+            } else {
+                $("#toUsers").hide();
+            }
+        });
+        //监听提交
+        form.on('submit(editForm)', function (data) {
+            return true;
+        });
+    });
+</script>

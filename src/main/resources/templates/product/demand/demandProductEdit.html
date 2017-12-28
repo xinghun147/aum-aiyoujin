@@ -1,0 +1,181 @@
+<form id="editForm" name="editForm" class="layui-form productForm"  action="/product/demand/demandProductEdit.html">
+	<input type="hidden" name="id"  th:value="${prod}?${prod.id}"/>
+	<div class="layui-form-item">
+		<div class="layui-inline">		
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-inline">		
+			<label class="layui-form-label">产品名称</label>
+			<div class="layui-input-inline">
+				<input type="text" id="name" name="name" th:value="${prod}?${prod.name}:''" class="layui-input" lay-verify="required" placeholder="请输入产品名称"/>
+			</div>
+		</div>
+
+		<div class="layui-inline">
+			<label class="layui-form-label">产品编号</label>
+			<div class="layui-input-inline">
+				<input type="text" id="code" name="code" th:value="${prod}?${prod.code}:''" class="layui-input" lay-verify="required|productCode" placeholder="请输入产品编号"/>
+			</div>
+		</div>
+	</div>
+
+	<div class="layui-form-item">
+		<div class="layui-inline">
+			<label class="layui-form-label">产品版本号</label>
+			<div class="layui-input-inline">
+				<input type="text" id="version" name="version" th:value="${prod}?${prod.version}:''" class="layui-input" lay-verify="required|version" placeholder="请输入产品版本号"/>
+			</div>
+		</div>
+
+		<div class="layui-inline">
+			<label class="layui-form-label">活期利率(%)</label>
+			<div class="layui-input-inline">
+				<input type="text"  name="rate" th:value="${prod}?${prod.rate}:''" class="layui-input" lay-verify="required|rate" placeholder="请输入活期利率"/>
+			</div>
+		</div>
+	</div>
+
+	<div class="layui-form-item">
+		<div class="layui-inline">
+			<label class="layui-form-label">买入手续费(元)</label>
+			<div class="layui-input-inline">
+				<input type="text"  name="buyFee" th:value="${prod}?${prod.buyFee}:''" class="layui-input" lay-verify="required|price" placeholder="请输入买入手续费"/>
+			</div>
+		</div>
+
+		<div class="layui-inline">
+			<label class="layui-form-label">卖出手续费(元)</label>
+			<div class="layui-input-inline">
+				<input type="text"  name="sellFee" th:value="${prod}?${prod.sellFee}:''" class="layui-input" lay-verify="required|price" placeholder="请输入卖出手续费"/>
+			</div>
+		</div>
+	</div>
+
+	<div class="layui-form-item">
+		<div class="layui-inline">
+			<label class="layui-form-label">起购金额(元)</label>
+			<div class="layui-input-inline">
+				<input type="text"  name="minAmount" th:value="${prod}?${prod.minAmount}:''" class="layui-input" lay-verify="required|price" placeholder="请输入起购金额"/>
+			</div>
+		</div>
+
+		<div class="layui-inline">
+			<label class="layui-form-label">起购克重(克)</label>
+			<div class="layui-input-inline">
+				<input type="text" name="minWeight" th:value="${prod}?${prod.minWeight}:''" class="layui-input" lay-verify="required|productWeight" placeholder="请输入起购克重"/>
+			</div>
+		</div>
+	</div>
+
+	<div class="layui-form-item">
+		<div class="layui-inline">
+			<label class="layui-form-label">最高买入金额(元)</label>
+			<div class="layui-input-inline">
+				<input type="text"  name="maxAmount" th:value="${prod}?${prod.maxAmount}:''" class="layui-input" lay-verify="required|price" placeholder="请输入最高买入金额"/>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">最高买入克重(克)</label>
+			<div class="layui-input-inline">
+				<input type="text"   name="maxWeight" th:value="${prod}?${prod.maxWeight}:''" class="layui-input" lay-verify="required|productWeight" placeholder="最高买入克重"/>
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-inline">
+			<label class="layui-form-label">交易限量总金额(元)</label>
+			<div class="layui-input-inline">
+				<input type="text"  name="maxAmountTotal" th:value="${prod}?${prod.maxAmountTotal}:''" class="layui-input" lay-verify="required|price" placeholder="请输入交易限量总金额"/>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">交易限量总克重(克)</label>
+			<div class="layui-input-inline">
+				<input type="text"  name="maxWeightTotal" th:value="${prod}?${prod.maxWeightTotal}:''" class="layui-input" lay-verify="required|productWeight" placeholder="请输入交易限量总克重"/>
+			</div>
+		</div>
+	</div>
+
+	<div class="layui-form-item">
+		<div class="layui-inline">
+			<label class="layui-form-label">产品描叙</label>
+			<div class="layui-input-inline">
+				<textarea placeholder="请输入产品描叙" class="layui-textarea" id="description" name="description" th:text="${prod}?${prod.descriptionStr}:''" style="width: 513px;"></textarea>
+			</div>
+		</div>
+	</div>
+
+	<div class="layui-form-item">
+		<div class="layui-form-item">
+			<div class="layui-input-block" >
+				<button class="layui-btn" lay-submit="" lay-filter="addForm">保存</button>
+		    </div>
+		</div>
+	</div>
+</form>
+<style>
+	.productForm .layui-form-label{width:140px;text-align: right;}
+</style>
+<script>
+      layui.use(['jquery','form', 'laydate'], function(){
+   	   var form = layui.form
+   	   ,layer = layui.layer
+   	   ,laydate = layui.laydate;
+   	   //日期
+   	   laydate.render({
+   	     elem: '#publishTime',
+		 type: 'datetime'
+   	   });
+          laydate.render({
+              elem: '#sellBeginTime',
+              type: 'datetime'
+          });
+          laydate.render({
+              elem: '#sellEndTime',
+              type: 'datetime'
+          });
+          laydate.render({
+              elem: '#removeTime',
+              type: 'datetime'
+          });
+  		//验证
+   		form.verify({
+   			productCode:function(value,item){  //value：表单的值、item：表单的DOM对象
+   				var codeRegex = /^DP{1}[a-zA-Z0-9]+$/;
+   				if(!codeRegex.test(value)){     //验证输入的产品编号是否合法
+   					return '产品编号必须以DP前缀开头';
+   				}
+   			},
+   			productWeight:function(value,item){   //验证输入的克重
+   				if(!/^(0|[1-9][0-9]{0,9})(\.[0-9]{1,4})?$/.test(value)){
+   					return '输入的克重不正确（例：999、1888.8934）';
+   				}
+   			},
+   			price:function(value,item){   //验证价格
+   				if(!/^(0|[1-9][0-9]{0,9})(\.[0-9]{1,2})?$/.test(value)){
+   					return '输入的价格不正确（例：100、99.99）';
+   				}
+   			},
+   			rate:function(value,item){   //利率验证
+   				if(!/^(0|[1-9][0-9]{0,9})(\.[0-9]{1,2})?$/.test(value)){
+   					return '输入的利率不正确（例：0.02）';
+   				}
+   			},
+   			version:function(value,item){ //版本号验证
+   				if(!/^(0|[1-9][0-9]{0,9})(\.[0-9]{1,2})?$/.test(value)){
+   					return '输入的版本号不正确（例：1.0）';
+   				}
+   			},
+   			productQuantity:function(value,item){ // 验证库存
+   				if(!/^[0-9]*[1-9][0-9]*$/.test(value)){
+   					return '库存必须为正整数';
+   				}
+   			}
+   		});
+   	   //监听提交
+   	   form.on('submit(editForm)', function(data){
+   	     return true;
+   	   });
+   	});
+</script>

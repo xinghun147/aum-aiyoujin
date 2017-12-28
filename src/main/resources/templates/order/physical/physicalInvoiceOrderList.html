@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8"/>
+	<title>提金发票订单列表--layui后台管理模板</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/layui/css/layui.css}" media="all" />
+	<link rel="stylesheet" type="text/css" th:href="@{/css/news.css}" media="all" />
+	<style>
+		.news_search .layui-input-block{margin-left:auto;}
+		.news_search .layui-form-label{padding:9px 10px; width:100px;}
+	</style>
+</head>
+<body class="childrenBody"  style="width:1300px;">
+	<blockquote class="layui-elem-quote news_search">
+	<form id="searchForm" name="searchForm" class="layui-form" action="/order/physical/orderInvoiceList.html">
+		<input type="hidden" id="pageNum" name="pageNum" th:value="${page.pageNum}"/>
+		<div class="layui-form-item">
+			<label class="layui-form-label">用户编号:</label>
+			<div class="layui-input-inline">
+				<input type="text" value="" name="userName" class="layui-input search_input"/>
+			</div>
+			<label class="layui-form-label">发票编号:</label>
+			<div class="layui-input-inline">
+				<input type="text" value="" name="code" class="layui-input search_input"/>
+			</div>
+			<label class="layui-form-label">发票抬头状态:</label>
+			<div class="layui-input-inline">
+				<select name="checkStatus" id="checkStatus" lay-filter="statusFilter" th:value="${checkStatus}">
+					<option value="">请选择查询状态</option>
+					<option value="0">处理中</option>
+					<option value="1">付款成功</option>
+					<option value="2">付款失败</option>
+					<option value="3">已发货</option>
+					<option value="4">已签收</option>
+				</select>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">创建时间:</label>
+			<div class="layui-input-inline">
+				<input  type="text" class="layui-input" name="setUpTime" id="startTime"/>
+			</div>
+			<div class="layui-form-mid">-</div>
+			<div class="layui-input-inline">
+				<input  type="text" class="layui-input" name="setUpTimeEnd" id="endTime"/>
+			</div>
+			<button class="layui-btn search_btn"><i class="layui-icon">&#xe615;</i>查询</button>
+		</div>
+	</form>
+	</blockquote>
+	<div class="layui-form news_list">
+	  	<table class="layui-table">
+		    <colgroup>
+				<col/>
+				<col/>
+				<col/>
+				<col/>
+		    </colgroup>
+		    <thead>
+				<tr>
+					<th>用户编号</th>
+					<th>发票编号</th>
+					<th>发票抬头</th>
+					<th>发票内容</th>
+					<th>票面金额</th>
+					<th>联系人</th>
+					<th>联系电话</th>
+					<th>状态</th>
+					<th>创建时间</th>
+					<th>操作</th>
+				</tr> 
+		    </thead>
+		    <tbody class="news_content">
+		  	  <th:block th:if="${not #lists.isEmpty(page.list)}">
+			    	<tr th:each="item:${page.list}">
+			    		<td  th:text="${item.userName}"></td>
+				    	<td  th:text="发票编号"></td>
+						<td  th:text="发票抬头"></td>
+						<td  th:text="发票内容"></td>
+						<td  th:text="票面金额"></td>
+						<td  th:text="联系人"></td>
+						<td  th:text="联系电话"></td>
+						<th:block th:switch="${item.status}">
+							<td  th:case="0">处理中</td>
+							<td  th:case="1">付款成功</td>
+							<td  th:case="2">付款失败</td>
+							<td  th:case="3">已发货</td>
+							<td  th:case="4">已签收</td>
+						</th:block>
+						<td  th:text="${item.createTime}"></td>
+				    	<td>
+					    	<a th:data="${item.id}" class="layui-btn layui-btn-mini invoice_check">查看</a>
+							<a th:data="${item.id}" class="layui-btn layui-btn-mini invoice_edit">编辑</a>
+						</td>
+					</tr>
+				</th:block>
+		    </tbody>
+		</table>
+	</div>
+	<div id="paged" align="right"></div>
+	<script type="text/javascript" th:src="@{/layui/layui.js}"></script>
+	<script type="text/javascript" th:src="@{/jquery/jquery-3.2.1.min.js}"></script>
+	</body>
+	<script th:inline="javascript">
+         layui.use('laypage', function(){
+        	  var laypage = layui.laypage;
+        	  //执行一个laypage实例
+        	  laypage.render({
+        	    elem: 'paged', //注意，这里的 test1 是 ID，不用加 # 号
+        	    curr: [[${page.pageNum}]],
+        	    count: [[${page.total}]], //数据总数，从服务端得到
+        	    layout: ['count', 'prev', 'page', 'next'],
+                jump: function(obj, first){
+                    //得到了当前页，用于向服务端请求对应数据
+                    var curr = obj.curr;
+                    $("#pageNum").val(curr);
+                    if(!first) {
+                        $("#searchForm").submit();
+					}
+                }
+        	  });
+        	});
+        
+        layui.use('layer',function(){
+            var layer = layui.layer,$=layui.jquery;
+
+			//查看
+			$(".invoice_check").bind("click",function() {
+				var id = $(this).attr("data");
+				form_html(id,'查看提金发票');
+			});
+            
+            //编辑
+			$(".invoice_edit").bind("click",function() {
+				var id = $(this).attr("data");
+				form_html(id,'编辑提金发票');
+			});
+             function form_html(id,title){
+              	$.post('invoiceOrderDetail.html', {id:id}, function(data){
+            	  	layer.open({
+            	  	  type: 1,
+              		  title: title
+              		  ,area: ['900px', '460px']
+              		  ,shade: 0
+              		  ,content: data
+           			  ,yes: function(index, layero){
+           				  layer.close(index);
+           				}
+              		}); 
+            	}); 
+            };
+        });
+        layui.use('laydate', function(){
+        	  var laydate = layui.laydate;
+        	  //执行一个laydate实例
+        	  laydate.render({
+        	    elem: '#startTime' //指定元素
+        	  });
+        	  //执行一个laydate实例
+        	  laydate.render({
+        	    elem: '#endTime' //指定元素
+        	  });
+        	});
+        layui.use('form', function(){
+             var form = layui.form;
+             var option = [[${checkStatus}]];
+             console.log(option);
+             $('select').val(option);
+             form.render();
+         });
+	</script>
+</html>

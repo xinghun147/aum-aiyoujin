@@ -1,0 +1,95 @@
+   <form id="editForm" name="editForm" class="layui-form regularOrderDetail">
+	<div class="layui-form-item">
+		<div class="layui-inline">
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-inline">
+			<label class="layui-form-label">用户名</label>
+			<div class="layui-input-inline">
+				<input type="text" name="" th:value="${regularPlanVo}?${regularPlanVo.username}:''"  class="layui-input" disabled=""/>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">计划编码</label>
+			<div class="layui-input-inline">
+				<input type="text" name="" th:value="${regularPlanVo}?${regularPlanVo.code}:''" class="layui-input" disabled=""/>
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-inline">
+			<label class="layui-form-label">定投产品</label>
+			<div class="layui-input-inline">
+				<input type="text" name="" th:value="${regularPlanVo}?${regularPlanVo.productName}:''" class="layui-input" disabled=""/>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">定投总额</label>
+			<div class="layui-input-inline">
+				<input type="text" name="" th:value="${regularPlanVo}?${regularPlanVo.budgetAmount}:''"  class="layui-input" disabled=""/>
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-inline">
+			<label class="layui-form-label">定投期限</label>
+			<div class="layui-input-inline">
+				<input type="text" name="" th:value="${regularPlanVo}?${regularPlanVo.term}:''"  class="layui-input" disabled=""/>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">定投周期</label>
+			<div class="layui-input-inline">
+				<input type="text" name="" th:value="${regularPlanVo}?${regularPlanVo.regularInterval}:''" class="layui-input" disabled=""/>
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-inline">
+			<label class="layui-form-label">定投日</label>
+			<div class="layui-input-inline">
+				<input type="text" name="" th:value="${regularPlanVo}?${regularPlanVo.regularDay}:''" class="layui-input" disabled=""/>
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-inline">
+			<label class="layui-form-label">修改时间</label>
+			<div class="layui-input-inline">
+				<input type="text" id="updateTime" name="" th:value="${regularPlanVo}?(${regularPlanVo.updateTime}?${#dates.format(regularPlanVo.updateTime,'yyyy-MM-dd HH:mm:ss')}:''):''" class="layui-input" lay-verify="required" readonly=""/>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">创建时间</label>
+			<div class="layui-input-inline">
+				<input type="text" id="updateTime" name="" th:value="${regularPlanVo}?(${regularPlanVo.createTime}?${#dates.format(regularPlanVo.createTime,'yyyy-MM-dd HH:mm:ss')}:''):''" class="layui-input" lay-verify="required" readonly=""/>
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-inline">
+			<label class="layui-form-label">备注</label>
+			<div class="layui-input-inline">
+				<input type="text" name=""  th:value="${regularPlanVo}?${regularPlanVo.remark}:''" class="layui-input" disabled="" />
+			</div>
+		</div>
+	</div>
+</form>
+<style>
+    .regularOrderDetail .layui-form-label{width:140px;text-align: right;}
+	.regularOrderDetail .layui-input{border:none;background-color:#eee;}
+</style>
+<script>
+	layui.use(['jquery','form', 'laydate','table'], function(){
+		var form = layui.form
+				,layer = layui.layer
+				,laydate = layui.laydate
+				,button = layui.button;
+
+		//监听提交
+		form.on('submit(editForm)', function(data){
+			return true;
+		});
+	});
+</script>

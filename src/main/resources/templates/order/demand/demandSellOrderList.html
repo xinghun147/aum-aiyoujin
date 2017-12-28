@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8"/>
+	<title>活期金卖出订单列表--layui后台管理模板</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/layui/css/layui.css}" media="all" />
+	<link rel="stylesheet" type="text/css" th:href="@{/css/news.css}" media="all" />
+	<style>
+		.news_search .layui-input-block{margin-left:auto;}
+		.news_search .layui-form-label{padding:9px 10px;}
+	</style>
+</head>
+<body class="childrenBody">
+	<blockquote class="layui-elem-quote news_search">
+	<form id="searchForm" name="searchForm" class="layui-form" action="orderSellList.html">
+		<input type="hidden" id="pageNum" name="pageNum" th:value="${page.pageNum}"/>
+		<div class="layui-form-item">
+			<label class="layui-form-label">用户:</label>
+			<div class="layui-input-inline">
+				<input type="text" value="" name="userName" class="layui-input search_input" th:value="${vo.userName}"/>
+			</div>
+			<label class="layui-form-label">订单编号:</label>
+			<div class="layui-input-inline">
+				<input type="text" value="" name="code" class="layui-input search_input" th:value="${vo.code}"/>
+			</div>
+			  <label class="layui-form-label">创建时间:</label>
+			<div class="layui-input-inline">
+				<input  type="text" class="layui-input" name="createTime" id="startTime" readonly="readonly" th:value="${vo.createTime}?${#dates.format(vo.createTime, 'yyyy-MM-dd HH:mm:ss')}"/>
+			</div>
+			<div class="layui-form-mid">-</div>
+			<div class="layui-input-inline">
+				<input  type="text" class="layui-input" name="updateTime" id="endTime" readonly="readonly" th:value="${vo.updateTime}?${#dates.format(vo.updateTime, 'yyyy-MM-dd HH:mm:ss')}"/>
+			</div>
+			<button class="layui-btn search_btn"><i class="layui-icon">&#xe615;</i>查询</button>
+		</div>
+	</form>
+	</blockquote>
+	<div class="layui-form news_list">
+	  	<table class="layui-table">
+		    <colgroup>
+				<col/>
+				<col/>
+				<col/>
+				<col/>
+		    </colgroup>
+		    <thead>
+				<tr>
+					<th>用户编号</th>
+					<th>订单编号</th>
+					<th>交易克重</th>
+					<th>交易金价</th>
+					<th>交易总金额</th>
+					<th>手续费</th>
+					<th>创建时间</th>
+					<th>操作</th>
+				</tr> 
+		    </thead>
+		    <tbody class="news_content">
+		  	  <th:block th:if="${not #lists.isEmpty(page.list)}">
+			    	<tr th:each="item:${page.list}">
+				    	<td  th:text="${item.userName}"></td>
+						<td  th:text="${item.code}"></td>
+						<td  th:text="${item.weight}"></td>
+						<td  th:text="${item.price}"></td>
+						<td  th:text="${item.amount}"></td>
+						<td  th:text="${item.fee}"></td>
+						<td th:text="${#dates.format(item.createTime,'yyyy-MM-dd HH:mm:ss')}"></td>
+				    	<td>
+					    	<a th:data="${item.id}" class="layui-btn layui-btn-mini demandSellOrder_check">查看</a>
+						</td>
+					</tr>
+				</th:block>
+		    </tbody>
+		</table>
+	</div>
+	<div id="paged" align="right"></div>
+	<script type="text/javascript" th:src="@{/layui/layui.js}"></script>
+	<script type="text/javascript" th:src="@{/jquery/jquery-3.2.1.min.js}"></script>
+	</body>
+	<script th:inline="javascript">
+         layui.use('laypage', function(){
+        	  var laypage = layui.laypage;
+        	  //执行一个laypage实例
+        	  laypage.render({
+        	    elem: 'paged', //注意，这里的 test1 是 ID，不用加 # 号
+        	    curr: [[${page.pageNum}]],
+        	    count: [[${page.total}]], //数据总数，从服务端得到
+        	    layout: ['count', 'prev', 'page', 'next'],
+                jump: function(obj, first){
+                    //得到了当前页，用于向服务端请求对应数据
+                    var curr = obj.curr;
+                    $("#pageNum").val(curr);
+                    if(!first) {
+                        $("#searchForm").submit();
+					}
+                }
+        	  });
+        	});
+        
+        layui.use('layer',function(){
+            var layer = layui.layer,$=layui.jquery;
+
+			//查看
+			$(".demandSellOrder_check").bind("click",function() {
+				var id = $(this).attr("data");
+				form_html(id,'查看活期卖出订单');
+			});
+
+             function form_html(id,title){
+              	$.post('orderSellDetail.html', {id:id}, function(data){
+            	  	layer.open({
+            	  	  type: 1,
+              		  title: title
+              		  ,area: ['900px', '460px']
+              		  ,shade: 0
+              		  ,content: data
+           			  ,yes: function(index, layero){
+           				  layer.close(index);
+           				}
+              		}); 
+            	}); 
+            };
+        });
+        layui.use('laydate', function(){
+        	  var laydate = layui.laydate;
+        	  //执行一个laydate实例
+        	  laydate.render({
+        	    elem: '#startTime' //指定元素
+        	    ,type:'datetime'
+        	    ,format: 'yyyy-MM-dd HH:mm:ss' //可任意组合
+        	  });
+        	  //执行一个laydate实例
+        	  laydate.render({
+        	    elem: '#endTime' //指定元素
+        	    ,type:'datetime'
+        	    ,format: 'yyyy-MM-dd HH:mm:ss' //可任意组合
+        	  });
+        	});
+        layui.use('form', function(){
+             var form = layui.form;
+             var option = [[${checkStatus}]];
+             console.log(option);
+             $('select').val(option);
+             form.render();
+         });
+	</script>
+</html>

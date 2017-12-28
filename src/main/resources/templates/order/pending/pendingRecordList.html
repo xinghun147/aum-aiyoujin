@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8"/>
+	<title>挂单成交订单</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/layui/css/layui.css}" media="all" />
+	<link rel="stylesheet" type="text/css" th:href="@{/css/news.css}" media="all" />
+</head>
+<body class="childrenBody">
+	<blockquote class="layui-elem-quote news_search">
+	<form id="searchForm" name="searchForm" class="layui-form" action="">
+		<input type="hidden" id="pageNum" name="pageNum" th:value="${page.pageNum}"/>
+		<div class="layui-form-item">
+		 	<label class="layui-form-label">订单编号:</label>
+		    <div class="layui-input-inline">
+		    	<input  type="text" class="layui-input" name="orderNo"/>
+		    </div>
+			<label class="layui-form-label">用户名:</label>
+		    <div class="layui-input-inline">
+		    	 <input  type="text" class="layui-input" name="userName"/>
+		    </div>
+		    <label class="layui-form-label">计划编号:</label>
+		    <div class="layui-input-inline">
+		    	 <input  type="text" class="layui-input" name="planCode"/>
+		    </div>
+		</div>
+		<div class="layui-form-item">
+		    <label class="layui-form-label">创建时间:</label>
+			<div class="layui-input-inline">
+				<input  type="text" class="layui-input" name="createTime" id="startTime"/>
+			</div>
+			<div class="layui-form-mid">-</div>
+			<div class="layui-input-inline">
+				<input  type="text" class="layui-input" name="updateTime" id="endTime"/>
+			</div>
+			<label class="layui-form-label">执行结果</label>
+		  	<div class="layui-input-inline">
+			  	<select name="status"  lay-filter="status">
+				 	<option value="">请选择查询执行结果</option>
+				  	<option value="0">执行成功</option>
+				  	<option value="1">执行失败</option>
+			  	</select>
+		  	</div>
+            <button class="layui-btn search_btn"><i class="layui-icon">&#xe615;</i>查询</button>
+        </div>
+	</form>
+	</blockquote>
+	<div class="layui-form news_list">
+	  	<table class="layui-table">
+		    <colgroup>
+				<col/>
+				<col/>
+				<col/>
+				<col/>
+		    </colgroup>
+		    <thead>
+				<tr>
+					<th>订单编号</th>
+					<th>用户名</th>
+					<th>计划编号</th>
+					<th>成交金额</th>
+					<th>成交价格</th>
+					<th>成交克重</th>
+					<th>执行结果</th>
+					<th>失败原因</th>
+					<th>创建时间</th>
+					<th>操作</th>
+				</tr> 
+		    </thead>
+		    <tbody class="news_content">
+		  	  <th:block th:if="${not #lists.isEmpty(page.list)}">
+			    	<tr th:each="item:${page.list}">
+				    	<td  th:text="${item.orderNo}"></td>
+						<td  th:text="${item.userName}"></td>
+						<td  th:text="${item.planCode}"></td>
+						<td  th:text="${item.amount}"></td>
+						<td  th:text="${item.price}"></td>
+						<td  th:text="${item.weight}"></td>
+						<th:block th:switch="${item.status}">
+							<td  th:case="0">成功</td>
+							<td  th:case="1">失败</td>
+							<td  th:case="*">未知结果状态</td>
+						</th:block>
+						<td  th:text="${item.remark}"></td>
+						<td th:text="${#dates.format(item.createTime,'yyyy-MM-dd HH:mm:ss')}"></td>
+				    	<td>
+							<a th:data="${item.id}" class="layui-btn layui-btn-danger layui-btn-mini detail_view" >查看</a>
+						</td>
+					</tr>
+				</th:block>
+		    </tbody>
+		</table>
+	</div>
+	<div id="paged" align="right"></div>
+	<script type="text/javascript" th:src="@{/layui/layui.js}"></script>
+	<script type="text/javascript" th:src="@{/jquery/jquery-3.2.1.min.js}"></script>
+	</body>
+	<script th:inline="javascript">
+		layui.use('form', function(){
+		    var form = layui.form;
+		    form.render();
+		});
+         layui.use('laypage', function(){
+        	  var laypage = layui.laypage;
+        	  //执行一个laypage实例
+        	  laypage.render({
+        	    elem: 'paged', //注意，这里的 test1 是 ID，不用加 # 号
+        	    curr: [[${page.pageNum}]],
+        	    count: [[${page.total}]], //数据总数，从服务端得到
+        	    layout: ['count', 'prev', 'page', 'next'],
+                jump: function(obj, first){
+                    //得到了当前页，用于向服务端请求对应数据
+                    var curr = obj.curr;
+                    $("#pageNum").val(curr);
+                    if(!first) {
+                        $("#searchForm").submit();
+					}
+                }
+        	  });
+        	});
+         layui.use('laydate', function(){
+       	  var laydate = layui.laydate;
+       	  //执行一个laydate实例
+       	  laydate.render({
+       	    elem: '#startTime' //指定元素
+       	    ,type:'datetime'
+               ,format: 'yyyy-MM-dd HH:mm:ss' //可任意组合
+       	  });
+       	  //执行一个laydate实例
+       	  laydate.render({
+       	    elem: '#endTime' //指定元素
+       	    ,type:'datetime'
+               ,format: 'yyyy-MM-dd HH:mm:ss' //可任意组合
+       	  });
+       	});
+         layui.use('layer',function(){
+             var layer = layui.layer,$=layui.jquery;
+             /* 查看  */
+ 			$(".detail_view").bind("click",function(){
+ 				var id = $(this).attr("data");
+ 				form_html(id, "查看")
+ 			})
+
+              function form_html(id,title){
+               	$.post('orderRecordDetail.html', {id:id}, function(data){
+             	  	layer.open({
+             	  	  type: 1,
+               		  title: title
+               		  ,area: ['420px', '320']
+               		  ,shade: 0
+               		  ,content: data
+            			  ,yes: function(index, layero){
+            				  layer.close(index);
+            				}
+               		}); 
+             	}); 
+             };
+         });
+	</script>
+</html>

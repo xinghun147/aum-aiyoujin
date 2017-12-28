@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <classPathEntry location="D:\dev\maven\repository\mysql\mysql-connector-java\5.1.39\mysql-connector-java-5.1.39.jar"/>
+    <context id="DB2Tables" defaultModelType="flat" targetRuntime="MyBatis3">
+    <plugin type="org.mybatis.generator.plugins.PaginationPlugin"></plugin>
+	<plugin type="org.mybatis.generator.plugins.SelectOneByExamplePlugin"></plugin>
+    	<commentGenerator>  
+            <property name="suppressDate" value="true"/>  
+            <!-- 是否去除自动生成的注释 true：是 ： false:否 -->  
+            <property name="suppressAllComments" value="false"/>  
+        </commentGenerator>  
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://101.200.190.151:3306/db_aiyoujin?characterEncoding=utf-8"
+                        userId="root"
+                        password="f0922186e3">
+        </jdbcConnection>
+
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
+
+
+
+        <!-- 生成模型的包名和位置-->  
+        <javaModelGenerator targetPackage="com.hjgj.aiyoujin.model"
+                            targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+        <!-- generate xml -->
+        <sqlMapGenerator targetPackage="com.hjgj.aiyoujin.dao"
+                         targetProject="src/main/resources">
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+        <!-- generate Mapper -->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.hjgj.aiyoujin.dao"
+                             targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+
+        <table tableName="product" domainObjectName="Product"></table>
+       	
+    
+    
+    </context>
+</generatorConfiguration>

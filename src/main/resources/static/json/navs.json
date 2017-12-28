@@ -1,0 +1,128 @@
+[{
+	"title" : "后台首页",
+	"icon" : "icon-computer",
+	"href" : "main.html",
+	"spread" : false
+},{
+	"title" : "内容管理",
+	"icon" : "icon-text",
+	"href" : "news/newsList.html",
+	"spread" : false,
+	"children" : [
+		{
+			"title" : "作者",
+			"icon" : "&#xe61c;",
+			"href" : "cms/author/authorList.html",
+			"spread" : false
+		},
+		{
+			"title" : "文章类型",
+			"icon" : "&#xe609;",
+			"href" : "cms/category/categoryList.html",
+			"spread" : false
+		},
+		{
+			"title" : "文章",
+			"icon" : "&#xe609;",
+			"href" : "cms/content/contentList.html",
+			"spread" : false
+		}
+	]
+},{
+	"title" : "产品管理",
+	"icon" : "icon-text",
+	"href" : "news/newsList.html",
+	"spread" : false,
+	"children" : [
+		{
+			"title" : "存金产品",
+			"icon" : "&#xe61c;",
+			"href" : "recycle/recycleProduct.html",
+			"spread" : false
+		},
+		{
+			"title" : "提金产品",
+			"icon" : "&#xe609;",
+			"href" : "product/physical/physicalList.html",
+			"spread" : false
+		}
+	]
+},{
+	"title" : "订单管理",
+	"icon" : "icon-text",
+	"href" : "news/newsList.html",
+	"spread" : false,
+	"children" : [
+		{
+			"title" : "存金订单",
+			"icon" : "&#xe61c;",
+			"href" : "recycleOrder/recycleOrder.html",
+			"spread" : false
+		},
+		{
+			"title" : "提金订单",
+			"icon" : "&#xe61c;",
+			"href" : "order/physical/orderList.html",
+			"spread" : false
+		}
+	]
+},{
+	"title" : "金价管理",
+	"icon" : "icon-text",
+	"href" : "news/newsList.html",
+	"spread" : false,
+	"children" : [
+		{
+			"title" : "实时金价",
+			"icon" : "&#xe61c;",
+			"href" : "price/realTimePrice.html",
+			"spread" : false
+		},
+		{
+			"title" : "收盘价",
+			"icon" : "&#xe609;",
+					"href" : "price/closePrice.html",
+			"spread" : false
+		}
+	]
+},{
+	"title" : "消息",
+	"icon" : "icon-text",
+	"href" : "message/message.html",
+	"spread" : false
+},{
+	"title" : "友情链接",
+	"icon" : "&#xe64c;",
+	"href" : "links/linksList.html",
+	"spread" : false
+},{
+	"title" : "用户列表",
+	"icon" : "&#xe64c;",
+	"href" : "user/allUsers.html",
+	"spread" : false
+},{
+	"title" : "系统基本参数",
+	"icon" : "&#xe631;",
+	"href" : "sys/systemParameter.html",
+	"spread" : false
+},{
+	"title" : "其他页面",
+	"icon" : "&#xe630;",
+	"href" : "",
+	"spread" : false,
+	"children" : [
+		{
+			"title" : "404页面",
+			"icon" : "&#xe61c;",
+			"href" : "/404.html",
+			"spread" : false
+		},
+		{
+			"title" : "登录",
+			"icon" : "&#xe609;",
+			"href" : "login/login.html",
+			"spread" : false,
+			"target" : "_blank"
+		}
+	]
+}]
