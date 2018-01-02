@@ -11,7 +11,7 @@
         <setting name="defaultExecutorType" value="REUSE"/>
         
              <!-- 打印查询语句 -->
-        <!-- <setting name="logImpl" value="STDOUT_LOGGING" /> -->
+        <setting name="logImpl" value="STDOUT_LOGGING" />
         <!-- resultType=map时 返回为空的字段名 -->
         <setting name="callSettersOnNulls" value="true"/>
     </settings>

@@ -88,12 +88,12 @@ public class BaseController {
             return null;
         }*/
         String fileType = StringUtils.substringAfterLast(file.getOriginalFilename(), ".");
-        String fullPath = "/" + generateFileName(fileType);
+        String fullPath = "/aiyoujin/" + generateFileName(fileType);
         String fileName = StringUtils.substringAfterLast(fullPath, "/");
         String filePath = StringUtils.substringBeforeLast(fullPath, "/");
         try {
             ftpUtils.connectServer(ftpIp, ftpPort, ftpUser, ftpPass, "");
-            ftpUtils.createDir("aiyoujin/"+filePath);
+            ftpUtils.createDir(filePath);
             ftpUtils.upload(file.getInputStream(), fileName);
             return fullPath;
         } catch (Exception e) {

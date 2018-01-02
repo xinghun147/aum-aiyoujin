@@ -1,4 +1,4 @@
-<form id="editForm" name="editForm" class="layui-form productInfo"  action="/product/demand/demandProductEdit.html">
+<form id="editForm" name="editForm" class="layui-form infoFixed"  action="/product/productEdit.html">
 	<input type="hidden" name="id"  th:value="${prod}?${prod.id}"/>
 	<div class="layui-form-item">
 		<div class="layui-inline">		
@@ -8,104 +8,77 @@
 		<div class="layui-inline">		
 			<label class="layui-form-label">产品名称</label>
 			<div class="layui-input-inline">
-				<input type="text" id="name" name="name" th:value="${prod}?${prod.name}:''" class="layui-input" lay-verify="required" placeholder="请输入产品名称"/>
+				<input type="text" id="name" name="name" th:value="${prod}?${prod.name}:''" class="layui-input" lay-verify="required" placeholder="请输入产品名称" readonly=""/>
 			</div>
 		</div>
 
 		<div class="layui-inline">
 			<label class="layui-form-label">产品编号</label>
 			<div class="layui-input-inline">
-				<input type="text" id="code" name="code" th:value="${prod}?${prod.code}:''" class="layui-input" lay-verify="required" placeholder="请输入产品编号"/>
+				<input type="text" id="code" name="code" th:value="${prod}?${prod.code}:''" class="layui-input" lay-verify="required" placeholder="请输入产品编号" readonly=""/>
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-inline">
+			<label class="layui-form-label">纯度</label>
+			<div class="layui-input-inline">
+				<input type="text"  name="fineness" th:value="${prod}?${prod.fineness}:''" class="layui-input" lay-verify="required" placeholder="请输入纯度" readonly=""/>
+			</div>
+		</div>
+		<div class="layui-inline">
+			<label class="layui-form-label">克重</label>
+			<div class="layui-input-inline">
+				<input type="text"  name="weight" th:value="${prod}?${prod.weight}:''" class="layui-input" lay-verify="required" placeholder="请输入商品克重" readonly=""/>
 			</div>
 		</div>
 	</div>
 
 	<div class="layui-form-item">
 		<div class="layui-inline">
-			<label class="layui-form-label">产品版本号</label>
+			<label class="layui-form-label">单价</label>
 			<div class="layui-input-inline">
-				<input type="text" id="version" name="version" th:value="${prod}?${prod.version}:''" class="layui-input" lay-verify="required" placeholder="请输入产品版本号"/>
+				<input type="text"  name="buyPrice" th:value="${prod}?${prod.buyPrice}:''" class="layui-input" lay-verify="required|price" placeholder="请输入单价" readonly=""/>
 			</div>
 		</div>
 
 		<div class="layui-inline">
-			<label class="layui-form-label">活期利率(%)</label>
+			<label class="layui-form-label">变现价格</label>
 			<div class="layui-input-inline">
-				<input type="text"  name="rate" th:value="${prod}?${prod.rate}:''" class="layui-input" lay-verify="required" placeholder="请输入活期利率"/>
+				<input type="text" name="sellPrice" th:value="${prod}?${prod.sellPrice}:''" class="layui-input" lay-verify="required|price" placeholder="请输入起购克重" readonly=""/>
 			</div>
 		</div>
 	</div>
 
 	<div class="layui-form-item">
-		<div class="layui-inline">
-			<label class="layui-form-label">买入手续费(元)</label>
+	<div class="layui-inline">
+			<label class="layui-form-label">库存数量</label>
 			<div class="layui-input-inline">
-				<input type="text"  name="buyFee" th:value="${prod}?${prod.buyFee}:''" class="layui-input" lay-verify="required" placeholder="请输入买入手续费"/>
-			</div>
-		</div>
-
-		<div class="layui-inline">
-			<label class="layui-form-label">卖出手续费(元)</label>
-			<div class="layui-input-inline">
-				<input type="text"  name="sellFee" th:value="${prod}?${prod.sellFee}:''" class="layui-input" lay-verify="required" placeholder="请输入卖出手续费"/>
-			</div>
-		</div>
-	</div>
-
-	<div class="layui-form-item">
-		<div class="layui-inline">
-			<label class="layui-form-label">起购金额(元)</label>
-			<div class="layui-input-inline">
-				<input type="text"  name="minAmount" th:value="${prod}?${prod.minAmount}:''" class="layui-input" lay-verify="required" placeholder="请输入起购金额"/>
-			</div>
-		</div>
-
-		<div class="layui-inline">
-			<label class="layui-form-label">起购克重(克)</label>
-			<div class="layui-input-inline">
-				<input type="text" name="minWeight" th:value="${prod}?${prod.minWeight}:''" class="layui-input" lay-verify="required" placeholder="请输入起购克重"/>
-			</div>
-		</div>
-	</div>
-
-	<div class="layui-form-item">
-		<div class="layui-inline">
-			<label class="layui-form-label">最高买入金额(元)</label>
-			<div class="layui-input-inline">
-				<input type="text"  name="maxAmount" th:value="${prod}?${prod.maxAmount}:''" class="layui-input" lay-verify="required" placeholder="请输入最高买入金额"/>
+				<input type="text"  name="quantity" th:value="${prod}?${prod.quantity}:''" class="layui-input" lay-verify="required|productQuantity" placeholder="请输入库存数量" readonly=""/>
 			</div>
 		</div>
 		<div class="layui-inline">
-			<label class="layui-form-label">最高买入克重(克)</label>
-			<div class="layui-input-inline">
-				<input type="text"   name="maxWeight" th:value="${prod}?${prod.maxWeight}:''" class="layui-input" lay-verify="required" placeholder="最高买入克重"/>
-			</div>
 		</div>
 	</div>
 	<div class="layui-form-item">
 		<div class="layui-inline">
-			<label class="layui-form-label">交易限量总金额(元)</label>
+			<label class="layui-form-label">排序位置</label>
 			<div class="layui-input-inline">
-				<input type="text"  name="maxAmountTotal" th:value="${prod}?${prod.maxAmountTotal}:''" class="layui-input" lay-verify="required" placeholder="请输入交易限量总金额"/>
+				<input type="text"  name="sort_no" th:value="${prod}?${prod.sortNo}:''" class="layui-input" lay-verify="required|productQuantity" placeholder="请输入排序位置" readonly=""/>
 			</div>
 		</div>
 		<div class="layui-inline">
-			<label class="layui-form-label">交易限量总克重(克)</label>
-			<div class="layui-input-inline">
-				<input type="text"  name="maxWeightTotal" th:value="${prod}?${prod.maxWeightTotal}:''" class="layui-input" lay-verify="required" placeholder="请输入交易限量总克重"/>
-			</div>
 		</div>
 	</div>
-
 	<div class="layui-form-item">
 		<div class="layui-inline">
-			<label class="layui-form-label">产品描叙</label>
+			<label class="layui-form-label">产品描述</label>
 			<div class="layui-input-inline">
-				<textarea placeholder="请输入产品描叙" class="layui-textarea" id="description" name="description" th:text="${prod}?${prod.descriptionStr}:''" style="width: 513px;"></textarea>
+				<textarea placeholder="请输入产品描叙" class="layui-textarea" id="description" name="description" th:text="${descriptionStr}?${descriptionStr}:''" readonly="" style="width: 513px;"></textarea>
 			</div>
 		</div>
 	</div>
-	 <div class="layui-form-item">
+	<div class="layui-form-item">
     	<div class="layui-inline">
 			<label class="layui-form-label">修改人</label>
 			<div class="layui-input-inline">
@@ -152,8 +125,9 @@
 			</div>
 		</div>
 	</div>
+
 </form>
 <style>
-	.productInfo .layui-form-label{width:140px;text-align: right;}
-	.productInfo .layui-input,.productInfo .layui-textarea{border:none;background-color: #eee;}
+	.infoFixed .layui-form-label{width:140px;text-align: right;}
+	.infoFixed .layui-input,.layui-textarea{border:none;background-color: #eee;}
 </style>

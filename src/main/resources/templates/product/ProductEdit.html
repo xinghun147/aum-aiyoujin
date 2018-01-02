@@ -1,4 +1,4 @@
-<form id="editForm" name="editForm" class="layui-form editFixed"  action="/product/fixed/fixedProductEdit.html">
+<form id="editForm" name="editForm" class="layui-form editFixed"  action="/product/productEdit.html">
 	<input type="hidden" name="id"  th:value="${prod}?${prod.id}"/>
 	<div class="layui-form-item">
 		<div class="layui-inline">		
@@ -22,61 +22,53 @@
 
 	<div class="layui-form-item">
 		<div class="layui-inline">
-			<label class="layui-form-label">产品利率</label>
+			<label class="layui-form-label">纯度</label>
 			<div class="layui-input-inline">
-				<input type="text"  name="rate" th:value="${prod}?${prod.rate}:''" class="layui-input" lay-verify="required" placeholder="请输入产品利率"/>
+				<input type="text"  name="fineness" th:value="${prod}?${prod.fineness}:''" class="layui-input" lay-verify="required" placeholder="请输入纯度"/>
 			</div>
 		</div>
 		<div class="layui-inline">
-			<label class="layui-form-label">期限天数</label>
+			<label class="layui-form-label">克重</label>
 			<div class="layui-input-inline">
-				<input type="text"  name="term" th:value="${prod}?${prod.term}:''" class="layui-input" lay-verify="required" placeholder="请输入期限天数"/>
-			</div>
-		</div>
-	</div>
-
-	<div class="layui-form-item">
-		<div class="layui-inline">
-			<label class="layui-form-label">单用户起购金额</label>
-			<div class="layui-input-inline">
-				<input type="text"  name="minAmount" th:value="${prod}?${prod.minAmount}:''" class="layui-input" lay-verify="required|price" placeholder="请输入起购金额"/>
-			</div>
-		</div>
-
-		<div class="layui-inline">
-			<label class="layui-form-label">单用户起购克重</label>
-			<div class="layui-input-inline">
-				<input type="text" name="minWeight" th:value="${prod}?${prod.minWeight}:''" class="layui-input" lay-verify="required|productWeight" placeholder="请输入起购克重"/>
+				<input type="text"  name="weight" th:value="${prod}?${prod.weight}:''" class="layui-input" lay-verify="required" placeholder="请输入商品克重"/>
 			</div>
 		</div>
 	</div>
 
 	<div class="layui-form-item">
 		<div class="layui-inline">
-			<label class="layui-form-label">单用户限量金额</label>
+			<label class="layui-form-label">单价</label>
 			<div class="layui-input-inline">
-				<input type="text"  name="maxAmount" th:value="${prod}?${prod.maxAmount}:''" class="layui-input" lay-verify="required|price" placeholder="请输入最高买入金额"/>
+				<input type="text"  name="buyPrice" th:value="${prod}?${prod.buyPrice}:''" class="layui-input" lay-verify="required|price" placeholder="请输入单价"/>
+			</div>
+		</div>
+
+		<div class="layui-inline">
+			<label class="layui-form-label">变现价格</label>
+			<div class="layui-input-inline">
+				<input type="text" name="sellPrice" th:value="${prod}?${prod.sellPrice}:''" class="layui-input" lay-verify="required|price" placeholder="请输入起购克重"/>
+			</div>
+		</div>
+	</div>
+
+	<div class="layui-form-item">
+	<div class="layui-inline">
+			<label class="layui-form-label">库存数量</label>
+			<div class="layui-input-inline">
+				<input type="text"  name="quantity" th:value="${prod}?${prod.quantity}:''" class="layui-input" lay-verify="required|productQuantity" placeholder="请输入库存数量"/>
 			</div>
 		</div>
 		<div class="layui-inline">
-			<label class="layui-form-label">单用户限量克重</label>
-			<div class="layui-input-inline">
-				<input type="text"   name="maxWeight" th:value="${prod}?${prod.maxWeight}:''" class="layui-input" lay-verify="required|productWeight" placeholder="最高买入克重"/>
-			</div>
 		</div>
 	</div>
 	<div class="layui-form-item">
 		<div class="layui-inline">
-			<label class="layui-form-label">交易限量总金额</label>
+			<label class="layui-form-label">排序位置</label>
 			<div class="layui-input-inline">
-				<input type="text"  name="maxAmountTotal" th:value="${prod}?${prod.maxAmountTotal}:''" class="layui-input" lay-verify="required|price" placeholder="请输入交易限量总金额"/>
+				<input type="text"  name="sortNo" th:value="${prod}?${prod.sortNo}:''" class="layui-input" lay-verify="required|productQuantity" placeholder="请输入排序位置"/>
 			</div>
 		</div>
 		<div class="layui-inline">
-			<label class="layui-form-label">交易限量总克重</label>
-			<div class="layui-input-inline">
-				<input type="text"  name="maxWeightTotal" th:value="${prod}?${prod.maxWeightTotal}:''" class="layui-input" lay-verify="required|productWeight" placeholder="请输入交易限量总克重"/>
-			</div>
 		</div>
 	</div>
 
@@ -84,7 +76,7 @@
 		<div class="layui-inline">
 			<label class="layui-form-label">产品描述</label>
 			<div class="layui-input-inline">
-				<textarea placeholder="请输入产品描叙" class="layui-textarea" id="description" name="description" th:text="${prod}?${prod.descriptionStr}:''" style="width: 513px;"></textarea>
+				<textarea placeholder="请输入产品描叙" class="layui-textarea" id="description" name="description" th:text="${descriptionStr}?${descriptionStr}:''" style="width: 513px;"></textarea>
 			</div>
 		</div>
 	</div>
@@ -125,9 +117,9 @@
     		//验证
      		form.verify({
      			productCode:function(value,item){  //value：表单的值、item：表单的DOM对象
-     				var codeRegex = /^FP{1}[a-zA-Z0-9]+$/;
+     				var codeRegex = /^PP{1}[a-zA-Z0-9]+$/;
      				if(!codeRegex.test(value)){     //验证输入的产品编号是否合法
-     					return '产品编号必须以FP前缀开头';
+     					return '产品编号必须以PP前缀开头';
      				}
      			},
      			productWeight:function(value,item){   //验证输入的克重

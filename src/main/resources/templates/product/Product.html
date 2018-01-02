@@ -2,32 +2,32 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="utf-8"/>
-	<title>活期产品列表</title>
+	<title>定期产品列表</title>
 	<link rel="stylesheet" type="text/css" th:href="@{/layui/css/layui.css}" media="all" />
 	<link rel="stylesheet" type="text/css" th:href="@{/css/news.css}" media="all" />
 </head>
-<body class="childrenBody">
+<body class="childrenBody" style="width:1400px;">
 	<blockquote class="layui-elem-quote news_search">
-	<form id="searchForm" name="searchForm" class="layui-form" action="/product/demand/demandProduct.html">
+	<form id="searchForm" name="searchForm" class="layui-form" action="/product/product.html">
  		<input type="hidden" id="pageNum" name="pageNum" th:value="${page}?${page.pageNum}"/>
 		  <div class="layui-form-item">
 		 	<label class="layui-form-label">产品编码:</label>
 		    <div class="layui-input-inline">
-		    	 <input  type="text" class="layui-input" name="code"  th:value="${demandProductVo}?${demandProductVo.code}"/>
+		    	 <input  type="text" class="layui-input" name="code"  th:value="${product}?${product.code}"/>
 		    </div>
 			<label class="layui-form-label">产品名称:</label>
 		    <div class="layui-input-inline">
-		    	 <input  type="text" class="layui-input" name="name"  th:value="${demandProductVo}?${demandProductVo.name}"/>
+		    	 <input  type="text" class="layui-input" name="name"  th:value="${product}?${product.name}"/>
 		    </div>
 			  <label class="layui-form-label">产品状态</label>
 			  <div class="layui-input-inline">
 				  <select name="status"  lay-filter="status">
 					  <option value="">请选择查询产品状态</option>
-					  <option value="0" th:selected="${demandProductVo}ne null  and ${demandProductVo.status == 0}">草稿未上架</option>
-					  <option value="1" th:selected="${demandProductVo}ne null  and ${demandProductVo.status == 1}">上架未开售</option>
-					  <option value="2" th:selected="${demandProductVo}ne null  and ${demandProductVo.status == 2}">正在销售中</option>
-					  <option value="3" th:selected="${demandProductVo}ne null  and ${demandProductVo.status == 3}">售磬未下架</option>
-					  <option value="4" th:selected="${demandProductVo}ne null  and ${demandProductVo.status == 4}">下架</option>
+					  <option value="0" th:selected="${product}ne null  and ${product.status == 0}">草稿未上架</option>
+					  <option value="1" th:selected="${product}ne null  and ${product.status == 1}">上架未开售</option>
+					  <option value="2" th:selected="${product}ne null  and ${product.status == 2}">正在销售中</option>
+					  <option value="3" th:selected="${product}ne null  and ${product.status == 3}">售磬未下架</option>
+					  <option value="4" th:selected="${product}ne null  and ${product.status == 4}">下架</option>
 				  </select>
 			  </div>
 		    <button class="layui-btn search_btn"><i class="layui-icon">&#xe615;</i>查询</button>
@@ -45,17 +45,17 @@
 				<col/>
 				<col/>
 				<col/>
+				<col/>
+				<col/>
 		    </colgroup>
 		    <thead>
 				<tr>
 					<th>产品编号</th>
-					<th>版本编号</th>
 					<th>产品名称</th>
+					<th>库存</th>
 					<th>状态</th>
-					<th>买入手续费</th>
-					<th>卖出手续费</th>
-					<th>起购金额</th>
-					<th>起购克重</th>
+					<th>产品价格</th>
+					<th>变现价格</th>
 					<th>创建时间</th>
 					<th>操作</th>
 				</tr> 
@@ -64,8 +64,8 @@
 		  	  <th:block th:if="${not #lists.isEmpty(page.list)}">
 			    	<tr th:each="item:${page.list}">
 				    	<td  th:text="${item.code}"></td>
-				    	<td  th:text="${item.version}"></td>
 				    	<td  th:text="${item.name}"></td>
+				    	<td  th:text="${item.quantity}"></td>
 						<th:block th:switch="${item.status}">
 						    <td  th:case="0">草稿未上架</td>
 							<td  th:case="1">上架未开售</td>
@@ -73,18 +73,15 @@
 							<td  th:case="3">售磬未下架</td>
 							<td  th:case="4">下架</td>
 						</th:block>
-						<td  th:text="${item.buyFee}"></td>
-						<td  th:text="${item.sellFee}"></td>
-						<td  th:text="${item.minAmount}"></td>
-						<td  th:text="${item.minWeight}"></td>
+						<td  th:text="${item.buyPrice}"></td>
+						<td  th:text="${item.sellPrice}"></td>
 						<td  th:text="${#dates.format(item.createTime,'yyyy-MM-dd HH:mm:ss')}"></td>
 				    	<td>
-							<a th:data="${item.id}" th:value="${item.version}" th:remove="${item.status == 0 or item.status == 4}?none:all" class="layui-btn layui-btn-mini shelves">上架</a>
-							<a th:data="${item.id}" th:value="${item.version}" th:remove="${item.status == 1}?none:all" class="layui-btn layui-btn-mini sale">开售</a>
-							<a th:data="${item.id}" th:value="${item.version}" th:remove="${item.status == 2 or item.status == 3}?none:all" class="layui-btn layui-btn-mini offShelf">下架</a>
-                            <a th:data="${item.id}" th:value="${item.version}" class="layui-btn layui-btn-mini demand_product_view">查看</a>
-					    	<a th:data="${item.id}" th:value="${item.version}" th:remove="${item.status == 0 or item.status == 4}?none:all"  class="layui-btn layui-btn-mini product_edit">编辑</a>
-							<!-- <a th:data="${item.id}" th:value="${item.version}" class="layui-btn layui-btn-danger layui-btn-mini news_del" ><i class="layui-icon">&#xe640;</i> 删除</a> -->
+				    		<a th:data="${item.id}"  th:remove="${item.status == 0 or item.status == 4}?none:all" class="layui-btn layui-btn-mini shelves">上架</a>
+							<a th:data="${item.id}"  th:remove="${item.status == 1}?none:all" class="layui-btn layui-btn-mini sale">开售</a>
+							<a th:data="${item.id}"  th:remove="${item.status == 2 or item.status == 3}?none:all" class="layui-btn layui-btn-mini offShelf">下架</a>
+                            <a th:data="${item.id}"  class="layui-btn layui-btn-mini product_info">查看</a>
+					    	<a th:data="${item.id}"  th:remove="${item.status == 0 or item.status == 4}?none:all"  class="layui-btn layui-btn-mini product_edit">编辑</a>
 						</td>
 					</tr>
 				</th:block>
@@ -120,81 +117,75 @@
 
             $(".shelves").bind("click",function () {
                 var id = $(this).attr('data');
-                var version = $(this).attr("value");
-                 updateStatus(id,version,1,'确定要上架吗?')
+                layer.confirm('确定要上架吗?', {icon: 3, title:'提示'}, function(index){
+                    $.post('updateProductStatus.html', {id:id,status:1}, function(data){
+                        location.reload();
+                    });
+                });
             });
 
             $(".offShelf").bind("click",function () {
                 var id = $(this).attr('data');
-                var version = $(this).attr("value");
-                updateStatus(id,version,4,'确定要下架该产品吗?')
+                layer.confirm('确定要下架该产品吗?', {icon: 3, title:'提示'}, function(index){
+                    $.post('updateProductStatus.html', {id:id,status:4}, function(data){
+                        location.reload();
+                    });
+                });
             });
             $(".sale").bind("click",function () {
                 var id = $(this).attr('data');
-                var version = $(this).attr("value");
-                updateStatus(id,version,2,'确定要销售该产品吗?')
+                layer.confirm('确定要销售该产品吗?', {icon: 3, title:'提示'}, function(index){
+                    $.post('updateProductStatus.html', {id:id,status:2}, function(data){
+                        location.reload();
+                    });
+                });
             });
             
             //删除
             $(".layui-btn-danger").bind("click",function() {
                 var id = $(this).attr("data");
-                var version = $(this).attr("value");
                 layer.confirm('确定要删除吗?', {icon: 3, title:'提示'}, function(index){
                 	  location.href="recycleProductDel.html?id="+id;
                 });
             });
             
-            //更新产品状态
-            function updateStatus(id,version,status,title){
-	            layer.confirm(title, {icon: 3, title:'提示'}, function(index){
-	                $.post('updateProductStatus.html', {id:id,version:version,status:status}, function(data){
-	                    $("#searchForm").submit();
-	                });
-	                
-	            });
-            }
+            //查看
+            $(".product_info").bind("click",function() {
+                var id = $(this).attr("data");
+                //Ajax获取
+            	$.post('productInfo.html', {id:id}, function(data){
+            	  	layer.open({
+            	  	  type: 1,
+              		  title: '查看产品'
+              		  ,area: ['1000px', '460px']
+              		  ,shade: 0
+              		  ,content: data
+           			  ,yes: function(index, layero){
+           				  layer.close(index);
+           				}
+              		}); 
+            	}); 
+            });
 
             //编辑
             $(".product_edit").bind("click",function() {
                 var id = $(this).attr("data");
-                var version = $(this).attr("value");
                 //Ajax获取
-            	form_html(id,version,'编辑活期产品');
+            	form_html(id,'编辑产品');
             });
 
-            /**
-			 * 添加
-             */
+            //添加
             $("#add").bind("click",function() {
             	//Ajax获取
-            	form_html("","",'添加活期产品');
+            	form_html("",'添加产品');
             });
             
-            //查看
-            $(".demand_product_view").bind("click",function() {
-                var id = $(this).attr("data");
-                var version = $(this).attr("value");
-                //Ajax获取
-                $.post('demandProductInfo.html', {id:id,version:version}, function(data){
-                    layer.open({
-                      type: 1,
-                      title: "查看活期产品"
-                      ,area: ['1000px', '520px']
-                      ,shade: 0
-                      ,content: data
-                      ,yes: function(index, layero){
-                          layer.close(index);
-                        }
-                    }); 
-                }); 
-            });
-            
-             function form_html(id,version,title){
-              	$.post('demandProductAdd.html', {id:id,version:version}, function(data){
+             function form_html(id,title){
+              	$.post('productAdd.html', {id:id}, function(data){
             	  	layer.open({
             	  	  type: 1,
               		  title: title
-              		  ,area: ['900px', '510px']
+              		  ,area: ['1000px', '460px']
               		  ,shade: 0
               		  ,content: data
            			  ,yes: function(index, layero){

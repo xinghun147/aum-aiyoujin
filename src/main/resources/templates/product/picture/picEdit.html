@@ -1,0 +1,70 @@
+<form id="editForm" name="editForm" class="layui-form" >
+	<input type="hidden" name="id"  th:value="${data}?${data.id}"/>
+	<input type="hidden" name="path"  th:value="${data}?${data.path}"/>
+	<input type="hidden" name="productId" id="productId" th:value="${data}?${data.productId}"/>
+	<div class="layui-form-item">
+		<div class="layui-inline">		
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-inline">		
+			<label class="layui-form-label">图片类型</label>
+			<div class="layui-input-block">
+				<!--<select name="type" id="type" th:value="${data}?${data.type}:''">
+					<option value="">请选择图片类型</option>
+					<option value="0">缩略图（thumb）</option>
+					<option value="1">大图（large）</option>
+					<option value="2">中图（middle）</option>
+				</select>-->
+				<input type="radio" name="type" value="0" title="缩略图（thumb）" th:checked="${data.type}==0?'true':'false'"/>
+				<input type="radio" name="type" value="1" title="大图（large）" th:checked="${data.type}==1?'true':'false'"/>
+				<input type="radio" name="type" value="2" title="中图（middle）" th:checked="${data.type}==2?'true':'false'"/>
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-inline">		
+			<label class="layui-form-label">排序位置</label>
+			<div class="layui-input-inline">
+				<input type="text" name="sortNo" th:value="${data}?${data.sortNo}:''" class="layui-input" id="sortNo"/>
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-form-item">
+			<div class="layui-input-block">
+				<button class="layui-btn" lay-submit="" lay-filter="editForm">立即提交</button>
+		    </div>
+		</div>
+	</div>
+</form>
+<script>
+layui.use(['form', 'laydate'], function(){
+	   var form = layui.form
+	   ,layer = layui.layer
+		,$ = layui.jquery
+	   ,laydate = layui.laydate;
+	   //监听提交
+	   form.on('submit(editForm)', function(data){
+	   		$.ajax({
+	            type: "POST",
+	            url:'/pic/toEdit.html',
+	            data:$('#editForm').serialize(),
+	            async: false,
+	            error: function(request) {
+	                alert("Connection error");
+	            },
+	            success: function(data) {
+	            	if(data == 'succ'){
+	            		 layer.closeAll();
+	            	}
+	            }
+	        });
+	   		return false;
+	   });
+       var option = $("#type").val();
+       console.log(option);
+       $('select').val(option);
+       form.render();
+	});
+</script>
