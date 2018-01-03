@@ -41,8 +41,8 @@
 		</javaClientGenerator>
 
 		<table tableName="t_product" domainObjectName="Product"></table>
-		<table tableName="t_product_picture" domainObjectName="ProductPicture"></table>
-		<table tableName="t_user" domainObjectName="User"></table>
+<!-- 		<table tableName="t_product_picture" domainObjectName="ProductPicture"></table>
+		<table tableName="t_user" domainObjectName="User"></table> -->
 
 
 	</context>

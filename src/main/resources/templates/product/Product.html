@@ -3,8 +3,8 @@
 <head>
 	<meta charset="utf-8"/>
 	<title>定期产品列表</title>
-	<link rel="stylesheet" type="text/css" th:href="@{/layui/css/layui.css}" media="all" />
-	<link rel="stylesheet" type="text/css" th:href="@{/css/news.css}" media="all" />
+	<link rel="stylesheet" type="text/css" th:href="@{/admin/static/layui/css/layui.css}" media="all" />
+	<link rel="stylesheet" type="text/css" th:href="@{/admin/static/css/news.css}" media="all" />
 </head>
 <body class="childrenBody" style="width:1400px;">
 	<blockquote class="layui-elem-quote news_search">
@@ -89,8 +89,8 @@
 		</table>
 	</div>
 	<div id="paged" align="right"></div>
-	<script type="text/javascript" th:src="@{/layui/layui.js}"></script>
-    <script type="text/javascript" th:src="@{/jquery/jquery-3.2.1.min.js}"></script>
+	<script type="text/javascript" th:src="@{/admin/static/layui/layui.js}"></script>
+    <script type="text/javascript" th:src="@{/admin/static/jquery/jquery-3.2.1.min.js}"></script>
 	</body>
 	<script th:inline="javascript">
          layui.use('laypage', function(){
@@ -118,7 +118,7 @@
             $(".shelves").bind("click",function () {
                 var id = $(this).attr('data');
                 layer.confirm('确定要上架吗?', {icon: 3, title:'提示'}, function(index){
-                    $.post('updateProductStatus.html', {id:id,status:1}, function(data){
+                    $.post('/admin/updateProductStatus.html', {id:id,status:1}, function(data){
                         location.reload();
                     });
                 });
@@ -127,7 +127,7 @@
             $(".offShelf").bind("click",function () {
                 var id = $(this).attr('data');
                 layer.confirm('确定要下架该产品吗?', {icon: 3, title:'提示'}, function(index){
-                    $.post('updateProductStatus.html', {id:id,status:4}, function(data){
+                    $.post('/admin/updateProductStatus.html', {id:id,status:4}, function(data){
                         location.reload();
                     });
                 });
@@ -135,7 +135,7 @@
             $(".sale").bind("click",function () {
                 var id = $(this).attr('data');
                 layer.confirm('确定要销售该产品吗?', {icon: 3, title:'提示'}, function(index){
-                    $.post('updateProductStatus.html', {id:id,status:2}, function(data){
+                    $.post('/admin/updateProductStatus.html', {id:id,status:2}, function(data){
                         location.reload();
                     });
                 });
@@ -153,7 +153,7 @@
             $(".product_info").bind("click",function() {
                 var id = $(this).attr("data");
                 //Ajax获取
-            	$.post('productInfo.html', {id:id}, function(data){
+            	$.post('/admin/productInfo.html', {id:id}, function(data){
             	  	layer.open({
             	  	  type: 1,
               		  title: '查看产品'
@@ -181,7 +181,7 @@
             });
             
              function form_html(id,title){
-              	$.post('productAdd.html', {id:id}, function(data){
+              	$.post('/admin/productAdd.html', {id:id}, function(data){
             	  	layer.open({
             	  	  type: 1,
               		  title: title

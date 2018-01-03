@@ -15,7 +15,7 @@ import com.hjgj.aiyoujin.common.utils.StringUtil;
 import com.hjgj.permissions.model.User;
 
 @Controller
-@RequestMapping("")
+@RequestMapping("/admin")
 public class IndexController extends BaseController {
 
 	@Autowired

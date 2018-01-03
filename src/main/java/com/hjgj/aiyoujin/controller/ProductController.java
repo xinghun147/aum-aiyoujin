@@ -19,7 +19,7 @@ import com.hjgj.permissions.model.User;
  * Created by Lin on 2017/9/5.
  */
 @Controller
-@RequestMapping("/product")
+@RequestMapping("/admin/product")
 public class ProductController extends BaseController{
 
     @Autowired
