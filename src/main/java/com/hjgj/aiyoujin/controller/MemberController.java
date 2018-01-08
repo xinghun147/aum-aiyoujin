@@ -26,7 +26,7 @@ public class MemberController extends BaseController {
 
 	
 
-
+	//
 	@RequestMapping(value = "addAddress", method = RequestMethod.POST)
 	public ResultModel addAddress(String userId, 
 			@RequestParam String contact,
