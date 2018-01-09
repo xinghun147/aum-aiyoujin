@@ -19,7 +19,7 @@
 	</parent>
 
 	<properties>
-		<start-class>com.hjgj.AdminApplication</start-class>
+		<start-class>com.hjgj.aiyoujin.AdminApplication</start-class>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
 		<commons-lang3.version>3.4</commons-lang3.version>
