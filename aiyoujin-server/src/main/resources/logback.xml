@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<pattern>%date [%thread] %-5level %logger{80} - %msg%n</pattern>
+		</layout>
+	</appender>
+	<appender name="logfile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+	  <file>/data/applogs/aum-platform/platform-server.log</file>
+	  <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+	    <fileNamePattern>/data/applogs/aum-platform/platform-server.%d{yyyy-MM-dd}.log</fileNamePattern>
+	  </rollingPolicy>
+	  <encoder>
+	    <pattern>%date %relative [%thread] %level %logger - %msg%n</pattern>
+	  </encoder>
+	</appender>
+	<logger name="profile" level="info" />
+	<logger name="com.hjgj" level="info"/>
+<!-- 	<logger name="com.yougou.imago.client">
+		<level value="DEBUG" />
+	</logger> -->
+	
+	<root>
+		<level value="error"/>
+		<appender-ref ref="stdout"/>
+	</root>
+</configuration>

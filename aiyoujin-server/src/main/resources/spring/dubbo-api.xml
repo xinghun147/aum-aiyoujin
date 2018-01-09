@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+	 http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+    <description>Dubbo provider配置</description>
+    <!-- 启动时检查提供者是否存在 --> 
+    <dubbo:consumer check="false"/>
+    <!-- 提供方应用信息，用于计算依赖关系 -->
+    <dubbo:application name="platform-server" owner="alm"/>
+    <!-- 使用zookeeper注册中心暴露服务地址 -->
+    <dubbo:registry protocol="zookeeper" address="${xml.dubbo.registry.address}"/>
+    <!-- 用dubbo协议在30880端口暴露服务 -->
+     <dubbo:protocol name="dubbo" port="30888" dispather="all" threadpool="cached" threads="500"/>
+    <!--监控-->
+    <!-- <dubbo:monitor protocol="registry"/> -->
+
+    <!-- 优雅停机-->
+    <bean class="com.hjgj.common.utils.DubboDestruction" destroy-method="destroy" lazy-init="false"/>
+</beans>
