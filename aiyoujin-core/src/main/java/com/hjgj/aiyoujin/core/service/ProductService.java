@@ -11,8 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.hjgj.aiyoujin.core.common.Constants;
 import com.hjgj.aiyoujin.core.common.utils.UUIDGenerator;
-import com.hjgj.aiyoujin.core.constants.Constants;
 import com.hjgj.aiyoujin.core.dao.ProductCustomMapper;
 import com.hjgj.aiyoujin.core.dao.ProductMapper;
 import com.hjgj.aiyoujin.core.model.Product;
