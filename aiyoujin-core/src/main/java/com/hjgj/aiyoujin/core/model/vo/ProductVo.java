@@ -53,7 +53,7 @@ public class ProductVo implements Serializable {
 		return middlePictures;
 	}
 
-	public void setMiddlePictures(String[] middlePictures) {
-		this.middlePictures = middlePictures;
+	public void setMiddlePictures(String middlePictures) {
+		this.middlePictures = middlePictures.split(",");
 	}
 }
