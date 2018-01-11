@@ -1,5 +1,9 @@
 package com.hjgj.aiyoujin.core.common.utils;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.UUID;
+
 /**
  * 
 * @ClassName: CommonUtils
@@ -52,5 +56,26 @@ public class CommonUtils {
 	 */
 	public static String makeBankNoAmbiguous(String bankNo, int prefix, int suffix) {
 		return bankNo.substring(0, prefix)+" **** **** "+bankNo.substring(bankNo.length() - suffix);
+	}
+
+	/**
+	 * 生成随机订单号
+	 * 总长度 32
+	 * @return
+	 */
+	public static String generateOrderNo(String prefix){
+		int machineId = 1;//最大支持1-9个集群机器部署
+		int hashCodeV = UUID.randomUUID().toString().hashCode();
+		if(hashCodeV < 0) {//有可能是负数
+			hashCodeV = - hashCodeV;
+		}
+		String orderNo = machineId+String.format("%015d", hashCodeV);
+		SimpleDateFormat format = new SimpleDateFormat("yyMMddHHmmss");
+		orderNo = prefix + format.format(new Date())+orderNo.substring(10,orderNo.length());
+		//32位长度保证
+		if (orderNo.length()>32) {
+			orderNo = orderNo.substring(0,32);
+		}
+		return orderNo;
 	}
 }
