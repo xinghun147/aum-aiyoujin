@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.hjgj.aiyoujin</groupId>
@@ -15,7 +15,7 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>1.4.1.RELEASE</version>
-		<relativePath /> <!-- lookup parent from repository -->
+		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
 	<properties>
@@ -64,9 +64,9 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-		    <groupId>com.github.ulisesbocchio</groupId>
-		    <artifactId>jasypt-spring-boot-starter</artifactId>
-		    <version>1.16</version>
+			<groupId>com.github.ulisesbocchio</groupId>
+			<artifactId>jasypt-spring-boot-starter</artifactId>
+			<version>1.16</version>
 		</dependency>
 		<!-- mybatis -->
 		<dependency>
@@ -154,9 +154,9 @@
 					<target>1.8</target>
 					<encoding>UTF-8</encoding>
 					<compilerArgs>
-                        <arg>-bootclasspath</arg>
-                        <arg>${java.home}/lib/rt.jar${path.separator}${java.home}/lib/jce.jar</arg>
-                    </compilerArgs>
+						<arg>-bootclasspath</arg>
+						<arg>${java.home}/lib/rt.jar${path.separator}${java.home}/lib/jce.jar</arg>
+					</compilerArgs>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -201,17 +201,17 @@
 		</plugins>
 	</build>
 
-  <distributionManagement>
-        <repository>
-            <id>releases</id>
-            <name>nexus Releases</name>
-            <url>http://172.16.10.188:8081/nexus/content/repositories/releases/</url>
-        </repository>
-        <snapshotRepository>
-            <id>snapshots</id>
-            <name>nexus Snapshots</name>
-            <url>http://172.16.10.188:8081/nexus/content/repositories/snapshots</url>
-        </snapshotRepository>
-    </distributionManagement>
+	<distributionManagement>
+		<repository>
+			<id>releases</id>
+			<name>nexus Releases</name>
+			<url>http://172.16.10.188:8081/nexus/content/repositories/releases/</url>
+		</repository>
+		<snapshotRepository>
+			<id>snapshots</id>
+			<name>nexus Snapshots</name>
+			<url>http://172.16.10.188:8081/nexus/content/repositories/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
 </project>
 
