@@ -37,6 +37,9 @@ public class UserApiController{
 										@ApiParam(value = "头像地址", required = false) @RequestParam String avatar) {
 		try {
 			User user = new User();
+			user.setAvatar(avatar);
+			user.setOpenId(openId);
+			user.setNickname(nickname);
 			userService.insertUser(user);
 			return ResultModel.ok();
 		} catch (Exception e) {
