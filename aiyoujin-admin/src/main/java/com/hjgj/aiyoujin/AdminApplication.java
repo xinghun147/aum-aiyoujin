@@ -11,7 +11,7 @@ import net.unicon.cas.client.configuration.EnableCasClient;
 @SpringBootApplication
 @EnableCasClient
 @PropertySources({@PropertySource(value = "classpath:config/config.properties"),
-	@PropertySource(value = "file:/etc.hjgj.aiyoujin.admin.conf/admin/config.properties", ignoreResourceNotFound = true)
+	@PropertySource(value = "file:/etc/hjgjconf/aiyoujin-admin/config.properties", ignoreResourceNotFound = true)
 })
 @ImportResource({"classpath:spring/dubbo-api.xml"})
 public class AdminApplication extends SpringBootServletInitializer {
