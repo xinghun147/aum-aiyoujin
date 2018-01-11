@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.hjgj.aiyoujin</groupId>
 	<artifactId>aiyoujin-core</artifactId>
@@ -67,9 +67,9 @@
 			<version>${commons-lang3.version}</version>
 		</dependency>
 		<dependency>
-		    <groupId>org.slf4j</groupId>
-		    <artifactId>slf4j-api</artifactId>
-		    <version>1.7.25</version>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.25</version>
 		</dependency>
 		<dependency>
 			<groupId>org.mybatis.generator</groupId>
@@ -88,9 +88,9 @@
 					<target>1.8</target>
 					<encoding>UTF-8</encoding>
 					<compilerArgs>
-                        <arg>-bootclasspath</arg>
-                        <arg>${java.home}/lib/rt.jar${path.separator}${java.home}/lib/jce.jar</arg>
-                    </compilerArgs>
+						<arg>-bootclasspath</arg>
+						<arg>${java.home}/lib/rt.jar${path.separator}${java.home}/lib/jce.jar</arg>
+					</compilerArgs>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -135,17 +135,17 @@
 		</plugins>
 	</build>
 
-  <distributionManagement>
-        <repository>
-            <id>releases</id>
-            <name>nexus Releases</name>
-            <url>http://172.16.10.188:8081/nexus/content/repositories/releases/</url>
-        </repository>
-        <snapshotRepository>
-            <id>snapshots</id>
-            <name>nexus Snapshots</name>
-            <url>http://172.16.10.188:8081/nexus/content/repositories/snapshots</url>
-        </snapshotRepository>
-    </distributionManagement>
+	<distributionManagement>
+		<repository>
+			<id>releases</id>
+			<name>nexus Releases</name>
+			<url>http://172.16.10.188:8081/nexus/content/repositories/releases/</url>
+		</repository>
+		<snapshotRepository>
+			<id>snapshots</id>
+			<name>nexus Snapshots</name>
+			<url>http://172.16.10.188:8081/nexus/content/repositories/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
 </project>
 
