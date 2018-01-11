@@ -148,3 +148,5 @@ target/
 *.jar
 
 /.apt_generated/
+/aiyoujin-server/.springBeans
+/aiyoujin-core/.springBeans
