@@ -2,7 +2,7 @@
 
 SERVER_NAME=aiyoujin-admin
 GREP_KEY=aiyoujin-admin.jar
-STDOUT_FILE=/data/applogs/aiyoujin-admin/logs/aiyoujin-admin.log
+STDOUT_FILE=/data/applogs/aiyoujin-admin/aiyoujin-admin.log
 WAR_FILE=target/aiyoujin-admin.jar
 
 
