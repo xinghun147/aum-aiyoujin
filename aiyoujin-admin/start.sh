@@ -1,9 +1,9 @@
 #!/bin/bash
 
-SERVER_NAME=platform-admin
-GREP_KEY=platform-admin.jar
-STDOUT_FILE=/data/applogs/platform-admin/logs/platform-admin.log
-WAR_FILE=target/platform-admin.jar
+SERVER_NAME=aiyoujin-admin
+GREP_KEY=aiyoujin-admin.jar
+STDOUT_FILE=/data/applogs/aiyoujin-admin/aiyoujin-admin.log
+WAR_FILE=target/aiyoujin-admin.jar
 
 
 PIDS=`ps -f | grep java | grep "${GREP_KEY}" |awk '{print $2}'`
