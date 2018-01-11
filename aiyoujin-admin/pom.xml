@@ -27,8 +27,8 @@
 		<mybatis.version>3.4.0</mybatis.version>
 		<mybatis-spring.version>1.3.0</mybatis-spring.version>
 		<fastjson.version>1.2.11</fastjson.version>
-		<aiyoujin.core.version>0.0.1-SNAPSHOT</aiyoujin.core.version>
 		<druid.version>1.0.11</druid.version>
+		<aiyoujin.core.version>0.0.1-SNAPSHOT</aiyoujin.core.version>
 	</properties>
 
 	<dependencies>
@@ -112,7 +112,17 @@
 			<artifactId>nekohtml</artifactId>
 			<version>1.9.22</version>
 		</dependency>
-		<!-- dubbo -->
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>druid</artifactId>
+			<version>${druid.version}</version>
+		</dependency>
+		<!-- c3p0 -->
+        <dependency>
+            <groupId>com.mchange</groupId>
+            <artifactId>c3p0</artifactId>
+            <version>0.9.5.2</version>
+        </dependency>
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>dubbo</artifactId>

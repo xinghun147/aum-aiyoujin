@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.hjgj</groupId>
+	<groupId>com.hjgj.aiyoujin</groupId>
 	<artifactId>aiyoujin-server</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
@@ -14,8 +14,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.4.1.RELEASE</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<version>1.5.9.RELEASE</version>
 	</parent>
 
 	<properties>
@@ -25,6 +24,9 @@
 		<guava.version>19.0</guava.version>
 		<fastjson.version>1.2.28</fastjson.version>
 		<org.codehaus.jackson.version>1.9.13</org.codehaus.jackson.version>
+		<druid.version>1.0.11</druid.version>
+		<mybatis.version>3.4.0</mybatis.version>
+		<mybatis-spring.version>1.3.0</mybatis-spring.version>
 		<aiyoujin.core.version>0.0.1-SNAPSHOT</aiyoujin.core.version>
 	</properties>
 
@@ -55,17 +57,13 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-redis</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.github.ulisesbocchio</groupId>
-			<artifactId>jasypt-spring-boot-starter</artifactId>
-			<version>1.16</version>
+		    <groupId>com.github.ulisesbocchio</groupId>
+		    <artifactId>jasypt-spring-boot-starter</artifactId>
+		    <version>1.16</version>
 		</dependency>
 		<dependency>
 			<groupId>com.alibaba</groupId>
@@ -97,9 +95,33 @@
 			<artifactId>jackson-core-asl</artifactId>
 			<version>${org.codehaus.jackson.version}</version>
 		</dependency>
-		<!-- <dependency> <groupId>org.codehaus.jackson</groupId> <artifactId>jackson-jaxrs</artifactId> 
-			<version>${org.codehaus.jackson.version}</version> </dependency> -->
-
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>druid</artifactId>
+			<version>${druid.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis-spring</artifactId>
+			<version>${mybatis-spring.version}</version>
+		</dependency>
+		<!-- mybatis -->
+		<dependency>
+			<artifactId>mybatis</artifactId>
+			<groupId>org.mybatis</groupId>
+			<version>${mybatis.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<!-- c3p0 -->
+        <dependency>
+            <groupId>com.mchange</groupId>
+            <artifactId>c3p0</artifactId>
+            <version>0.9.5.2</version>
+        </dependency>
 		<!-- dubbo -->
 		<dependency>
 			<groupId>com.alibaba</groupId>
@@ -119,9 +141,9 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.hjgj.aiyoujin</groupId>
-			<artifactId>aiyoujin-core</artifactId>
-			<version>${aiyoujin.core.version}</version>
+ 			<groupId>com.hjgj.aiyoujin</groupId> 
+  			<artifactId>aiyoujin-core</artifactId>  
+ 	 		<version>${aiyoujin.core.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
@@ -138,35 +160,35 @@
 			<artifactId>freemarker</artifactId>
 			<version>2.3.23</version>
 		</dependency>
-		<dependency>
-			<groupId>org.dom4j</groupId>
-			<artifactId>dom4j</artifactId>
-			<version>2.1.0</version>
-		</dependency>
+        <dependency>
+            <groupId>org.dom4j</groupId>
+            <artifactId>dom4j</artifactId>
+            <version>2.1.0</version>
+        </dependency>
 		<dependency>
 			<groupId>commons-httpclient</groupId>
 			<artifactId>commons-httpclient</artifactId>
 			<version>3.1</version>
 		</dependency>
-
+		
 		<!-- Swagger -->
 		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger2</artifactId>
 			<version>2.7.0</version>
 		</dependency>
-
+		
 		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger-ui</artifactId>
 			<version>2.7.0</version>
 		</dependency>
+		
 		<dependency>
 			<groupId>com.github.liyiorg</groupId>
 			<artifactId>weixin-popular</artifactId>
 			<version>2.8.15</version>
 		</dependency>
-
 
 	</dependencies>
 	<build>
@@ -180,9 +202,9 @@
 					<target>1.8</target>
 					<encoding>UTF-8</encoding>
 					<compilerArgs>
-						<arg>-bootclasspath</arg>
-						<arg>${java.home}/lib/rt.jar${path.separator}${java.home}/lib/jce.jar</arg>
-					</compilerArgs>
+                        <arg>-bootclasspath</arg>
+                        <arg>${java.home}/lib/rt.jar${path.separator}${java.home}/lib/jce.jar</arg>
+                    </compilerArgs>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -211,4 +233,3 @@
 	</build>
 
 </project>
-

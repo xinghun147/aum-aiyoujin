@@ -17,5 +17,5 @@
                      
     <!-- pms接口 -->
     <dubbo:reference id="permissionsApi" interface="com.hjgj.permissions.api.IPermissionsApi"  version="1.0"  protocol="dubbo" timeout="15000"/> 
-    <bean class="com.hjgj.aiyoujin.core.common.utils.DubboDestruction" destroy-method="destroy" lazy-init="false"/>
+    <bean class="com.hjgj.aiyoujin.admin.common.utils.DubboDestruction" destroy-method="destroy" lazy-init="false"/>
 </beans>
