@@ -148,3 +148,4 @@ target/
 *.jar
 
 /.apt_generated/
+/.springBeans
