@@ -1,7 +1,9 @@
-package com.hjgj.aiyoujin.admin.controller;
+package com.hjgj.aiyoujin.server.controller;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,23 +12,25 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.hjgj.aiyoujin.admin.common.Constants;
-import com.hjgj.aiyoujin.admin.common.ResultModel;
-import com.hjgj.aiyoujin.admin.common.ResultStatus;
-import com.hjgj.aiyoujin.admin.common.utils.FormatCheckUtils;
+import com.hjgj.aiyoujin.core.common.Constants;
+import com.hjgj.aiyoujin.core.common.utils.FormatCheckUtils;
 import com.hjgj.aiyoujin.core.model.UserAddress;
 import com.hjgj.aiyoujin.core.service.AddressService;
 import com.hjgj.aiyoujin.core.vo.AddressVo;
+import com.hjgj.aiyoujin.server.common.ResultModel;
+import com.hjgj.aiyoujin.server.common.ResultStatus;
+
+import io.swagger.annotations.ApiOperation;
 @RestController
 @RequestMapping("/member/")
-public class MemberController extends BaseController {
-
+public class MemberApiController{
+	protected final Logger logger = LoggerFactory.getLogger(MemberApiController.class);
 	@Autowired
 	private AddressService addressService;
 
 	
 
-
+	@ApiOperation(value = "添加地址")
 	@RequestMapping(value = "addAddress", method = RequestMethod.POST)
 	public ResultModel addAddress(String userId, 
 			@RequestParam String contact,
@@ -71,7 +75,7 @@ public class MemberController extends BaseController {
 			return ResultModel.error(ResultStatus.SYSTEM_ERROR);
 		}
 	}
-
+	@ApiOperation(value = "修改地址")
 	@RequestMapping(value = "putAddress", method = RequestMethod.PUT)
 	public ResultModel putAddress(String userId,  
 			@RequestParam String id,
@@ -96,7 +100,7 @@ public class MemberController extends BaseController {
 			return ResultModel.error(ResultStatus.SYSTEM_ERROR);
 		}
 	}
-	
+	@ApiOperation(value = "查询用户地址")
 	@RequestMapping(value = "queryAddress", method = RequestMethod.GET)
 	public ResultModel queryAddress(String userId) {
 		AddressVo addressVo = new AddressVo();
@@ -104,7 +108,7 @@ public class MemberController extends BaseController {
 		List<UserAddress> data = addressService.queryAddress(addressVo);
 		return ResultModel.ok(data);
 	}
-	
+	@ApiOperation(value = "删除用户地址")
 	@RequestMapping(value = "delAddress/{id}", method = RequestMethod.DELETE)
 	public ResultModel delAddress(String userId,@PathVariable("id") String id) {
 		try {
@@ -116,7 +120,7 @@ public class MemberController extends BaseController {
 		}
 	}
 	
-	
+	@ApiOperation(value = "设置默认地址")
 	@RequestMapping(value = "putDefault", method = RequestMethod.PUT)
 	public ResultModel putDefault(String userId,@RequestParam String id) {
 		Assert.notNull(id, "id can not be empty");
