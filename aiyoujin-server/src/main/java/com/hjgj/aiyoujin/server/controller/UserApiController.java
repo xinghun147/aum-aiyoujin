@@ -40,8 +40,8 @@ public class UserApiController{
 			user.setAvatar(avatar);
 			user.setOpenId(openId);
 			user.setNickname(nickname);
-			userService.insertUser(user);
-			return ResultModel.ok();
+			 user = userService.insertUser(user);
+			return ResultModel.ok(user);
 		} catch (Exception e) {
 			logger.error("添加用户接口异常,e:{}", e);
 			return ResultModel.error(ResultStatus.SYSTEM_ERROR);
