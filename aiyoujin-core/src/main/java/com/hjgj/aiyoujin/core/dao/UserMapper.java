@@ -12,7 +12,7 @@ public interface UserMapper {
 
     int deleteByPrimaryKey(String id);
 
-    int insert(User record);
+    User insert(User record);
 
     int insertSelective(User record);
 

@@ -17,12 +17,13 @@ public class UserService {
 	private UserMapper userMapper;
 	
 	
-	public void insertUser(User user) throws Exception{
+	public User insertUser(User user) throws Exception{
 		user.setCreateTime(new Date());
 		user.setDeleted(Constants.DelFlag.NO.ordinal());
 		user.setId(UUIDGenerator.generate());
 		user.setUpdateTime(new Date());
 		userMapper.insert(user);
+		return user;
 	}
 
 }
