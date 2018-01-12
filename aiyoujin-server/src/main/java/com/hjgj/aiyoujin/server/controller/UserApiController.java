@@ -2,6 +2,7 @@ package com.hjgj.aiyoujin.server.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -33,14 +34,15 @@ public class UserApiController{
     @ApiOperation(value = "添加用户")
 	@RequestMapping(value = "addUser", method = RequestMethod.GET)
 	public ResultModel queryGoodsDetail(@ApiParam(value = "微信openId", required = true)  @RequestParam String openId,
-										@ApiParam(value = "昵称", required = false) @RequestParam String nickname,
-										@ApiParam(value = "头像地址", required = false) @RequestParam String avatar) {
-		try {
+										@ApiParam(value = "昵称") @RequestParam(required = false) String nickname,
+										@ApiParam(value = "头像地址") @RequestParam(required = false) String avatar) {
+    	Assert.notNull(openId, "微信openId can not be empty");
+    	try {
 			User user = new User();
 			user.setAvatar(avatar);
 			user.setOpenId(openId);
 			user.setNickname(nickname);
-			 user = userService.insertUser(user);
+			user = userService.insertUser(user);
 			return ResultModel.ok(user);
 		} catch (Exception e) {
 			logger.error("添加用户接口异常,e:{}", e);

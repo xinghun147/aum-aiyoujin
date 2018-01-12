@@ -2,6 +2,7 @@ package com.hjgj.aiyoujin.server.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,6 +37,8 @@ public class ProductApiController{
 	@RequestMapping(value = "queryGoodsDetail", method = RequestMethod.GET)
 	public ResultModel queryGoodsDetail(@ApiParam(value = "第多少页", required = true)  @RequestParam Integer pageNum,
 										@ApiParam(value = "每页多少", required = true) @RequestParam Integer pageSize) {
+    	Assert.notNull(pageNum, "页码 can not be empty");
+    	Assert.notNull(pageSize, "每页条数 can not be empty");
 		try {
 			Page<ProductVo> data = productService.queryPageGoods(new Product(), pageNum, pageSize);
 			return ResultModel.ok(data);
