@@ -17,13 +17,18 @@
    </select>
    
    <select id="queryGoodsDetail" parameterType="java.lang.String" resultType="com.hjgj.aiyoujin.core.model.vo.ProductVo">
-   SELECT t.id id,t.`name` name,t.buy_price buyPrice,pic.imageUrls middlePictures
+   SELECT t.id id,t.`name` name,t.buy_price buyPrice,p.imageUrls middlePictures,p1.imageUrls largePictures
 	FROM t_product t 
 	LEFT JOIN 
    (SELECT GROUP_CONCAT(path ORDER BY sort_no ASC) imageUrls,
     product_id
     FROM t_product_picture 
-    WHERE  type = 2 GROUP BY product_id) pic ON pic.product_id= t.id
+    WHERE  type = 2 GROUP BY product_id) p ON p.product_id= t.id
+    LEFT JOIN 
+   (SELECT GROUP_CONCAT(path ORDER BY sort_no ASC) imageUrls,
+    product_id
+    FROM t_product_picture 
+    WHERE  type = 1 GROUP BY product_id) p1 ON p1.product_id= t.id
     where t.id=#{id,jdbcType=VARCHAR}
    </select>
 </mapper>
