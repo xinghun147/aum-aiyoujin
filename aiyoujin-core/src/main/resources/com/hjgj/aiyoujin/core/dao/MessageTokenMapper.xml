@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hjgj.aiyoujin.core.dao.MessageTokenMapper" >
+  <resultMap id="BaseResultMap" type="com.hjgj.aiyoujin.core.model.MessageToken" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="access_token" property="accessToken" jdbcType="VARCHAR" />
+    <result column="refresh_token" property="refreshToken" jdbcType="VARCHAR" />
+    <result column="expires_in" property="expiresIn" jdbcType="INTEGER" />
+    <result column="err_code" property="errCode" jdbcType="VARCHAR" />
+    <result column="err_msg" property="errMsg" jdbcType="VARCHAR" />
+    <result column="scope" property="scope" jdbcType="VARCHAR" />
+    <result column="ip_list" property="ipList" jdbcType="VARCHAR" />
+    <result column="expired_date" property="expiredDate" jdbcType="VARCHAR" />
+    <result column="require_date" property="requireDate" jdbcType="TIMESTAMP" />
+    <result column="token_type" property="tokenType" jdbcType="INTEGER" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, access_token, refresh_token, expires_in, err_code, err_msg, scope, ip_list, expired_date, 
+    require_date, token_type, remark
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.hjgj.aiyoujin.core.model.MessageTokenExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_token
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="limitRows != null and limitRows>0" >
+      limit #{limitOffset} , #{limitRows}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_token
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from t_token
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.hjgj.aiyoujin.core.model.MessageTokenExample" >
+    delete from t_token
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.hjgj.aiyoujin.core.model.MessageToken" >
+    insert into t_token (id, access_token, refresh_token, 
+      expires_in, err_code, err_msg, 
+      scope, ip_list, expired_date, 
+      require_date, token_type, remark
+      )
+    values (#{id,jdbcType=VARCHAR}, #{accessToken,jdbcType=VARCHAR}, #{refreshToken,jdbcType=VARCHAR}, 
+      #{expiresIn,jdbcType=INTEGER}, #{errCode,jdbcType=VARCHAR}, #{errMsg,jdbcType=VARCHAR}, 
+      #{scope,jdbcType=VARCHAR}, #{ipList,jdbcType=VARCHAR}, #{expiredDate,jdbcType=VARCHAR}, 
+      #{requireDate,jdbcType=TIMESTAMP}, #{tokenType,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.hjgj.aiyoujin.core.model.MessageToken" >
+    insert into t_token
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="accessToken != null" >
+        access_token,
+      </if>
+      <if test="refreshToken != null" >
+        refresh_token,
+      </if>
+      <if test="expiresIn != null" >
+        expires_in,
+      </if>
+      <if test="errCode != null" >
+        err_code,
+      </if>
+      <if test="errMsg != null" >
+        err_msg,
+      </if>
+      <if test="scope != null" >
+        scope,
+      </if>
+      <if test="ipList != null" >
+        ip_list,
+      </if>
+      <if test="expiredDate != null" >
+        expired_date,
+      </if>
+      <if test="requireDate != null" >
+        require_date,
+      </if>
+      <if test="tokenType != null" >
+        token_type,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="accessToken != null" >
+        #{accessToken,jdbcType=VARCHAR},
+      </if>
+      <if test="refreshToken != null" >
+        #{refreshToken,jdbcType=VARCHAR},
+      </if>
+      <if test="expiresIn != null" >
+        #{expiresIn,jdbcType=INTEGER},
+      </if>
+      <if test="errCode != null" >
+        #{errCode,jdbcType=VARCHAR},
+      </if>
+      <if test="errMsg != null" >
+        #{errMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="scope != null" >
+        #{scope,jdbcType=VARCHAR},
+      </if>
+      <if test="ipList != null" >
+        #{ipList,jdbcType=VARCHAR},
+      </if>
+      <if test="expiredDate != null" >
+        #{expiredDate,jdbcType=VARCHAR},
+      </if>
+      <if test="requireDate != null" >
+        #{requireDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tokenType != null" >
+        #{tokenType,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.hjgj.aiyoujin.core.model.MessageTokenExample" resultType="java.lang.Integer" >
+    select count(*) from t_token
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_token
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.accessToken != null" >
+        access_token = #{record.accessToken,jdbcType=VARCHAR},
+      </if>
+      <if test="record.refreshToken != null" >
+        refresh_token = #{record.refreshToken,jdbcType=VARCHAR},
+      </if>
+      <if test="record.expiresIn != null" >
+        expires_in = #{record.expiresIn,jdbcType=INTEGER},
+      </if>
+      <if test="record.errCode != null" >
+        err_code = #{record.errCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.errMsg != null" >
+        err_msg = #{record.errMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.scope != null" >
+        scope = #{record.scope,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ipList != null" >
+        ip_list = #{record.ipList,jdbcType=VARCHAR},
+      </if>
+      <if test="record.expiredDate != null" >
+        expired_date = #{record.expiredDate,jdbcType=VARCHAR},
+      </if>
+      <if test="record.requireDate != null" >
+        require_date = #{record.requireDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.tokenType != null" >
+        token_type = #{record.tokenType,jdbcType=INTEGER},
+      </if>
+      <if test="record.remark != null" >
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_token
+    set id = #{record.id,jdbcType=VARCHAR},
+      access_token = #{record.accessToken,jdbcType=VARCHAR},
+      refresh_token = #{record.refreshToken,jdbcType=VARCHAR},
+      expires_in = #{record.expiresIn,jdbcType=INTEGER},
+      err_code = #{record.errCode,jdbcType=VARCHAR},
+      err_msg = #{record.errMsg,jdbcType=VARCHAR},
+      scope = #{record.scope,jdbcType=VARCHAR},
+      ip_list = #{record.ipList,jdbcType=VARCHAR},
+      expired_date = #{record.expiredDate,jdbcType=VARCHAR},
+      require_date = #{record.requireDate,jdbcType=TIMESTAMP},
+      token_type = #{record.tokenType,jdbcType=INTEGER},
+      remark = #{record.remark,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hjgj.aiyoujin.core.model.MessageToken" >
+    update t_token
+    <set >
+      <if test="accessToken != null" >
+        access_token = #{accessToken,jdbcType=VARCHAR},
+      </if>
+      <if test="refreshToken != null" >
+        refresh_token = #{refreshToken,jdbcType=VARCHAR},
+      </if>
+      <if test="expiresIn != null" >
+        expires_in = #{expiresIn,jdbcType=INTEGER},
+      </if>
+      <if test="errCode != null" >
+        err_code = #{errCode,jdbcType=VARCHAR},
+      </if>
+      <if test="errMsg != null" >
+        err_msg = #{errMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="scope != null" >
+        scope = #{scope,jdbcType=VARCHAR},
+      </if>
+      <if test="ipList != null" >
+        ip_list = #{ipList,jdbcType=VARCHAR},
+      </if>
+      <if test="expiredDate != null" >
+        expired_date = #{expiredDate,jdbcType=VARCHAR},
+      </if>
+      <if test="requireDate != null" >
+        require_date = #{requireDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tokenType != null" >
+        token_type = #{tokenType,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hjgj.aiyoujin.core.model.MessageToken" >
+    update t_token
+    set access_token = #{accessToken,jdbcType=VARCHAR},
+      refresh_token = #{refreshToken,jdbcType=VARCHAR},
+      expires_in = #{expiresIn,jdbcType=INTEGER},
+      err_code = #{errCode,jdbcType=VARCHAR},
+      err_msg = #{errMsg,jdbcType=VARCHAR},
+      scope = #{scope,jdbcType=VARCHAR},
+      ip_list = #{ipList,jdbcType=VARCHAR},
+      expired_date = #{expiredDate,jdbcType=VARCHAR},
+      require_date = #{requireDate,jdbcType=TIMESTAMP},
+      token_type = #{tokenType,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <select id="selectOneByExample" resultMap="BaseResultMap" parameterType="com.hjgj.aiyoujin.core.model.MessageTokenExample" >
+    select <include refid="Base_Column_List" /> from t_token <if test="_parameter != null" >  <include refid="Example_Where_Clause" /> </if> <if test="orderByClause != null" >  order by ${orderByClause} </if>  limit 1
+  </select>
+</mapper>
