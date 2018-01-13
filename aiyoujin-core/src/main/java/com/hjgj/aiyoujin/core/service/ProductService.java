@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.hjgj.aiyoujin.core.common.Constants;
+import com.hjgj.aiyoujin.core.common.exception.BusinessException;
+import com.hjgj.aiyoujin.core.common.exception.EnumError;
 import com.hjgj.aiyoujin.core.common.utils.UUIDGenerator;
 import com.hjgj.aiyoujin.core.dao.ProductCustomMapper;
 import com.hjgj.aiyoujin.core.dao.ProductMapper;
@@ -121,5 +123,28 @@ public class ProductService extends BaseService {
 			return null;
 		}
 		return productCustomMapper.queryGoodsDetail(id);
+	}
+	/**
+	 * 
+	 * @Title:        updateQuantity 
+	 * @Description:  更新库存  负数为扣减 正数为释放增加
+	 * @param:        @param id
+	 * @param:        @param quantity    
+	 * @return:       void    
+	 * @throws 			
+	 * @author        ailiming@gold32.com
+	 * @Date          2018年1月13日 下午2:35:22
+	 */
+	public void updateQuantity(String id,Integer quantity) throws BusinessException{
+		if(StringUtils.isBlank(id)|| quantity == null){
+			logger.error("更新库存商品id为null");
+			return ;
+		}
+		Product product = productMapper.getAndLock(id);
+		if(quantity < 0 && product.getQuantity() < Math.abs(quantity)){
+			throw new BusinessException(EnumError.INSUFFICIENT_STOCK_ERROR);
+		}
+		product.setQuantity(product.getQuantity()+quantity);
+		productMapper.updateByPrimaryKeySelective(product);
 	}
 }

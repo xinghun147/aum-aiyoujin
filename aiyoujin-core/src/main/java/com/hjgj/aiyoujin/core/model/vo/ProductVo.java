@@ -11,11 +11,13 @@ public class ProductVo implements Serializable {
 
     private String name;
 
-    private String thumbPictures;
+    private String thumbPictures;//产品列表图片
 
     private BigDecimal buyPrice;
     
-    private String [] middlePictures;
+    private String [] middlePictures;//产品详情图片
+    
+    private String [] largePictures;//订单详情图片
 
     public String getId() {
         return id;
@@ -55,5 +57,13 @@ public class ProductVo implements Serializable {
 
 	public void setMiddlePictures(String middlePictures) {
 		this.middlePictures = middlePictures.split(",");
+	}
+
+	public String[] getLargePictures() {
+		return largePictures;
+	}
+
+	public void setLargePictures(String largePictures) {
+		this.largePictures = largePictures.split(",");
 	}
 }
