@@ -521,4 +521,12 @@
   <select id="selectOneByExample" resultMap="BaseResultMap" parameterType="com.hjgj.aiyoujin.core.model.ProductExample" >
     select <include refid="Base_Column_List" /> from t_product <if test="_parameter != null" >  <include refid="Example_Where_Clause" /> </if> <if test="orderByClause != null" >  order by ${orderByClause} </if>  limit 1
   </select>
+  
+  <select id="getAndLock" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_product where
+    id =  #{id,jdbcType=VARCHAR}
+    for update
+  </select>
 </mapper>
