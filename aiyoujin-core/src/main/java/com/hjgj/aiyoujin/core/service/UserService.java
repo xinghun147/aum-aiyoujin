@@ -18,9 +18,9 @@ public class UserService {
 	
 	
 	public User insertUser(User user) throws Exception{
+		user.setId(UUIDGenerator.generate());
 		user.setCreateTime(new Date());
 		user.setDeleted(Constants.DelFlag.NO.ordinal());
-		user.setId(UUIDGenerator.generate());
 		user.setUpdateTime(new Date());
 		userMapper.insert(user);
 		return user;
