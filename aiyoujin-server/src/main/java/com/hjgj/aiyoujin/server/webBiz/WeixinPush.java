@@ -65,18 +65,18 @@ public class WeixinPush {
 
         // 物品名称
         TemplateMessageItem keyword1 = new TemplateMessageItem();
-        keyword1.setValue("爱有金金牌项链");
-        keyword1.setColor("#CC3333");
+        keyword1.setValue(prodName);
+        keyword1.setColor("#333333");
 
         // 付款金额
         TemplateMessageItem keyword2 = new TemplateMessageItem();
-        keyword2.setValue("0.01元");
-        keyword2.setColor("#333333");
+        keyword2.setValue(payMoney+"元");
+        keyword2.setColor("#CC3333");
 
         // 付款时间
         TemplateMessageItem keyword3 = new TemplateMessageItem();
-        keyword3.setValue("2018年1月11日");
-        keyword3.setColor("#CC3333");
+        keyword3.setValue(payTime);
+        keyword3.setColor("#333333");
 
         LinkedHashMap<String, TemplateMessageItem> linkedHashMap = new LinkedHashMap<String, TemplateMessageItem>();
 

@@ -32,6 +32,10 @@ public class Order {
 
     private String sourceOrderId;
 
+    private String fromOrderId;
+
+    private String toOrderId;
+
     public String getId() {
         return id;
     }
@@ -142,5 +146,21 @@ public class Order {
 
     public void setSourceOrderId(String sourceOrderId) {
         this.sourceOrderId = sourceOrderId == null ? null : sourceOrderId.trim();
+    }
+
+    public String getFromOrderId() {
+        return fromOrderId;
+    }
+
+    public void setFromOrderId(String fromOrderId) {
+        this.fromOrderId = fromOrderId == null ? null : fromOrderId.trim();
+    }
+
+    public String getToOrderId() {
+        return toOrderId;
+    }
+
+    public void setToOrderId(String toOrderId) {
+        this.toOrderId = toOrderId == null ? null : toOrderId.trim();
     }
 }

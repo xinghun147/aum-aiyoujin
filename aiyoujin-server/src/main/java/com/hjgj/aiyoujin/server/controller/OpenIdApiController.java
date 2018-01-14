@@ -7,8 +7,11 @@ import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.entity.ContentType;
 import org.apache.http.message.BasicHeader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import weixin.popular.client.LocalHttpClient;
 
@@ -16,6 +19,7 @@ import weixin.popular.client.LocalHttpClient;
 //@RequestMapping(value = "/api/openid")
 public class OpenIdApiController {
 
+    protected final Logger logger = LoggerFactory.getLogger(OpenIdApiController.class);
 
     protected static final String BASE_URI = "https://api.weixin.qq.com";
 
@@ -30,8 +34,9 @@ public class OpenIdApiController {
     protected static final String PARAM_ACCESS_TOKEN = "access_token";
 
     @ResponseBody
-    @RequestMapping(value = "getOpenId")
+    @RequestMapping(value = "getOpenId",method = RequestMethod.GET)
     public OpenIdResult getOpenId(String jsCode) {
+        logger.info("用户获取OpenId=========>jsCode为:"+jsCode);
         HttpUriRequest httpUriRequest = RequestBuilder.post()
                 .setHeader(jsonHeader)
                 .setUri(BASE_URI+"/sns/jscode2session")
@@ -42,6 +47,7 @@ public class OpenIdApiController {
                 .build();
 
         OpenIdResult openIdResult = LocalHttpClient.executeJsonResult(httpUriRequest, OpenIdResult.class);
+        logger.info("获取OpenIdResult==========>"+openIdResult);
         return openIdResult;
     }
 

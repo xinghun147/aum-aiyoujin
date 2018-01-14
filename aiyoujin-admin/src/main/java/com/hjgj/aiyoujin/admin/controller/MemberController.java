@@ -2,6 +2,7 @@ package com.hjgj.aiyoujin.admin.controller;
 
 import java.util.List;
 
+import com.hjgj.aiyoujin.core.common.utils.UUIDGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -65,7 +66,7 @@ public class MemberController extends BaseController {
 				}
 			}
 			String id=addressService.insert(userAddress)+"";
-			return ResultModel.ok(id);
+			return ResultModel.ok(userAddress.getId());
 		} catch (Exception e) {
 			logger.error("用户添加地址异常,e:{}", e);
 			return ResultModel.error(ResultStatus.SYSTEM_ERROR);

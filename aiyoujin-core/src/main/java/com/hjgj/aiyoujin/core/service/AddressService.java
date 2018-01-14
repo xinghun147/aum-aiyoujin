@@ -41,9 +41,9 @@ public class AddressService extends BaseService  {
 		if(StringUtils.isNotBlank(addressVo.getUserId())){
 			criteria.andUserIdEqualTo(addressVo.getUserId());
 		}
-		if(addressVo.getDeleted() != null){
-			criteria.andDeletedEqualTo(addressVo.getDeleted());
-		}
+//		if(addressVo.getDeleted() != null){
+			criteria.andDeletedEqualTo(Constants.DelFlag.NO.ordinal());
+//		}
 		if(addressVo.getIsDefault() != null){
 			criteria.andIsDefaultEqualTo(addressVo.getIsDefault());
 		}

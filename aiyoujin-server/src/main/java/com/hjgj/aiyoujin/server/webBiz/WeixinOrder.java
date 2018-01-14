@@ -161,4 +161,33 @@ public class WeixinOrder {
         return hashMap;
     }
 
+    public String getXmlRequest(String nonce, String openId, BigDecimal payMoney, String orderNo,String productName) {
+        String appid = weiXinProperty.getAppid();
+        String merchantId = weiXinProperty.getMerchantId();
+        String invokeUrl = weiXinProperty.getInvokeUrl();
+        String clientIP = weiXinProperty.getClientIP();
+        String apiKey = weiXinProperty.getApiKey();
+
+        UnifiedOrderRequest orderRequest = new UnifiedOrderRequest();
+
+        DecimalFormat df = new DecimalFormat("#");
+        String money = df.format(payMoney.multiply(new BigDecimal(100)));
+        orderRequest.setAppid(appid);
+        orderRequest.setBody(productName);
+        orderRequest.setMch_id(merchantId);
+        orderRequest.setNonce_str(nonce);
+        orderRequest.setNotify_url(invokeUrl);
+        orderRequest.setOut_trade_no(orderNo);
+        orderRequest.setSpbill_create_ip(clientIP);
+        orderRequest.setTrade_type("JSAPI"); //JSAPI--公众号支付、NATIVE--原生扫码支付、APP--app支付
+        orderRequest.setTotal_fee(money); // 单位是:分
+        orderRequest.setOpenid(openId);
+        orderRequest.setSign(WxSignUtil.createSign(orderRequest, apiKey));//签名
+
+        XStream xStream = new XStream(new XppDriver(new XmlFriendlyNameCoder("_-", "_")));
+        xStream.alias("xml", UnifiedOrderRequest.class);//根元素名需要是xml
+        String xmlRequest = xStream.toXML(orderRequest);
+        return xmlRequest;
+    }
+
 }

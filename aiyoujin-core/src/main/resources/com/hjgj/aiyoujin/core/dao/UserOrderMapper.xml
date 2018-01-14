@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hjgj.aiyoujin.core.dao.UserOrderMapper">
+
+	<resultMap id="BaseResultMap" type="com.hjgj.aiyoujin.core.model.Order">
+		<id column="id" property="id" jdbcType="VARCHAR"/>
+		<result column="code" property="code" jdbcType="VARCHAR"/>
+		<result column="user_id" property="userId" jdbcType="VARCHAR"/>
+		<result column="product_id" property="productId" jdbcType="VARCHAR"/>
+		<result column="buy_amount" property="buyAmount" jdbcType="DECIMAL"/>
+		<result column="status" property="status" jdbcType="INTEGER"/>
+		<result column="deleted" property="deleted" jdbcType="INTEGER"/>
+		<result column="reason" property="reason" jdbcType="VARCHAR"/>
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+		<result column="sell_amount" property="sellAmount" jdbcType="DECIMAL"/>
+		<result column="express_company" property="expressCompany" jdbcType="VARCHAR"/>
+		<result column="express_no" property="expressNo" jdbcType="VARCHAR"/>
+		<result column="source_order_id" property="sourceOrderId" jdbcType="VARCHAR"/>
+		<result column="from_order_id" property="fromOrderId" jdbcType="VARCHAR"/>
+		<result column="to_order_id" property="toOrderId" jdbcType="VARCHAR"/>
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem" open="(" close=")"
+											 separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem" open="(" close=")"
+											 separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, code, user_id, product_id, buy_amount, status, deleted, reason, create_time,
+		update_time, sell_amount, express_company, express_no, source_order_id, from_order_id,
+		to_order_id
+	</sql>
+	<select id="selectByExample" resultMap="BaseResultMap" parameterType="com.hjgj.aiyoujin.core.model.OrderExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List"/>
+		from t_order
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause"/>
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+		<if test="limitRows != null and limitRows>0">
+			limit #{limitOffset} , #{limitRows}
+		</if>
+	</select>
+
+	<!-- TODO 统计礼物数目 -->
+	<select id="countUserAllOrdersByUserId" resultType="java.lang.Integer">
+		SELECT
+		count(oneOrder.id)
+		FROM
+		t_order AS oneOrder
+		LEFT JOIN t_order AS fromOrder ON oneOrder.from_order_id = fromOrder.id
+		LEFT JOIN t_user AS oneUser ON oneOrder.user_id = oneUser.id
+		LEFT JOIN t_user AS fromUser ON fromUser.id = fromOrder.user_id
+		LEFT JOIN t_order AS toOrder ON toOrder.id = oneOrder.to_order_id
+		LEFT JOIN t_user AS toUser ON toUser.id = toOrder.user_id
+		LEFT JOIN t_product AS oneProd ON oneProd.id = oneOrder.product_id
+		LEFT JOIN t_product_picture AS oneProdPic ON oneOrder.product_id = oneProdPic.product_id
+		WHERE
+		oneOrder.user_id = #{userId,jdbcType=VARCHAR}
+		AND oneOrder.deleted = 0
+		<if test="types == 1">
+			AND oneOrder.status in (0,1,2,4,6,7,9,10,11)
+		</if>
+		<if test="types == 2">
+			AND oneOrder.status = 5
+		</if>
+		<if test="types == 3">
+			AND oneOrder.status = 8
+		</if>
+		<if test="types == 4">
+			AND oneOrder.status = 12
+		</if>
+	</select>
+
+
+	<!-- TODO 累计所有礼物 -->
+	<select id="getUserAllOrdersByUserId" resultType="com.hjgj.aiyoujin.core.model.vo.OrderWebVo">
+		SELECT
+		oneOrder.id          AS orderId,
+		oneOrder.`status`    AS orderStatus,
+		oneOrder.user_id     AS userId,
+		oneUser.nickname     AS userNickName,
+		fromUser.nickname    AS fromNickName,
+		toUser.nickname      AS toNickName,
+		oneProd.id           AS productId,
+		oneProd.`code`       AS productCode,
+		oneProd.`name`       AS productName,
+		oneOrder.buy_amount  AS buyAmount,
+		oneOrder.reason      AS reason,
+		oneOrder.create_time AS createTime,
+		oneOrder.sell_amount AS sellAmount,
+		oneProdPic.path      AS productImgUrl
+		FROM
+		t_order AS oneOrder
+		LEFT JOIN t_order AS fromOrder ON oneOrder.from_order_id = fromOrder.id
+		LEFT JOIN t_user AS oneUser ON oneOrder.user_id = oneUser.id
+		LEFT JOIN t_user AS fromUser ON fromUser.id = fromOrder.user_id
+		LEFT JOIN t_order AS toOrder ON toOrder.id = oneOrder.to_order_id
+		LEFT JOIN t_user AS toUser ON toUser.id = toOrder.user_id
+		LEFT JOIN t_product AS oneProd ON oneProd.id = oneOrder.product_id
+		LEFT JOIN t_product_picture AS oneProdPic ON oneOrder.product_id = oneProdPic.product_id
+		WHERE
+		oneOrder.user_id = #{userId,jdbcType=VARCHAR}
+		AND oneOrder.deleted = 0
+		<if test="types == 1">
+			AND oneOrder.status in (0,1,2,4,6,7,9,10,11)
+		</if>
+		<if test="types == 2">
+			AND oneOrder.status = 5
+		</if>
+		<if test="types == 3">
+			AND oneOrder.status = 8
+		</if>
+		<if test="types == 4">
+			AND oneOrder.status = 12
+		</if>
+		order by oneOrder.create_time DESC
+	</select>
+
+	<update id="updateOrderByMap" parameterType="map">
+		UPDATE t_order
+		<set>
+			<if test="code != null">
+				code = #{code,jdbcType=VARCHAR},
+			</if>
+			<if test="userId != null">
+				user_id = #{userId,jdbcType=VARCHAR},
+			</if>
+			<if test="productId != null">
+				product_id = #{productId,jdbcType=VARCHAR},
+			</if>
+			<if test="buyAmount != null">
+				buy_amount = #{buyAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="status != null">
+				`status` = #{status,jdbcType=INTEGER},
+			</if>
+			<if test="deleted != null">
+				deleted = #{deleted,jdbcType=INTEGER},
+			</if>
+			<if test="reason != null">
+				reason = #{reason,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="sellAmount != null">
+				sell_amount = #{sellAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="expressCompany != null">
+				express_company = #{expressCompany,jdbcType=VARCHAR},
+			</if>
+			<if test="expressNo != null">
+				express_no = #{expressNo,jdbcType=VARCHAR},
+			</if>
+			<if test="sourceOrderId != null">
+				source_order_id = #{sourceOrderId,jdbcType=VARCHAR},
+			</if>
+			<if test="fromOrderId != null">
+				from_order_id = #{fromOrderId,jdbcType=VARCHAR},
+			</if>
+			<if test="toOrderId != null">
+				to_order_id = #{toOrderId,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where code = #{orderNo,jdbcType=VARCHAR}
+	</update>
+
+	<select id="getOrderProduct" resultType="java.util.Map">
+		SELECT
+			torder.id AS orderId,
+			orderLog.prepay_id AS prepayId,
+			tuser.open_id AS openId,
+			tprod.`name` AS productName,
+			tprod.buy_price AS buyMoney,
+			orderLog.update_time AS updateTime
+		FROM
+			t_order_log AS orderLog
+			LEFT JOIN t_order AS torder ON orderLog.order_id = torder.id
+			LEFT JOIN t_product AS tprod ON tprod.id = torder.product_id
+			LEFT JOIN t_user AS tuser ON tuser.id = torder.user_id
+		WHERE torder.id = #{orderId}
+			  AND tprod.`status` = 2
+	</select>
+</mapper>

@@ -1,391 +1,456 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.hjgj.aiyoujin.core.dao.OrderLogMapper" >
-  <resultMap id="BaseResultMap" type="com.hjgj.aiyoujin.core.model.OrderLog" >
-    <id column="id" property="id" jdbcType="VARCHAR" />
-    <result column="order_id" property="orderId" jdbcType="VARCHAR" />
-    <result column="status" property="status" jdbcType="INTEGER" />
-    <result column="prepay_id" property="prepayId" jdbcType="VARCHAR" />
-    <result column="pay_id" property="payId" jdbcType="VARCHAR" />
-    <result column="pay_result_code" property="payResultCode" jdbcType="VARCHAR" />
-    <result column="pay_result_msg" property="payResultMsg" jdbcType="VARCHAR" />
-    <result column="pay_req" property="payReq" jdbcType="VARCHAR" />
-    <result column="pay_resp" property="payResp" jdbcType="VARCHAR" />
-    <result column="pay_type" property="payType" jdbcType="INTEGER" />
-    <result column="resp_time" property="respTime" jdbcType="TIMESTAMP" />
-    <result column="req_time" property="reqTime" jdbcType="TIMESTAMP" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
-    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
-    <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
-  </resultMap>
-  <sql id="Example_Where_Clause" >
-    <where >
-      <foreach collection="oredCriteria" item="criteria" separator="or" >
-        <if test="criteria.valid" >
-          <trim prefix="(" suffix=")" prefixOverrides="and" >
-            <foreach collection="criteria.criteria" item="criterion" >
-              <choose >
-                <when test="criterion.noValue" >
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue" >
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue" >
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue" >
-                  and ${criterion.condition}
-                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
-            </foreach>
-          </trim>
-        </if>
-      </foreach>
-    </where>
-  </sql>
-  <sql id="Update_By_Example_Where_Clause" >
-    <where >
-      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
-        <if test="criteria.valid" >
-          <trim prefix="(" suffix=")" prefixOverrides="and" >
-            <foreach collection="criteria.criteria" item="criterion" >
-              <choose >
-                <when test="criterion.noValue" >
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue" >
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue" >
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue" >
-                  and ${criterion.condition}
-                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
-            </foreach>
-          </trim>
-        </if>
-      </foreach>
-    </where>
-  </sql>
-  <sql id="Base_Column_List" >
-    id, order_id, status, prepay_id, pay_id, pay_result_code, pay_result_msg, pay_req, 
-    pay_resp, pay_type, resp_time, req_time, create_time, create_by, update_time, update_by
-  </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.hjgj.aiyoujin.core.model.OrderLogExample" >
-    select
-    <if test="distinct" >
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    from t_order_log
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null" >
-      order by ${orderByClause}
-    </if>
-    <if test="limitRows != null and limitRows>0" >
-      limit #{limitOffset} , #{limitRows}
-    </if>
-  </select>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
-    select 
-    <include refid="Base_Column_List" />
-    from t_order_log
-    where id = #{id,jdbcType=VARCHAR}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
-    delete from t_order_log
-    where id = #{id,jdbcType=VARCHAR}
-  </delete>
-  <delete id="deleteByExample" parameterType="com.hjgj.aiyoujin.core.model.OrderLogExample" >
-    delete from t_order_log
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-  </delete>
-  <insert id="insert" parameterType="com.hjgj.aiyoujin.core.model.OrderLog" >
-    insert into t_order_log (id, order_id, status, 
-      prepay_id, pay_id, pay_result_code, 
-      pay_result_msg, pay_req, pay_resp, 
-      pay_type, resp_time, req_time, 
-      create_time, create_by, update_time, 
-      update_by)
-    values (#{id,jdbcType=VARCHAR}, #{orderId,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
-      #{prepayId,jdbcType=VARCHAR}, #{payId,jdbcType=VARCHAR}, #{payResultCode,jdbcType=VARCHAR}, 
-      #{payResultMsg,jdbcType=VARCHAR}, #{payReq,jdbcType=VARCHAR}, #{payResp,jdbcType=VARCHAR}, 
-      #{payType,jdbcType=INTEGER}, #{respTime,jdbcType=TIMESTAMP}, #{reqTime,jdbcType=TIMESTAMP}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{updateBy,jdbcType=VARCHAR})
-  </insert>
-  <insert id="insertSelective" parameterType="com.hjgj.aiyoujin.core.model.OrderLog" >
-    insert into t_order_log
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
-      <if test="orderId != null" >
-        order_id,
-      </if>
-      <if test="status != null" >
-        status,
-      </if>
-      <if test="prepayId != null" >
-        prepay_id,
-      </if>
-      <if test="payId != null" >
-        pay_id,
-      </if>
-      <if test="payResultCode != null" >
-        pay_result_code,
-      </if>
-      <if test="payResultMsg != null" >
-        pay_result_msg,
-      </if>
-      <if test="payReq != null" >
-        pay_req,
-      </if>
-      <if test="payResp != null" >
-        pay_resp,
-      </if>
-      <if test="payType != null" >
-        pay_type,
-      </if>
-      <if test="respTime != null" >
-        resp_time,
-      </if>
-      <if test="reqTime != null" >
-        req_time,
-      </if>
-      <if test="createTime != null" >
-        create_time,
-      </if>
-      <if test="createBy != null" >
-        create_by,
-      </if>
-      <if test="updateTime != null" >
-        update_time,
-      </if>
-      <if test="updateBy != null" >
-        update_by,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=VARCHAR},
-      </if>
-      <if test="orderId != null" >
-        #{orderId,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null" >
-        #{status,jdbcType=INTEGER},
-      </if>
-      <if test="prepayId != null" >
-        #{prepayId,jdbcType=VARCHAR},
-      </if>
-      <if test="payId != null" >
-        #{payId,jdbcType=VARCHAR},
-      </if>
-      <if test="payResultCode != null" >
-        #{payResultCode,jdbcType=VARCHAR},
-      </if>
-      <if test="payResultMsg != null" >
-        #{payResultMsg,jdbcType=VARCHAR},
-      </if>
-      <if test="payReq != null" >
-        #{payReq,jdbcType=VARCHAR},
-      </if>
-      <if test="payResp != null" >
-        #{payResp,jdbcType=VARCHAR},
-      </if>
-      <if test="payType != null" >
-        #{payType,jdbcType=INTEGER},
-      </if>
-      <if test="respTime != null" >
-        #{respTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="reqTime != null" >
-        #{reqTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="createTime != null" >
-        #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="createBy != null" >
-        #{createBy,jdbcType=VARCHAR},
-      </if>
-      <if test="updateTime != null" >
-        #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateBy != null" >
-        #{updateBy,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
-  <select id="countByExample" parameterType="com.hjgj.aiyoujin.core.model.OrderLogExample" resultType="java.lang.Integer" >
-    select count(*) from t_order_log
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-  </select>
-  <update id="updateByExampleSelective" parameterType="map" >
-    update t_order_log
-    <set >
-      <if test="record.id != null" >
-        id = #{record.id,jdbcType=VARCHAR},
-      </if>
-      <if test="record.orderId != null" >
-        order_id = #{record.orderId,jdbcType=VARCHAR},
-      </if>
-      <if test="record.status != null" >
-        status = #{record.status,jdbcType=INTEGER},
-      </if>
-      <if test="record.prepayId != null" >
-        prepay_id = #{record.prepayId,jdbcType=VARCHAR},
-      </if>
-      <if test="record.payId != null" >
-        pay_id = #{record.payId,jdbcType=VARCHAR},
-      </if>
-      <if test="record.payResultCode != null" >
-        pay_result_code = #{record.payResultCode,jdbcType=VARCHAR},
-      </if>
-      <if test="record.payResultMsg != null" >
-        pay_result_msg = #{record.payResultMsg,jdbcType=VARCHAR},
-      </if>
-      <if test="record.payReq != null" >
-        pay_req = #{record.payReq,jdbcType=VARCHAR},
-      </if>
-      <if test="record.payResp != null" >
-        pay_resp = #{record.payResp,jdbcType=VARCHAR},
-      </if>
-      <if test="record.payType != null" >
-        pay_type = #{record.payType,jdbcType=INTEGER},
-      </if>
-      <if test="record.respTime != null" >
-        resp_time = #{record.respTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.reqTime != null" >
-        req_time = #{record.reqTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.createTime != null" >
-        create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.createBy != null" >
-        create_by = #{record.createBy,jdbcType=VARCHAR},
-      </if>
-      <if test="record.updateTime != null" >
-        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.updateBy != null" >
-        update_by = #{record.updateBy,jdbcType=VARCHAR},
-      </if>
-    </set>
-    <if test="_parameter != null" >
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByExample" parameterType="map" >
-    update t_order_log
-    set id = #{record.id,jdbcType=VARCHAR},
-      order_id = #{record.orderId,jdbcType=VARCHAR},
-      status = #{record.status,jdbcType=INTEGER},
-      prepay_id = #{record.prepayId,jdbcType=VARCHAR},
-      pay_id = #{record.payId,jdbcType=VARCHAR},
-      pay_result_code = #{record.payResultCode,jdbcType=VARCHAR},
-      pay_result_msg = #{record.payResultMsg,jdbcType=VARCHAR},
-      pay_req = #{record.payReq,jdbcType=VARCHAR},
-      pay_resp = #{record.payResp,jdbcType=VARCHAR},
-      pay_type = #{record.payType,jdbcType=INTEGER},
-      resp_time = #{record.respTime,jdbcType=TIMESTAMP},
-      req_time = #{record.reqTime,jdbcType=TIMESTAMP},
-      create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      create_by = #{record.createBy,jdbcType=VARCHAR},
-      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-      update_by = #{record.updateBy,jdbcType=VARCHAR}
-    <if test="_parameter != null" >
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.hjgj.aiyoujin.core.model.OrderLog" >
-    update t_order_log
-    <set >
-      <if test="orderId != null" >
-        order_id = #{orderId,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null" >
-        status = #{status,jdbcType=INTEGER},
-      </if>
-      <if test="prepayId != null" >
-        prepay_id = #{prepayId,jdbcType=VARCHAR},
-      </if>
-      <if test="payId != null" >
-        pay_id = #{payId,jdbcType=VARCHAR},
-      </if>
-      <if test="payResultCode != null" >
-        pay_result_code = #{payResultCode,jdbcType=VARCHAR},
-      </if>
-      <if test="payResultMsg != null" >
-        pay_result_msg = #{payResultMsg,jdbcType=VARCHAR},
-      </if>
-      <if test="payReq != null" >
-        pay_req = #{payReq,jdbcType=VARCHAR},
-      </if>
-      <if test="payResp != null" >
-        pay_resp = #{payResp,jdbcType=VARCHAR},
-      </if>
-      <if test="payType != null" >
-        pay_type = #{payType,jdbcType=INTEGER},
-      </if>
-      <if test="respTime != null" >
-        resp_time = #{respTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="reqTime != null" >
-        req_time = #{reqTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="createTime != null" >
-        create_time = #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="createBy != null" >
-        create_by = #{createBy,jdbcType=VARCHAR},
-      </if>
-      <if test="updateTime != null" >
-        update_time = #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateBy != null" >
-        update_by = #{updateBy,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where id = #{id,jdbcType=VARCHAR}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.hjgj.aiyoujin.core.model.OrderLog" >
-    update t_order_log
-    set order_id = #{orderId,jdbcType=VARCHAR},
-      status = #{status,jdbcType=INTEGER},
-      prepay_id = #{prepayId,jdbcType=VARCHAR},
-      pay_id = #{payId,jdbcType=VARCHAR},
-      pay_result_code = #{payResultCode,jdbcType=VARCHAR},
-      pay_result_msg = #{payResultMsg,jdbcType=VARCHAR},
-      pay_req = #{payReq,jdbcType=VARCHAR},
-      pay_resp = #{payResp,jdbcType=VARCHAR},
-      pay_type = #{payType,jdbcType=INTEGER},
-      resp_time = #{respTime,jdbcType=TIMESTAMP},
-      req_time = #{reqTime,jdbcType=TIMESTAMP},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      create_by = #{createBy,jdbcType=VARCHAR},
-      update_time = #{updateTime,jdbcType=TIMESTAMP},
-      update_by = #{updateBy,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=VARCHAR}
-  </update>
-  <select id="selectOneByExample" resultMap="BaseResultMap" parameterType="com.hjgj.aiyoujin.core.model.OrderLogExample" >
-    select <include refid="Base_Column_List" /> from t_order_log <if test="_parameter != null" >  <include refid="Example_Where_Clause" /> </if> <if test="orderByClause != null" >  order by ${orderByClause} </if>  limit 1
-  </select>
+<mapper namespace="com.hjgj.aiyoujin.core.dao.OrderLogMapper">
+	<resultMap id="BaseResultMap" type="com.hjgj.aiyoujin.core.model.OrderLog">
+		<id column="id" property="id" jdbcType="VARCHAR"/>
+		<result column="order_id" property="orderId" jdbcType="VARCHAR"/>
+		<result column="status" property="status" jdbcType="INTEGER"/>
+		<result column="prepay_id" property="prepayId" jdbcType="VARCHAR"/>
+		<result column="pay_id" property="payId" jdbcType="VARCHAR"/>
+		<result column="pay_result_code" property="payResultCode" jdbcType="VARCHAR"/>
+		<result column="pay_result_msg" property="payResultMsg" jdbcType="VARCHAR"/>
+		<result column="pay_req" property="payReq" jdbcType="VARCHAR"/>
+		<result column="pay_resp" property="payResp" jdbcType="VARCHAR"/>
+		<result column="pay_type" property="payType" jdbcType="INTEGER"/>
+		<result column="resp_time" property="respTime" jdbcType="TIMESTAMP"/>
+		<result column="req_time" property="reqTime" jdbcType="TIMESTAMP"/>
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+		<result column="create_by" property="createBy" jdbcType="VARCHAR"/>
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+		<result column="update_by" property="updateBy" jdbcType="VARCHAR"/>
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem" open="(" close=")"
+											 separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem" open="(" close=")"
+											 separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, order_id, status, prepay_id, pay_id, pay_result_code, pay_result_msg, pay_req,
+		pay_resp, pay_type, resp_time, req_time, create_time, create_by, update_time, update_by
+	</sql>
+	<select id="selectByExample" resultMap="BaseResultMap" parameterType="com.hjgj.aiyoujin.core.model.OrderLogExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List"/>
+		from t_order_log
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause"/>
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+		<if test="limitRows != null and limitRows>0">
+			limit #{limitOffset} , #{limitRows}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List"/>
+		from t_order_log
+		where id = #{id,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		DELETE FROM t_order_log
+		WHERE id = #{id,jdbcType=VARCHAR}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.hjgj.aiyoujin.core.model.OrderLogExample">
+		delete from t_order_log
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause"/>
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.hjgj.aiyoujin.core.model.OrderLog">
+		INSERT INTO t_order_log (id, order_id, status,
+								 prepay_id, pay_id, pay_result_code,
+								 pay_result_msg, pay_req, pay_resp,
+								 pay_type, resp_time, req_time,
+								 create_time, create_by, update_time,
+								 update_by)
+		VALUES (#{id,jdbcType=VARCHAR}, #{orderId,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER},
+										#{prepayId,jdbcType=VARCHAR}, #{payId,jdbcType=VARCHAR},
+										#{payResultCode,jdbcType=VARCHAR},
+										#{payResultMsg,jdbcType=VARCHAR}, #{payReq,jdbcType=VARCHAR},
+										#{payResp,jdbcType=VARCHAR},
+										#{payType,jdbcType=INTEGER}, #{respTime,jdbcType=TIMESTAMP},
+				#{reqTime,jdbcType=TIMESTAMP},
+				#{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP},
+				#{updateBy,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.hjgj.aiyoujin.core.model.OrderLog">
+		insert into t_order_log
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="orderId != null">
+				order_id,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="prepayId != null">
+				prepay_id,
+			</if>
+			<if test="payId != null">
+				pay_id,
+			</if>
+			<if test="payResultCode != null">
+				pay_result_code,
+			</if>
+			<if test="payResultMsg != null">
+				pay_result_msg,
+			</if>
+			<if test="payReq != null">
+				pay_req,
+			</if>
+			<if test="payResp != null">
+				pay_resp,
+			</if>
+			<if test="payType != null">
+				pay_type,
+			</if>
+			<if test="respTime != null">
+				resp_time,
+			</if>
+			<if test="reqTime != null">
+				req_time,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="createBy != null">
+				create_by,
+			</if>
+			<if test="updateTime != null">
+				update_time,
+			</if>
+			<if test="updateBy != null">
+				update_by,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=VARCHAR},
+			</if>
+			<if test="orderId != null">
+				#{orderId,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=INTEGER},
+			</if>
+			<if test="prepayId != null">
+				#{prepayId,jdbcType=VARCHAR},
+			</if>
+			<if test="payId != null">
+				#{payId,jdbcType=VARCHAR},
+			</if>
+			<if test="payResultCode != null">
+				#{payResultCode,jdbcType=VARCHAR},
+			</if>
+			<if test="payResultMsg != null">
+				#{payResultMsg,jdbcType=VARCHAR},
+			</if>
+			<if test="payReq != null">
+				#{payReq,jdbcType=VARCHAR},
+			</if>
+			<if test="payResp != null">
+				#{payResp,jdbcType=VARCHAR},
+			</if>
+			<if test="payType != null">
+				#{payType,jdbcType=INTEGER},
+			</if>
+			<if test="respTime != null">
+				#{respTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="reqTime != null">
+				#{reqTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createBy != null">
+				#{createBy,jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateBy != null">
+				#{updateBy,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.hjgj.aiyoujin.core.model.OrderLogExample"
+			resultType="java.lang.Integer">
+		select count(*) from t_order_log
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause"/>
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update t_order_log
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=VARCHAR},
+			</if>
+			<if test="record.orderId != null">
+				order_id = #{record.orderId,jdbcType=VARCHAR},
+			</if>
+			<if test="record.status != null">
+				status = #{record.status,jdbcType=INTEGER},
+			</if>
+			<if test="record.prepayId != null">
+				prepay_id = #{record.prepayId,jdbcType=VARCHAR},
+			</if>
+			<if test="record.payId != null">
+				pay_id = #{record.payId,jdbcType=VARCHAR},
+			</if>
+			<if test="record.payResultCode != null">
+				pay_result_code = #{record.payResultCode,jdbcType=VARCHAR},
+			</if>
+			<if test="record.payResultMsg != null">
+				pay_result_msg = #{record.payResultMsg,jdbcType=VARCHAR},
+			</if>
+			<if test="record.payReq != null">
+				pay_req = #{record.payReq,jdbcType=VARCHAR},
+			</if>
+			<if test="record.payResp != null">
+				pay_resp = #{record.payResp,jdbcType=VARCHAR},
+			</if>
+			<if test="record.payType != null">
+				pay_type = #{record.payType,jdbcType=INTEGER},
+			</if>
+			<if test="record.respTime != null">
+				resp_time = #{record.respTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.reqTime != null">
+				req_time = #{record.reqTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.createTime != null">
+				create_time = #{record.createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.createBy != null">
+				create_by = #{record.createBy,jdbcType=VARCHAR},
+			</if>
+			<if test="record.updateTime != null">
+				update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.updateBy != null">
+				update_by = #{record.updateBy,jdbcType=VARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause"/>
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update t_order_log
+		set id = #{record.id,jdbcType=VARCHAR},
+		order_id = #{record.orderId,jdbcType=VARCHAR},
+		status = #{record.status,jdbcType=INTEGER},
+		prepay_id = #{record.prepayId,jdbcType=VARCHAR},
+		pay_id = #{record.payId,jdbcType=VARCHAR},
+		pay_result_code = #{record.payResultCode,jdbcType=VARCHAR},
+		pay_result_msg = #{record.payResultMsg,jdbcType=VARCHAR},
+		pay_req = #{record.payReq,jdbcType=VARCHAR},
+		pay_resp = #{record.payResp,jdbcType=VARCHAR},
+		pay_type = #{record.payType,jdbcType=INTEGER},
+		resp_time = #{record.respTime,jdbcType=TIMESTAMP},
+		req_time = #{record.reqTime,jdbcType=TIMESTAMP},
+		create_time = #{record.createTime,jdbcType=TIMESTAMP},
+		create_by = #{record.createBy,jdbcType=VARCHAR},
+		update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+		update_by = #{record.updateBy,jdbcType=VARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause"/>
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.hjgj.aiyoujin.core.model.OrderLog">
+		update t_order_log
+		<set>
+			<if test="orderId != null">
+				order_id = #{orderId,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=INTEGER},
+			</if>
+			<if test="prepayId != null">
+				prepay_id = #{prepayId,jdbcType=VARCHAR},
+			</if>
+			<if test="payId != null">
+				pay_id = #{payId,jdbcType=VARCHAR},
+			</if>
+			<if test="payResultCode != null">
+				pay_result_code = #{payResultCode,jdbcType=VARCHAR},
+			</if>
+			<if test="payResultMsg != null">
+				pay_result_msg = #{payResultMsg,jdbcType=VARCHAR},
+			</if>
+			<if test="payReq != null">
+				pay_req = #{payReq,jdbcType=VARCHAR},
+			</if>
+			<if test="payResp != null">
+				pay_resp = #{payResp,jdbcType=VARCHAR},
+			</if>
+			<if test="payType != null">
+				pay_type = #{payType,jdbcType=INTEGER},
+			</if>
+			<if test="respTime != null">
+				resp_time = #{respTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="reqTime != null">
+				req_time = #{reqTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createBy != null">
+				create_by = #{createBy,jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateBy != null">
+				update_by = #{updateBy,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.hjgj.aiyoujin.core.model.OrderLog">
+		UPDATE t_order_log
+		SET order_id        = #{orderId,jdbcType=VARCHAR},
+			status          = #{status,jdbcType=INTEGER},
+			prepay_id       = #{prepayId,jdbcType=VARCHAR},
+			pay_id          = #{payId,jdbcType=VARCHAR},
+			pay_result_code = #{payResultCode,jdbcType=VARCHAR},
+			pay_result_msg  = #{payResultMsg,jdbcType=VARCHAR},
+			pay_req         = #{payReq,jdbcType=VARCHAR},
+			pay_resp        = #{payResp,jdbcType=VARCHAR},
+			pay_type        = #{payType,jdbcType=INTEGER},
+			resp_time       = #{respTime,jdbcType=TIMESTAMP},
+			req_time        = #{reqTime,jdbcType=TIMESTAMP},
+			create_time     = #{createTime,jdbcType=TIMESTAMP},
+			create_by       = #{createBy,jdbcType=VARCHAR},
+			update_time     = #{updateTime,jdbcType=TIMESTAMP},
+			update_by       = #{updateBy,jdbcType=VARCHAR}
+		WHERE id = #{id,jdbcType=VARCHAR}
+	</update>
+	<select id="selectOneByExample" resultMap="BaseResultMap"
+			parameterType="com.hjgj.aiyoujin.core.model.OrderLogExample">
+		select
+		<include refid="Base_Column_List"/>
+		from t_order_log
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause"/>
+		</if>
+		<if test="orderByClause != null">order by ${orderByClause}</if>  limit 1
+	</select>
+
+	<update id="updateOrderLogByMap" parameterType="map">
+		update t_order_log
+		<set>
+			<if test="orderId != null">
+				order_id = #{orderId,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				`status` = #{status,jdbcType=INTEGER},
+			</if>
+			<if test="prepayId != null">
+				prepay_id = #{prepayId,jdbcType=VARCHAR},
+			</if>
+			<if test="payId != null">
+				pay_id = #{payId,jdbcType=VARCHAR},
+			</if>
+			<if test="payResultCode != null">
+				pay_result_code = #{payResultCode,jdbcType=VARCHAR},
+			</if>
+			<if test="payResultMsg != null">
+				pay_result_msg = #{payResultMsg,jdbcType=VARCHAR},
+			</if>
+			<if test="payReq != null">
+				pay_req = #{payReq,jdbcType=VARCHAR},
+			</if>
+			<if test="payResp != null">
+				pay_resp = #{payResp,jdbcType=VARCHAR},
+			</if>
+			<if test="payType != null">
+				pay_type = #{payType,jdbcType=INTEGER},
+			</if>
+			<if test="respTime != null">
+				resp_time = #{respTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="reqTime != null">
+				req_time = #{reqTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createBy != null">
+				create_by = #{createBy,jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateBy != null">
+				update_by = #{updateBy,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{orderCode,jdbcType=VARCHAR}
+	</update>
 </mapper>
