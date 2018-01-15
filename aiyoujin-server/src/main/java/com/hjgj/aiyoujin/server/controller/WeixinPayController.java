@@ -254,7 +254,9 @@ public class WeixinPayController {
     public void paySuccessCallback(HttpServletRequest request, HttpServletResponse response) throws Exception {
         InputStream inputStream = request.getInputStream();
         String postData = IOUtils.toString(inputStream, "UTF-8");
-
+        if(postData == null){
+            return;
+        }
         XStream xStream = new XStream(new XppDriver(new XmlFriendlyNameCoder("_-", "_")));//说明3(见文末)
         //将请求返回的内容通过xStream转换为UnifiedOrderRespose对象
         xStream.alias("xml", UnifiedOrderRespose.class);
