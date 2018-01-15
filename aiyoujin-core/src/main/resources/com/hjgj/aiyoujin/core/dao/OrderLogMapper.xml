@@ -405,44 +405,11 @@
 	<update id="updateOrderLogByMap" parameterType="map">
 		update t_order_log
 		<set>
-			<if test="orderId != null">
-				order_id = #{orderId,jdbcType=VARCHAR},
-			</if>
 			<if test="status != null">
-				`status` = #{status,jdbcType=INTEGER},
-			</if>
-			<if test="prepayId != null">
-				prepay_id = #{prepayId,jdbcType=VARCHAR},
+				`status` = #{logStatus,jdbcType=INTEGER},
 			</if>
 			<if test="payId != null">
 				pay_id = #{payId,jdbcType=VARCHAR},
-			</if>
-			<if test="payResultCode != null">
-				pay_result_code = #{payResultCode,jdbcType=VARCHAR},
-			</if>
-			<if test="payResultMsg != null">
-				pay_result_msg = #{payResultMsg,jdbcType=VARCHAR},
-			</if>
-			<if test="payReq != null">
-				pay_req = #{payReq,jdbcType=VARCHAR},
-			</if>
-			<if test="payResp != null">
-				pay_resp = #{payResp,jdbcType=VARCHAR},
-			</if>
-			<if test="payType != null">
-				pay_type = #{payType,jdbcType=INTEGER},
-			</if>
-			<if test="respTime != null">
-				resp_time = #{respTime,jdbcType=TIMESTAMP},
-			</if>
-			<if test="reqTime != null">
-				req_time = #{reqTime,jdbcType=TIMESTAMP},
-			</if>
-			<if test="createTime != null">
-				create_time = #{createTime,jdbcType=TIMESTAMP},
-			</if>
-			<if test="createBy != null">
-				create_by = #{createBy,jdbcType=VARCHAR},
 			</if>
 			<if test="updateTime != null">
 				update_time = #{updateTime,jdbcType=TIMESTAMP},
@@ -451,6 +418,6 @@
 				update_by = #{updateBy,jdbcType=VARCHAR},
 			</if>
 		</set>
-		where id = #{orderCode,jdbcType=VARCHAR}
+		where id = #{orderNo,jdbcType=VARCHAR}
 	</update>
 </mapper>
