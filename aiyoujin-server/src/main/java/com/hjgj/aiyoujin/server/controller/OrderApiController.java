@@ -82,7 +82,7 @@ public class OrderApiController {
         fromOrder.setStatus(Integer.valueOf(3));
         int insertFromOrder = userOrderService.insertFromOrder(fromOrder);
         if (insertFromOrder > 0) {
-            return ResultModel.ok("");
+            return ResultModel.ok("赠送成功");
         } else {
             return ResultModel.error(ResultStatus.ERROR_EMPTY_VAL_RETURNED);
         }
@@ -115,13 +115,13 @@ public class OrderApiController {
             int updateOrderByCodeState = userOrderService.updateOrderByCodeState(orderById.getCode(), Integer.valueOf(5));
 
             if (insertOrder > 0 && updateOrderByCodeState > 0) {
-                return ResultModel.ok("");
+                return ResultModel.ok("赠送成功");
             }
         } catch (Exception e) {
             e.printStackTrace();
             return ResultModel.error(ResultStatus.ERROR_EMPTY_VAL_RETURNED);
         }
-        return ResultModel.ok("");
+        return ResultModel.ok("赠送失败");
 
     }
 

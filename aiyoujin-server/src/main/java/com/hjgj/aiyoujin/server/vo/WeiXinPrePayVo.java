@@ -34,6 +34,10 @@ public class WeiXinPrePayVo {
      */
     private String userId;
 
+    private String content;
+
+    private String mediaUrl;
+
     public String getTimeStamp() {
         return timeStamp;
     }
@@ -83,15 +87,19 @@ public class WeiXinPrePayVo {
         this.userId = userId;
     }
 
-    @Override
-    public String toString() {
-        return "WeiXinPrePayVo{" +
-                "timeStamp='" + timeStamp + '\'' +
-                ", nonceStr='" + nonceStr + '\'' +
-                ", openId='" + openId + '\'' +
-                ", productId='" + productId + '\'' +
-                ", payMoney=" + payMoney +
-                ", userId='" + userId + '\'' +
-                '}';
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getMediaUrl() {
+        return mediaUrl;
+    }
+
+    public void setMediaUrl(String mediaUrl) {
+        this.mediaUrl = mediaUrl;
     }
 }
