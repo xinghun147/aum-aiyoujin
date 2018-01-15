@@ -36,6 +36,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -70,9 +71,9 @@ public class WeixinPayController {
     private UserService userService;
 
 
-    @ApiOperation(value = "微信预下单")
-    @ResponseBody
-    @RequestMapping(value = "/preparePay", method = RequestMethod.GET)
+    //@ApiOperation(value = "微信预下单")
+    //@ResponseBody
+    //@RequestMapping(value = "/preparePay", method = RequestMethod.GET)
     public String prePayOrder(String timeStamp, String nonceStr, String openId, BigDecimal payMoney) {
         String responseMsg = null;
         String orderNo = CommonUtils.generateOrderNo("CZ");
@@ -183,7 +184,7 @@ public class WeixinPayController {
 
         OrderLog orderLog = new OrderLog();
         orderLog.setId(UUIDGenerator.generate());
-        orderLog.setOrderId(orderNo);
+        orderLog.setOrderId(wxOrder.getId());
         orderLog.setPayReq(xmlRequest);
         orderLog.setPayResp(xmlStr);
         orderLog.setStatus(Integer.valueOf(0)); // 支付状态: 0-处理中 1-成功 2-失败
@@ -232,7 +233,7 @@ public class WeixinPayController {
             orderLog.setPayResultMsg(unifiedOrderRespose.getReturn_msg());
             orderLog.setUpdateTime(orderLog.getCreateTime());
             orderLog.setPrepayId(unifiedOrderRespose.getPrepay_id());
-
+            int insertOrder = userOrderService.insertOrder(wxOrder);
             int insertOrderLog = orderLogService.insertOrderLog(orderLog);
         } else {
             map.put("code", "1");
@@ -259,7 +260,7 @@ public class WeixinPayController {
         }
         XStream xStream = new XStream(new XppDriver(new XmlFriendlyNameCoder("_-", "_")));//说明3(见文末)
         //将请求返回的内容通过xStream转换为UnifiedOrderRespose对象
-        xStream.alias("xml", UnifiedOrderRespose.class);
+        xStream.alias("xml", WeiXinPayResultVo.class);
         WeiXinPayResultVo payResultVo = (WeiXinPayResultVo) xStream.fromXML(postData);
 
         if (payResultVo != null && payResultVo.getReturn_code().equals("SUCCESS")) {
@@ -317,8 +318,9 @@ public class WeixinPayController {
                             Date updateTime = (Date)orderProduct.get("updateTime");
                             String productName = (String) orderProduct.get("productName");
                             String prepayId = (String) orderProduct.get("prepayId");
-                            String buyMoney = (String) orderProduct.get("buyMoney");
-                            weixinPush.payResultNotify(productName,buyMoney,updateTime,prepayId,payResultVo.getOpenid());
+                            BigDecimal buyMoney = (BigDecimal) orderProduct.get("buyMoney");
+                            DecimalFormat df = new DecimalFormat("#");
+                            weixinPush.payResultNotify(productName,df.format(buyMoney.multiply(new BigDecimal(100))),updateTime,prepayId,payResultVo.getOpenid());
 
                             HashMap<String, Object> hashMap = new HashMap<>();
                             hashMap.put("orderNo",orderId);
@@ -335,8 +337,9 @@ public class WeixinPayController {
                             Date updateTime = (Date)orderProduct.get("updateTime");
                             String prepayId = (String) orderProduct.get("prepayId");
                             String productName = (String) orderProduct.get("productName");
-                            String buyMoney = (String) orderProduct.get("buyMoney");
-                            weixinPush.payResultNotifyFail(productName,buyMoney,"系统正忙...",updateTime,prepayId,payResultVo.getOpenid());
+                            BigDecimal buyMoney = (BigDecimal) orderProduct.get("buyMoney");
+                            DecimalFormat df = new DecimalFormat("#");
+                            weixinPush.payResultNotifyFail(productName,df.format(buyMoney.multiply(new BigDecimal(100))),"系统正忙...",updateTime,prepayId,payResultVo.getOpenid());
 
                             HashMap<String, Object> hashMap = new HashMap<>();
                             hashMap.put("orderNo",orderId);
@@ -364,8 +367,9 @@ public class WeixinPayController {
                             Date updateTime = (Date)orderProduct.get("updateTime");
                             String prepayId = (String) orderProduct.get("prepayId");
                             String productName = (String) orderProduct.get("productName");
-                            String buyMoney = (String) orderProduct.get("buyMoney");
-                            weixinPush.payResultNotify(productName,buyMoney,updateTime,prepayId,payResultVo.getOpenid());
+                            BigDecimal buyMoney = (BigDecimal) orderProduct.get("buyMoney");
+                            DecimalFormat df = new DecimalFormat("#");
+                            weixinPush.payResultNotify(productName,df.format(buyMoney.multiply(new BigDecimal(100))),updateTime,prepayId,payResultVo.getOpenid());
 
                             HashMap<String, Object> hashMap = new HashMap<>();
                             hashMap.put("orderNo",orderId);
@@ -382,8 +386,9 @@ public class WeixinPayController {
                             String orderId = (String) orderProduct.get("orderId");
                             String prepayId = (String) orderProduct.get("prepayId");
                             String productName = (String) orderProduct.get("productName");
-                            String buyMoney = (String) orderProduct.get("buyMoney");
-                            weixinPush.payResultNotifyFail(productName,buyMoney,"系统正忙",updateTime,prepayId,payResultVo.getOpenid());
+                            BigDecimal buyMoney = (BigDecimal) orderProduct.get("buyMoney");
+                            DecimalFormat df = new DecimalFormat("#");
+                            weixinPush.payResultNotifyFail(productName,df.format(buyMoney.multiply(new BigDecimal(100))),"系统正忙",updateTime,prepayId,payResultVo.getOpenid());
 
                             HashMap<String, Object> hashMap = new HashMap<>();
                             hashMap.put("orderNo",orderId);
@@ -413,8 +418,9 @@ public class WeixinPayController {
                             String orderId = (String) orderProduct.get("orderId");
                             String prepayId = (String) orderProduct.get("prepayId");
                             String productName = (String) orderProduct.get("productName");
-                            String buyMoney = (String) orderProduct.get("buyMoney");
-                            weixinPush.payResultNotify(productName,buyMoney,updateTime,prepayId,payResultVo.getOpenid());
+                            BigDecimal buyMoney = (BigDecimal) orderProduct.get("buyMoney");
+                            DecimalFormat df = new DecimalFormat("#");
+                            weixinPush.payResultNotify(productName,df.format(buyMoney.multiply(new BigDecimal(100))),updateTime,prepayId,payResultVo.getOpenid());
 
                             HashMap<String, Object> hashMap = new HashMap<>();
                             hashMap.put("orderNo",orderId);
@@ -434,8 +440,9 @@ public class WeixinPayController {
                             Date updateTime = (Date)orderProduct.get("updateTime");
                             String prepayId = (String) orderProduct.get("prepayId");
                             String productName = (String) orderProduct.get("productName");
-                            String buyMoney = (String) orderProduct.get("buyMoney");
-                            weixinPush.payResultNotifyFail(productName,buyMoney,"订单异常",updateTime,prepayId,payResultVo.getOpenid());
+                            BigDecimal buyMoney = (BigDecimal) orderProduct.get("buyMoney");
+                            DecimalFormat df = new DecimalFormat("#");
+                            weixinPush.payResultNotifyFail(productName,df.format(buyMoney.multiply(new BigDecimal(100))),"订单异常",updateTime,prepayId,payResultVo.getOpenid());
 
                             HashMap<String, Object> hashMap = new HashMap<>();
                             hashMap.put("orderNo",orderId);
