@@ -37,7 +37,31 @@ public interface UserOrderMapper {
      */
     int updateOrderByMap(Map param);
 
+    /**
+     * 由example 查询
+     * @param example
+     * @return
+     */
     List<Order> selectByExample(OrderExample example);
 
+    /**
+     * 由订单id 查询订单产品,记录
+     * @param orderId
+     * @return
+     */
     List<Map<String,Object>> getOrderProduct(@Param("orderId")String orderId);
+
+    /**
+     * 新增
+     * @param order
+     * @return
+     */
+    int insert(Order order);
+
+    /**
+     * 批量新增
+     * @param orderList
+     * @return
+     */
+    int batchInsertOrder(List<Order> orderList);
 }
