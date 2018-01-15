@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.PublicKey;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -80,9 +81,13 @@ public class UserOrderService {
 
     @Transactional
     public int updateOrderAndOrderLogByMap(Map<String,Object> updateParam){
-
-
-        return 0;
+        int orderByMap = userOrderMapper.updateOrderByMap(updateParam);
+        int logByMap = orderLogMapper.updateOrderLogByMap(updateParam);
+        if(orderByMap >0 && logByMap>0){
+            return 1;
+        }else {
+            return 0;
+        }
     }
 
     public Map getOrderProduct(String orderId){
