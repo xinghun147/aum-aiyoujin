@@ -309,14 +309,6 @@ public class WeixinPayController {
                         PrintWriter out = response.getWriter();
                         out.print(xml.toString());
                         out.close();
-                        /**
-                         * torder.id AS orderId,
-                         orderLog.prepay_id AS prepayId,
-                         tuser.open_id AS openId,
-                         tprod.`name` AS productName,
-                         tprod.buy_price AS buyMoney,
-                         orderLog.update_time AS updateTime
-                         */
                         Map orderProduct = userOrderService.getOrderProduct(selfOrder.getId());
                         Date updateTime = (Date)orderProduct.get("updateTime");
                         String orderId = (String) orderProduct.get("orderId");
@@ -326,13 +318,14 @@ public class WeixinPayController {
                         weixinPush.payResultNotify(productName,buyMoney,new SimpleDateFormat("yyyy年MM月dd日").format(updateTime),prepayId,payResultVo.getOpenid());
 
                         HashMap<String, Object> hashMap = new HashMap<>();
-                        hashMap.put("orderId",orderId);
+                        hashMap.put("orderNo",orderId);
                         hashMap.put("updateTime",updateTime);
-                        hashMap.put("prepayId",prepayId);
-                        hashMap.put("orderId",orderId);
-                        hashMap.put("orderId",orderId);
+                        hashMap.put("updateBy","wexinCallBack");
+                        //hashMap.put("prepayId",prepayId);
+                        hashMap.put("logStatus",Integer.valueOf(1)); // 订单记录表 支付状态: 0-处理中 1-成功 2-失败
+                        hashMap.put("orderStatus",Integer.valueOf(1));  // 订单状态：0待支付、1支付成功、2支付失败
+                        hashMap.put("payId",payResultVo.getTransaction_id());
                         userOrderService.updateOrderAndOrderLogByMap(hashMap);
-
 
                     }else if(status.equals(Integer.valueOf(0))){  // 待支付状态
                         String result_code = payResultVo.getResult_code();
@@ -346,8 +339,42 @@ public class WeixinPayController {
                             PrintWriter out = response.getWriter();
                             out.print(builder.toString());
                             out.close();
+                            Map orderProduct = userOrderService.getOrderProduct(selfOrder.getId());
+                            Date updateTime = (Date)orderProduct.get("updateTime");
+                            String orderId = (String) orderProduct.get("orderId");
+                            String prepayId = (String) orderProduct.get("prepayId");
+                            String productName = (String) orderProduct.get("productName");
+                            String buyMoney = (String) orderProduct.get("buyMoney");
+                            weixinPush.payResultNotify(productName,buyMoney,new SimpleDateFormat("yyyy年MM月dd日").format(updateTime),prepayId,payResultVo.getOpenid());
+
+                            HashMap<String, Object> hashMap = new HashMap<>();
+                            hashMap.put("orderNo",orderId);
+                            hashMap.put("updateTime",updateTime);
+                            hashMap.put("updateBy","wexinCallBack");
+                            //hashMap.put("prepayId",prepayId);
+                            hashMap.put("logStatus",Integer.valueOf(1)); // 订单记录表 支付状态: 0-处理中 1-成功 2-失败
+                            hashMap.put("orderStatus",Integer.valueOf(1));  // 订单状态：0待支付、1支付成功、2支付失败
+                            hashMap.put("payId",payResultVo.getTransaction_id());
+                            userOrderService.updateOrderAndOrderLogByMap(hashMap);
                         } else if("FAIL".equals(result_code.trim())){
                             userOrderService.updateOrderByCodeState(payResultVo.getOut_trade_no(),Integer.valueOf(1));
+                            Map orderProduct = userOrderService.getOrderProduct(selfOrder.getId());
+                            Date updateTime = (Date)orderProduct.get("updateTime");
+                            String orderId = (String) orderProduct.get("orderId");
+                            String prepayId = (String) orderProduct.get("prepayId");
+                            String productName = (String) orderProduct.get("productName");
+                            String buyMoney = (String) orderProduct.get("buyMoney");
+                            weixinPush.payResultNotify(productName,buyMoney,new SimpleDateFormat("yyyy年MM月dd日").format(updateTime),prepayId,payResultVo.getOpenid());
+
+                            HashMap<String, Object> hashMap = new HashMap<>();
+                            hashMap.put("orderNo",orderId);
+                            hashMap.put("updateTime",updateTime);
+                            hashMap.put("updateBy","wexinCallBack");
+                            //hashMap.put("prepayId",prepayId);
+                            hashMap.put("logStatus",Integer.valueOf(2)); // 订单记录表 支付状态: 0-处理中 1-成功 2-失败
+                            hashMap.put("orderStatus",Integer.valueOf(2));  // 订单状态：0待支付、1支付成功、2支付失败
+                            hashMap.put("payId",payResultVo.getTransaction_id());
+                            userOrderService.updateOrderAndOrderLogByMap(hashMap);
                         }
                     }else if(status.equals(Integer.valueOf(2))){ // 支付失败
                         String result_code = payResultVo.getResult_code();
@@ -361,8 +388,45 @@ public class WeixinPayController {
                             PrintWriter out = response.getWriter();
                             out.print(builder.toString());
                             out.close();
+
+                            Map orderProduct = userOrderService.getOrderProduct(selfOrder.getId());
+                            Date updateTime = (Date)orderProduct.get("updateTime");
+                            String orderId = (String) orderProduct.get("orderId");
+                            String prepayId = (String) orderProduct.get("prepayId");
+                            String productName = (String) orderProduct.get("productName");
+                            String buyMoney = (String) orderProduct.get("buyMoney");
+                            weixinPush.payResultNotify(productName,buyMoney,new SimpleDateFormat("yyyy年MM月dd日").format(updateTime),prepayId,payResultVo.getOpenid());
+
+                            HashMap<String, Object> hashMap = new HashMap<>();
+                            hashMap.put("orderNo",orderId);
+                            hashMap.put("updateTime",updateTime);
+                            hashMap.put("updateBy","wexinCallBack");
+                            //hashMap.put("prepayId",prepayId);
+                            hashMap.put("logStatus",Integer.valueOf(1)); // 订单记录表 支付状态: 0-处理中 1-成功 2-失败
+                            hashMap.put("orderStatus",Integer.valueOf(1));  // 订单状态：0待支付、1支付成功、2支付失败
+                            hashMap.put("payId",payResultVo.getTransaction_id());
+                            userOrderService.updateOrderAndOrderLogByMap(hashMap);
+
                         } else if("FAIL".equals(result_code.trim())){
                             userOrderService.updateOrderByCodeState(payResultVo.getOut_trade_no(),Integer.valueOf(1));
+
+                            Map orderProduct = userOrderService.getOrderProduct(selfOrder.getId());
+                            String orderId = (String) orderProduct.get("orderId");
+                            Date updateTime = (Date)orderProduct.get("updateTime");
+                            String prepayId = (String) orderProduct.get("prepayId");
+                            String productName = (String) orderProduct.get("productName");
+                            String buyMoney = (String) orderProduct.get("buyMoney");
+                            weixinPush.payResultNotify(productName,buyMoney,new SimpleDateFormat("yyyy年MM月dd日").format(updateTime),prepayId,payResultVo.getOpenid());
+
+                            HashMap<String, Object> hashMap = new HashMap<>();
+                            hashMap.put("orderNo",orderId);
+                            hashMap.put("updateTime",updateTime);
+                            hashMap.put("updateBy","wexinCallBack");
+                            //hashMap.put("prepayId",prepayId);
+                            hashMap.put("logStatus",Integer.valueOf(2)); // 订单记录表 支付状态: 0-处理中 1-成功 2-失败
+                            hashMap.put("orderStatus",Integer.valueOf(2));  // 订单状态：0待支付、1支付成功、2支付失败
+                            hashMap.put("payId",payResultVo.getTransaction_id());
+                            userOrderService.updateOrderAndOrderLogByMap(hashMap);
                         }
                     }
                 } else { // 订单不存在
