@@ -228,4 +228,40 @@
 		WHERE torder.id = #{orderId}
 			  AND tprod.`status` = 2
 	</select>
+
+	<insert id="insert" parameterType="com.hjgj.aiyoujin.core.model.Order">
+		INSERT INTO t_order (id, code, user_id,
+							 product_id, buy_amount, status,
+							 deleted, reason, create_time,
+							 update_time, sell_amount, express_company,
+							 express_no, source_order_id, from_order_id,
+							 to_order_id)
+		VALUES (#{id,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR},
+										#{productId,jdbcType=VARCHAR}, #{buyAmount,jdbcType=DECIMAL},
+										#{status,jdbcType=INTEGER},
+										#{deleted,jdbcType=INTEGER}, #{reason,jdbcType=VARCHAR},
+										#{createTime,jdbcType=TIMESTAMP},
+										#{updateTime,jdbcType=TIMESTAMP}, #{sellAmount,jdbcType=DECIMAL},
+				#{expressCompany,jdbcType=VARCHAR},
+				#{expressNo,jdbcType=VARCHAR}, #{sourceOrderId,jdbcType=VARCHAR}, #{fromOrderId,jdbcType=VARCHAR},
+				#{toOrderId,jdbcType=VARCHAR})
+	</insert>
+
+	<insert id="batchInsertOrder" parameterType="java.util.List">
+		INSERT INTO t_order (id, code, user_id,
+							 product_id, buy_amount, status,
+							 deleted, reason, create_time,
+							 update_time, sell_amount, express_company,
+							 express_no, source_order_id, from_order_id,
+							 to_order_id)
+		VALUES
+		<foreach collection="list" item="item" index="index" separator=",">
+			(#{item.id,jdbcType=VARCHAR}, #{item.code,jdbcType=VARCHAR}, #{item.userId,jdbcType=VARCHAR},
+			#{item.productId,jdbcType=VARCHAR}, #{item.buyAmount,jdbcType=DECIMAL},#{item.status,jdbcType=INTEGER},
+			#{item.deleted,jdbcType=INTEGER}, #{item.reason,jdbcType=VARCHAR},#{item.createTime,jdbcType=TIMESTAMP},
+			#{item.updateTime,jdbcType=TIMESTAMP}, #{item.sellAmount,jdbcType=DECIMAL},#{item.expressCompany,jdbcType=VARCHAR},
+			#{item.expressNo,jdbcType=VARCHAR}, #{item.sourceOrderId,jdbcType=VARCHAR}, #{item.fromOrderId,jdbcType=VARCHAR},
+			#{item.toOrderId,jdbcType=VARCHAR})
+		</foreach>
+	</insert>
 </mapper>
