@@ -482,16 +482,16 @@
 		torder.deleted = 0
 		AND torder.`status` IN (0, 1, 2)
 		<if test="startTime != null and endTime != null">
-			torder.create_time BETWEEN #{startTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
+			AND torder.create_time BETWEEN #{startTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
 		</if>
 		<if test="orderNo != null">
-			torder.`code` = #{orderNo,jdbcType=VARCHAR}
+			AND torder.`code` = #{orderNo,jdbcType=VARCHAR}
 		</if>
 		<if test="userName != null">
-			tuser.nickname = #{userName,jdbcType=VARCHAR}
+			AND tuser.nickname = #{userName,jdbcType=VARCHAR}
 		</if>
 		<if test="productName != null">
-			tprod.`name` = #{productName,jdbcType=VARCHAR}
+			AND tprod.`name` = #{productName,jdbcType=VARCHAR}
 		</if>
 	</select>
 
@@ -502,11 +502,11 @@
 		tuser.nickname AS userNickName,
 		tuser.open_id AS openId,
 		torder.`code` AS orderNo,
-		tprod.`code` AS prodCode,
-		tprod.`name` AS prodName,
-		torder.buy_amount AS buyMoney,
+		tprod.`code` AS productCode,
+		tprod.`name` AS productName,
+		torder.buy_amount AS buyAmount,
 		torder.`status` AS orderStatus,
-		torder.create_time AS buyTime
+		torder.create_time AS createTime
 		FROM
 		t_order AS torder
 		LEFT JOIN t_product AS tprod ON torder.product_id = tprod.id
@@ -515,18 +515,18 @@
 		torder.deleted = 0
 		AND torder.`status` IN (0, 1, 2)
 		<if test="startTime != null and endTime != null">
-			torder.create_time BETWEEN #{startTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
+			AND torder.create_time BETWEEN #{startTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
 		</if>
 		<if test="orderNo != null">
-			torder.`code` = #{orderNo,jdbcType=VARCHAR}
+			AND torder.`code` = #{orderNo,jdbcType=VARCHAR}
 		</if>
 		<if test="userName != null">
-			tuser.nickname = #{userName,jdbcType=VARCHAR}
+			AND tuser.nickname = #{userName,jdbcType=VARCHAR}
 		</if>
 		<if test="productName != null">
-			tprod.`name` = #{productName,jdbcType=VARCHAR}
+			AND tprod.`name` = #{productName,jdbcType=VARCHAR}
 		</if>
-		ORDER BY torder.createTime desc
+		ORDER BY torder.create_time desc
 	</select>
 
 	<!-- TODO 统计礼物数目 -->
@@ -616,16 +616,16 @@
 		torder.deleted = 0
 		AND torder.`status` IN (7, 8, 9)
 		<if test="startTime != null and endTime != null">
-			torder.create_time BETWEEN #{startTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
+			AND torder.create_time BETWEEN #{startTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
 		</if>
 		<if test="orderNo != null">
-			torder.`code` = #{orderNo,jdbcType=VARCHAR}
+			AND torder.`code` = #{orderNo,jdbcType=VARCHAR}
 		</if>
 		<if test="userName != null">
-			tuser.nickname = #{userName,jdbcType=VARCHAR}
+			AND tuser.nickname = #{userName,jdbcType=VARCHAR}
 		</if>
 		<if test="productName != null">
-			tprod.`name` = #{productName,jdbcType=VARCHAR}
+			AND tprod.`name` = #{productName,jdbcType=VARCHAR}
 		</if>
 	</select>
 
@@ -635,12 +635,12 @@
 			tuser.nickname AS userNickName,
 			tuser.open_id AS openId,
 			torder.`code` AS orderNo,
-			tprod.`code` AS prodCode,
-			tprod.`name` AS prodName,
+			tprod.`code` AS productCode,
+			tprod.`name` AS productName,
 			torder.buy_amount AS buyAmount,
 			torder.`status` AS orderStatus,
 			torder.sell_amount AS sellAmount,
-			torder.create_time AS buyTime
+			torder.create_time AS createTime
 		FROM
 		t_order AS torder
 		LEFT JOIN t_product AS tprod ON torder.product_id = tprod.id
@@ -649,18 +649,18 @@
 		torder.deleted = 0
 		AND torder.`status` IN (7, 8, 9)
 		<if test="startTime != null and endTime != null">
-			torder.create_time BETWEEN #{startTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
+			AND torder.create_time BETWEEN #{startTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
 		</if>
 		<if test="orderNo != null">
-			torder.`code` = #{orderNo,jdbcType=VARCHAR}
+			AND torder.`code` = #{orderNo,jdbcType=VARCHAR}
 		</if>
 		<if test="userName != null">
-			tuser.nickname = #{userName,jdbcType=VARCHAR}
+			AND tuser.nickname = #{userName,jdbcType=VARCHAR}
 		</if>
 		<if test="productName != null">
-			tprod.`name` = #{productName,jdbcType=VARCHAR}
+			AND tprod.`name` = #{productName,jdbcType=VARCHAR}
 		</if>
-		ORDER BY torder.createTime desc
+		ORDER BY torder.create_time desc
 	</select>
 
 	<!-- TODO 统计转送订单数目 -->
@@ -677,16 +677,16 @@
 		torder.deleted = 0
 		AND torder.`status` IN (3, 4, 5, 6)
 		<if test="startTime != null and endTime != null">
-			torder.create_time BETWEEN #{startTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
+			AND torder.create_time BETWEEN #{startTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
 		</if>
 		<if test="orderNo != null">
-			torder.`code` = #{orderNo,jdbcType=VARCHAR}
+			AND torder.`code` = #{orderNo,jdbcType=VARCHAR}
 		</if>
 		<if test="userName != null">
-			tuser.nickname = #{userName,jdbcType=VARCHAR}
+			AND tuser.nickname = #{userName,jdbcType=VARCHAR}
 		</if>
 		<if test="productName != null">
-			tprod.`name` = #{productName,jdbcType=VARCHAR}
+			AND tprod.`name` = #{productName,jdbcType=VARCHAR}
 		</if>
 	</select>
 
@@ -696,11 +696,11 @@
 			tuser.nickname AS userNickName,
 			tuser.open_id AS openId,
 			torder.`code` AS orderNo,
-			tprod.`code` AS prodCode,
-			tprod.`name` AS prodName,
+			tprod.`code` AS productCode,
+			tprod.`name` AS productName,
 			torder.buy_amount AS buyAmount,
 			torder.`status` AS orderStatus,
-			torder.create_time AS buyTime,
+			torder.create_time AS createTime,
 			fromOrder.create_time AS updateTime,
 			fromUser.nickname AS fromUserNickName
 		FROM
@@ -713,27 +713,83 @@
 			torder.deleted = 0
 			AND torder.`status` IN (3, 4, 5, 6)
 		<if test="startTime != null and endTime != null">
-			torder.create_time BETWEEN #{startTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
+			AND torder.create_time BETWEEN #{startTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
 		</if>
 		<if test="orderNo != null">
-			torder.`code` = #{orderNo,jdbcType=VARCHAR}
+			AND torder.`code` = #{orderNo,jdbcType=VARCHAR}
 		</if>
 		<if test="userName != null">
-			tuser.nickname = #{userName,jdbcType=VARCHAR}
+			AND tuser.nickname = #{userName,jdbcType=VARCHAR}
 		</if>
 		<if test="productName != null">
-			tprod.`name` = #{productName,jdbcType=VARCHAR}
+			AND tprod.`name` = #{productName,jdbcType=VARCHAR}
 		</if>
-		ORDER BY torder.createTime desc
+		ORDER BY torder.create_time desc
 	</select>
 
 	<!-- TODO 统计提货订单数目 -->
 	<select id="countPickOrderVo" resultType="java.lang.Integer">
-
+      	SELECT
+			count(torder.id)
+		FROM
+		t_order AS torder
+		LEFT JOIN t_product AS tprod ON torder.product_id = tprod.id
+		LEFT JOIN t_user AS tuser ON tuser.id = torder.user_id
+		WHERE
+		torder.deleted = 0
+		AND torder.`status` IN (10,11,12)
+		<if test="startTime != null and endTime != null">
+			AND torder.create_time BETWEEN #{startTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="orderNo != null">
+			AND torder.`code` = #{orderNo,jdbcType=VARCHAR}
+		</if>
+		<if test="orderState != null">
+			AND torder.`status` = #{orderState,jdbcType=VARCHAR}
+		</if>
+		<if test="userName != null">
+			AND tuser.nickname = #{userName,jdbcType=VARCHAR}
+		</if>
+		<if test="productName != null">
+			tprod.`name` = #{productName,jdbcType=VARCHAR}
+		</if>
 	</select>
 
 	<!-- TODO 查询提货订单 -->
 	<select id="selectPickOrderVo" resultType="com.hjgj.aiyoujin.core.model.vo.OrderVO">
-
+        SELECT
+			tuser.nickname AS userNickName,
+			tuser.open_id AS openId,
+			torder.`code` AS orderNo,
+			tprod.`code` AS productCode,
+			tprod.`name` AS productName,
+			torder.buy_amount AS buyAmount,
+			torder.`status` AS orderStatus,
+			torder.express_no AS expressNo,
+            torder.express_company AS expressCompany,
+            torder.update_time AS updateTime
+		FROM
+			t_order AS torder
+			LEFT JOIN t_product AS tprod ON torder.product_id = tprod.id
+			LEFT JOIN t_user AS tuser ON tuser.id = torder.user_id
+		WHERE
+			torder.deleted = 0
+			AND torder.`status` IN (10, 11, 12)
+		<if test="startTime != null and endTime != null">
+			AND torder.create_time BETWEEN #{startTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="orderNo != null">
+			AND torder.`code` = #{orderNo,jdbcType=VARCHAR}
+		</if>
+        <if test="orderState != null">
+			AND torder.`status` = #{orderState,jdbcType=VARCHAR}
+		</if>
+		<if test="userName != null">
+			AND tuser.nickname = #{userName,jdbcType=VARCHAR}
+		</if>
+		<if test="productName != null">
+			AND tprod.`name` = #{productName,jdbcType=VARCHAR}
+		</if>
+		ORDER BY torder.create_time desc
 	</select>
 </mapper>
