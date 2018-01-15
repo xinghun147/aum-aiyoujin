@@ -9,10 +9,8 @@ public enum ResultStatus {
     USER_CAPTCHA_ERROR(-1004, "验证码错误"),
     USER_NOT_PASSWORD(-1005, "用户未设置登录密码"),
     USER_PHONE_ERROR(-1006, "手机号码格式错误"),
-    UPLOAD_NOT_IMAGE(-1007, "非法图片格式"),
-    USER_BANKCARD_NULL(-1015, "银行卡不不在"),
-    USER_BANKCARD_UNAVAILABLE(-1016, "平台不支持此银行卡"),
-    USER_PARAMS_ISNULL(-1017, "绑定信用卡必填参数为空"),
+    UPLOAD_FILE_ERROE(-1007, "非法文件格式"),
+
 
     
     //产品

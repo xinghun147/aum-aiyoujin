@@ -88,7 +88,7 @@ public class BaseController {
             return null;
         }*/
         String fileType = StringUtils.substringAfterLast(file.getOriginalFilename(), ".");
-        String fullPath = "/admin/" + generateFileName(fileType);
+        String fullPath = "/aiyoujin/" + generateFileName(fileType);
         String fileName = StringUtils.substringAfterLast(fullPath, "/");
         String filePath = StringUtils.substringBeforeLast(fullPath, "/");
         try {
