@@ -1,9 +1,14 @@
 package com.hjgj.aiyoujin.server.controller;
 
+import com.hjgj.aiyoujin.core.common.utils.UUIDGenerator;
+import com.hjgj.aiyoujin.core.model.Order;
+import com.hjgj.aiyoujin.core.model.OrderExample;
+import com.hjgj.aiyoujin.core.model.User;
 import com.hjgj.aiyoujin.core.model.vo.OrderWebVo;
 import com.hjgj.aiyoujin.core.model.vo.Page;
 import com.hjgj.aiyoujin.core.service.BaseService;
 import com.hjgj.aiyoujin.core.service.UserOrderService;
+import com.hjgj.aiyoujin.core.service.UserService;
 import com.hjgj.aiyoujin.server.common.ResultModel;
 import com.hjgj.aiyoujin.server.common.ResultStatus;
 import io.swagger.annotations.ApiOperation;
@@ -16,12 +21,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.Date;
+
 @Controller
 @RequestMapping(value = "order")
 public class OrderApiController{
 
     @Autowired
     private UserOrderService userOrderService;
+
+    @Autowired
+    private UserService userService;
 
     /**
      * 查询用户的所有订单详情
@@ -51,10 +61,41 @@ public class OrderApiController{
     @ApiOperation(value = "发送礼品卡")
     @ResponseBody
     @RequestMapping(value = "sendGiftCard",method = RequestMethod.POST)
-    public void test1(@ApiParam(value = "用户OpenId", required = true)  @RequestParam String openId,
-                      String orderId)
-    {
+    public void sendGiftCard(@ApiParam(value = "用户OpenId", required = true) @RequestParam String openId,
+                      @ApiParam(value = "订单ID", required = true) @RequestParam String orderId) {
+        Date nowDate = new Date();
+        User byOpenId = userService.getUserByOpenId(openId);
+        Order orderById = userOrderService.getOrderById(orderId);
+        Order fromOrder = new Order();
+        fromOrder.setId(UUIDGenerator.generate());
+        fromOrder.setUserId(byOpenId.getId());
+        fromOrder.setBuyAmount(orderById.getBuyAmount());
+        fromOrder.setProductId(orderById.getProductId());
+        fromOrder.setCreateTime(nowDate);
+        fromOrder.setDeleted(0);
+        fromOrder.setFromOrderId(orderId);
+        // 3送出待收、4已退回、5送出成功、6领取成功
+        fromOrder.setStatus(Integer.valueOf(3));
+    }
 
+    @ApiOperation(value = "发送礼品卡")
+    @ResponseBody
+    @RequestMapping(value = "receiveGiftCard",method = RequestMethod.POST)
+    public void receiveGiftCard(@ApiParam(value = "用户OpenId", required = true) @RequestParam String openId,
+                      @ApiParam(value = "订单ID", required = true) @RequestParam String orderId) {
+        Date nowDate = new Date();
+        User byOpenId = userService.getUserByOpenId(openId);
+        Order orderById = userOrderService.getOrderById(orderId);
+        Order fromOrder = new Order();
+        fromOrder.setId(UUIDGenerator.generate());
+        fromOrder.setUserId(byOpenId.getId());
+        fromOrder.setBuyAmount(orderById.getBuyAmount());
+        fromOrder.setProductId(orderById.getProductId());
+        fromOrder.setCreateTime(nowDate);
+        fromOrder.setDeleted(0);
+        fromOrder.setFromOrderId(orderId);
+        // 3送出待收、4已退回、5送出成功、6领取成功
+        fromOrder.setStatus(Integer.valueOf(6));
     }
 
 }

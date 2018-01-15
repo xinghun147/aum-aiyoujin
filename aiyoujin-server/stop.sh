@@ -1,7 +1,7 @@
 #!/bin/bash
 
-SERVER_NAME=aiyoujin-admin
-GREP_KEY=aiyoujin-admin.jar
+SERVER_NAME=aiyoujin-server
+GREP_KEY=aiyoujin-server.jar
 
 PIDS=`ps -ef | grep java | grep "${GREP_KEY}" |awk '{print $2}'`
 if [ -z "$PIDS" ]; then

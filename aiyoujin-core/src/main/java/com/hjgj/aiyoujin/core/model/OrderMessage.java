@@ -9,6 +9,8 @@ public class OrderMessage {
 
     private String content;
 
+    private String link;
+
     private String title;
 
     private Integer deleted;
@@ -16,6 +18,8 @@ public class OrderMessage {
     private Date createTime;
 
     private Date updateTime;
+
+    private byte[] vodeoUrl;
 
     public String getId() {
         return id;
@@ -39,6 +43,14 @@ public class OrderMessage {
 
     public void setContent(String content) {
         this.content = content == null ? null : content.trim();
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link == null ? null : link.trim();
     }
 
     public String getTitle() {
@@ -71,5 +83,13 @@ public class OrderMessage {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public byte[] getVodeoUrl() {
+        return vodeoUrl;
+    }
+
+    public void setVodeoUrl(byte[] vodeoUrl) {
+        this.vodeoUrl = vodeoUrl;
     }
 }
