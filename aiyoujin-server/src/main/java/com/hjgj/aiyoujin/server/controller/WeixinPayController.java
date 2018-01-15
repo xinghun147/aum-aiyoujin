@@ -72,7 +72,7 @@ public class WeixinPayController {
 
     @ApiOperation(value = "微信预下单")
     @ResponseBody
-    @RequestMapping(value = "/preparePay", method = RequestMethod.POST)
+    @RequestMapping(value = "/preparePay", method = RequestMethod.GET)
     public String prePayOrder(String timeStamp, String nonceStr, String openId, BigDecimal payMoney) {
         String responseMsg = null;
         String orderNo = CommonUtils.generateOrderNo("CZ");
@@ -148,7 +148,7 @@ public class WeixinPayController {
 
     @ApiOperation(value = "微信预下单")
     @ResponseBody
-    @RequestMapping(value = "/preparePay", method = RequestMethod.GET)
+    @RequestMapping(value = "/preparePay", method = RequestMethod.POST)
     public String prePayOrder2(WeiXinPrePayVo weixin) {
         String responseMsg = null;
         String orderNo = CommonUtils.generateOrderNo("CZ");
