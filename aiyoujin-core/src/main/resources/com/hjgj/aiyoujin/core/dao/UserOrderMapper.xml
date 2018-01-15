@@ -264,4 +264,11 @@
 			#{item.toOrderId,jdbcType=VARCHAR})
 		</foreach>
 	</insert>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List"/>
+		from t_order
+		where id = #{id,jdbcType=VARCHAR}
+	</select>
 </mapper>

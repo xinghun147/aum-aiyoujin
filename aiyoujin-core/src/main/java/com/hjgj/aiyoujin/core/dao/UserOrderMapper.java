@@ -64,4 +64,6 @@ public interface UserOrderMapper {
      * @return
      */
     int batchInsertOrder(List<Order> orderList);
+
+    Order selectByPrimaryKey(String id);
 }

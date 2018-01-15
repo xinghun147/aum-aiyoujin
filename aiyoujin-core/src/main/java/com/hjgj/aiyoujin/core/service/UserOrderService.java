@@ -7,6 +7,7 @@ import com.hjgj.aiyoujin.core.model.OrderExample;
 import com.hjgj.aiyoujin.core.model.User;
 import com.hjgj.aiyoujin.core.model.vo.OrderWebVo;
 import com.hjgj.aiyoujin.core.model.vo.Page;
+import com.sun.org.apache.xpath.internal.operations.Or;
 import org.apache.ibatis.session.RowBounds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -88,7 +89,7 @@ public class UserOrderService {
         logger.info("updateOrderByCodeState执行,参数为{" + orderNo + "},{" + orderState + "}");
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("orderNo", orderNo);
-        hashMap.put("status", orderState);
+        hashMap.put("orderStatus", orderState);
         hashMap.put("updateTime", new Date());
         int updateResult = userOrderMapper.updateOrderByMap(hashMap);
         logger.info("updateOrderByCodeState执行,参数为{" + orderNo + "},{" + orderState + "},更新结果为" + updateResult);
@@ -137,10 +138,19 @@ public class UserOrderService {
         int fromOrderResult = userOrderMapper.insert(order);
         return fromOrderResult;
     }
-    
-    public int batchInsertOrder(List<Order> orderList){
-        
-        
+
+    public int batchInsertOrder(List<Order> orderList) {
+
+
         return 0;
+    }
+
+    public Order getOrderById(String orderId) {
+        return userOrderMapper.selectByPrimaryKey(orderId);
+    }
+
+    public int insertOrder(Order order){
+        int fromOrderResult = userOrderMapper.insert(order);
+        return fromOrderResult;
     }
 }
