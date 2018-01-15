@@ -181,29 +181,11 @@
 	<update id="updateOrderByMap" parameterType="map">
 		UPDATE t_order
 		<set>
-			<if test="code != null">
-				code = #{code,jdbcType=VARCHAR},
-			</if>
-			<if test="userId != null">
-				user_id = #{userId,jdbcType=VARCHAR},
-			</if>
-			<if test="productId != null">
-				product_id = #{productId,jdbcType=VARCHAR},
-			</if>
-			<if test="buyAmount != null">
-				buy_amount = #{buyAmount,jdbcType=DECIMAL},
-			</if>
 			<if test="status != null">
-				`status` = #{status,jdbcType=INTEGER},
-			</if>
-			<if test="deleted != null">
-				deleted = #{deleted,jdbcType=INTEGER},
+				`status` = #{orderStatus,jdbcType=INTEGER},
 			</if>
 			<if test="reason != null">
 				reason = #{reason,jdbcType=VARCHAR},
-			</if>
-			<if test="createTime != null">
-				create_time = #{createTime,jdbcType=TIMESTAMP},
 			</if>
 			<if test="updateTime != null">
 				update_time = #{updateTime,jdbcType=TIMESTAMP},
@@ -227,7 +209,7 @@
 				to_order_id = #{toOrderId,jdbcType=VARCHAR},
 			</if>
 		</set>
-		where code = #{orderNo,jdbcType=VARCHAR}
+		where `code` = #{orderNo,jdbcType=VARCHAR}
 	</update>
 
 	<select id="getOrderProduct" resultType="java.util.Map">
