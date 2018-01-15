@@ -6,14 +6,17 @@ import com.hjgj.aiyoujin.core.common.utils.UUIDGenerator;
 import com.hjgj.aiyoujin.core.model.Order;
 import com.hjgj.aiyoujin.core.model.OrderLog;
 import com.hjgj.aiyoujin.core.model.Product;
+import com.hjgj.aiyoujin.core.model.User;
 import com.hjgj.aiyoujin.core.service.OrderLogService;
 import com.hjgj.aiyoujin.core.service.ProductService;
 import com.hjgj.aiyoujin.core.service.UserOrderService;
+import com.hjgj.aiyoujin.core.service.UserService;
 import com.hjgj.aiyoujin.core.vo.UnifiedOrderRespose;
 import com.hjgj.aiyoujin.server.util.MD5Util;
 import com.hjgj.aiyoujin.server.vo.WeiXinPayResultVo;
 import com.hjgj.aiyoujin.server.vo.WeiXinPrePayVo;
 import com.hjgj.aiyoujin.server.webBiz.WeixinOrder;
+import com.hjgj.aiyoujin.server.webBiz.WeixinPush;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.XmlFriendlyNameCoder;
 import com.thoughtworks.xstream.io.xml.XppDriver;
@@ -33,6 +36,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -59,7 +63,14 @@ public class WeixinPayController {
     @Autowired
     private WeixinOrder weixinOrder;
 
+    @Autowired
+    private WeixinPush weixinPush;
 
+    @Autowired
+    private UserService userService;
+
+
+    @ApiOperation(value = "微信预下单")
     @ResponseBody
     @RequestMapping(value = "/preparePay", method = RequestMethod.POST)
     public String prePayOrder(String timeStamp, String nonceStr, String openId, BigDecimal payMoney) {
@@ -145,6 +156,7 @@ public class WeixinPayController {
         Product product = productService.findProduct(weixin.getProductId());
         String name = product.getName();
 
+        User userByOpenId = userService.getUserByOpenId(weixin.getOpenId());
 
         Date nowDate = new Date();
         Order wxOrder = new Order();
@@ -155,12 +167,14 @@ public class WeixinPayController {
         wxOrder.setProductId(weixin.getProductId());
         wxOrder.setStatus(0);
         wxOrder.setCode(orderNo); // 订单号
+        wxOrder.setUserId(userByOpenId.getId());
+        wxOrder.setBuyAmount(product.getBuyPrice());
         // 订单状态：0待支付、1支付成功、2支付失败、3送出待收、4已退回、5送出成功、
         //	  6领取成功、7变现待处理、8变现成功、9变现失败、10提货待处理、11物流中、12已收货
 
 
         HashMap<String, Object> map = new HashMap<>();
-        String xmlRequest = weixinOrder.getXmlRequest(weixin.getNonceStr(), weixin.getOpenId(), weixin.getPayMoney(), orderNo, weixin.getProductId());
+        String xmlRequest = weixinOrder.getXmlRequest(weixin.getNonceStr(), weixin.getOpenId(), product.getBuyPrice(), orderNo,name);
         Map<String, Object> prePayXML = weixinOrder.wxPrePayXML(xmlRequest);
         String xmlStr = (String) prePayXML.get("xmlStr");
         UnifiedOrderRespose unifiedOrderRespose = (UnifiedOrderRespose) prePayXML.get("unifiedOrderRespose");
@@ -235,7 +249,8 @@ public class WeixinPayController {
      * @param response
      * @throws Exception
      */
-    @RequestMapping(value = "/wxPayCallback")
+    @ApiOperation(value = "微信支付通知回调")
+    @RequestMapping(value = "/wxPayCallback",method = RequestMethod.POST)
     public void paySuccessCallback(HttpServletRequest request, HttpServletResponse response) throws Exception {
         InputStream inputStream = request.getInputStream();
         String postData = IOUtils.toString(inputStream, "UTF-8");
@@ -294,8 +309,31 @@ public class WeixinPayController {
                         PrintWriter out = response.getWriter();
                         out.print(xml.toString());
                         out.close();
+                        /**
+                         * torder.id AS orderId,
+                         orderLog.prepay_id AS prepayId,
+                         tuser.open_id AS openId,
+                         tprod.`name` AS productName,
+                         tprod.buy_price AS buyMoney,
+                         orderLog.update_time AS updateTime
+                         */
                         Map orderProduct = userOrderService.getOrderProduct(selfOrder.getId());
-                        Object updateTime = (Date)orderProduct.get("updateTime");
+                        Date updateTime = (Date)orderProduct.get("updateTime");
+                        String orderId = (String) orderProduct.get("orderId");
+                        String prepayId = (String) orderProduct.get("prepayId");
+                        String productName = (String) orderProduct.get("productName");
+                        String buyMoney = (String) orderProduct.get("buyMoney");
+                        weixinPush.payResultNotify(productName,buyMoney,new SimpleDateFormat("yyyy年MM月dd日").format(updateTime),prepayId,payResultVo.getOpenid());
+
+                        HashMap<String, Object> hashMap = new HashMap<>();
+                        hashMap.put("orderId",orderId);
+                        hashMap.put("updateTime",updateTime);
+                        hashMap.put("prepayId",prepayId);
+                        hashMap.put("orderId",orderId);
+                        hashMap.put("orderId",orderId);
+                        userOrderService.updateOrderAndOrderLogByMap(hashMap);
+
+
                     }else if(status.equals(Integer.valueOf(0))){  // 待支付状态
                         String result_code = payResultVo.getResult_code();
                         if("SUCCESS".equals(result_code.trim())){
