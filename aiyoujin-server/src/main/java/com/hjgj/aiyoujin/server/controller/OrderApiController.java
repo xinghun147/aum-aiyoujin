@@ -122,7 +122,20 @@ public class OrderApiController {
             return ResultModel.error(ResultStatus.ERROR_EMPTY_VAL_RETURNED);
         }
         return ResultModel.ok("赠送失败");
+    }
 
+    @ApiOperation(value = "查看订单状态")
+    @ResponseBody
+    @RequestMapping(value = "getOrderStatus", method = RequestMethod.GET)
+    public ResultModel checkOrderStatus(@ApiParam(value = "订单ID", required = true) @RequestParam String orderId) {
+        Assert.notNull(orderId, "orderId 不可为空");
+        Order orderById = userOrderService.getOrderById(orderId);
+        if (orderById == null) {
+            return ResultModel.error(ResultStatus.ERROR_NOT_FIND_DATA);
+        } else {
+            Integer status = orderById.getStatus();
+            return ResultModel.ok(status);
+        }
     }
 
 }
