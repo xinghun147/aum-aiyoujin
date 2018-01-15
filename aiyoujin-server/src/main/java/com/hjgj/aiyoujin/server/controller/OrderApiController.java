@@ -1,9 +1,11 @@
 package com.hjgj.aiyoujin.server.controller;
 
+import com.hjgj.aiyoujin.core.model.User;
 import com.hjgj.aiyoujin.core.model.vo.OrderWebVo;
 import com.hjgj.aiyoujin.core.model.vo.Page;
 import com.hjgj.aiyoujin.core.service.BaseService;
 import com.hjgj.aiyoujin.core.service.UserOrderService;
+import com.hjgj.aiyoujin.core.service.UserService;
 import com.hjgj.aiyoujin.server.common.ResultModel;
 import com.hjgj.aiyoujin.server.common.ResultStatus;
 import io.swagger.annotations.ApiOperation;
@@ -22,6 +24,9 @@ public class OrderApiController{
 
     @Autowired
     private UserOrderService userOrderService;
+
+    @Autowired
+    private UserService userService;
 
     /**
      * 查询用户的所有订单详情
@@ -51,9 +56,9 @@ public class OrderApiController{
     @ApiOperation(value = "发送礼品卡")
     @ResponseBody
     @RequestMapping(value = "sendGiftCard",method = RequestMethod.POST)
-    public void test1(@ApiParam(value = "用户OpenId", required = true)  @RequestParam String openId,
-                      String orderId)
-    {
+    public void test1(@ApiParam(value = "用户OpenId", required = true) @RequestParam String openId,
+                      @ApiParam(value = "订单ID", required = true) @RequestParam String orderId) {
+        User byOpenId = userService.getUserByOpenId(openId);
 
     }
 
