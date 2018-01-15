@@ -73,7 +73,7 @@ public class WeixinPush {
      * 微信支付失败通知
      * @param prodName
      * @param payMoney
-     * @param String failCause
+     * @param failCause
      * @param payTime
      * @param prePayId
      * @param openId
