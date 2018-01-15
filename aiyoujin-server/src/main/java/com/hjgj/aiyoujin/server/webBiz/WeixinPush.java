@@ -26,43 +26,19 @@ public class WeixinPush {
     @Autowired
     private MessageTokenService messageTokenService;
 
+    /**
+     * 微信支付成功通知
+     * @param prodName
+     * @param payMoney
+     * @param payTime
+     * @param prePayId
+     * @param openId
+     */
     public void payResultNotify(String prodName,String payMoney,String payTime,String prePayId,String openId) {
-        Date nowTime = new Date();
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(nowTime);
-        calendar.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY) - 2);
-
-        Date beforeTime = calendar.getTime();
-        MessageToken latestToken = messageTokenService.getLatestToken(beforeTime, nowTime);
-
         String weixinToken = null;
-        if (latestToken != null) {
-            String tokenAccessToken = latestToken.getAccessToken();
-            weixinToken = tokenAccessToken;
-
-
-
-        } else {
-
-            Token token = TokenAPI.token(weiXinProperty.getAppid(), weiXinProperty.getAppSecret());
-            String access_token = token.getAccess_token();
-            String errcode = token.getErrcode();
-            int expires_in = token.getExpires_in();
-            String generateID = UUIDGenerator.generate();
-
-            MessageToken messageToken = new MessageToken();
-            messageToken.setId(generateID);
-            messageToken.setAccessToken(access_token);
-            messageToken.setRequireDate(new Date());
-            messageToken.setExpiresIn(expires_in);
-            messageToken.setScope("client_credential");
-            messageToken.setRemark("OK");
-            messageToken.setTokenType(3); // 3 小程序 1 普通
-
-            int insertLatestToken = messageTokenService.insertLatestToken(messageToken);
-            weixinToken = access_token;
+        while (weixinToken == null){
+            weixinToken = getRightAccessToken();
         }
-
         // 物品名称
         TemplateMessageItem keyword1 = new TemplateMessageItem();
         keyword1.setValue(prodName);
@@ -79,12 +55,9 @@ public class WeixinPush {
         keyword3.setColor("#333333");
 
         LinkedHashMap<String, TemplateMessageItem> linkedHashMap = new LinkedHashMap<String, TemplateMessageItem>();
-
-
         linkedHashMap.put("keyword1", keyword1);
         linkedHashMap.put("keyword2", keyword2);
         linkedHashMap.put("keyword3", keyword3);
-
         WxopenTemplateMessage wxopenTemplateMessage = new WxopenTemplateMessage();
         wxopenTemplateMessage.setTouser(openId);
         wxopenTemplateMessage.setData(linkedHashMap);
@@ -96,4 +69,47 @@ public class WeixinPush {
 
     }
 
+
+    public void test(){
+
+    }
+
+    /**
+     * 获取可用的AccessToken
+     * @return
+     */
+    private String getRightAccessToken(){
+        Date nowTime = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(nowTime);
+        calendar.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY) - 2);
+
+        Date beforeTime = calendar.getTime();
+        MessageToken latestToken = messageTokenService.getLatestToken(beforeTime, nowTime);
+
+        String weixinToken = null;
+        if (latestToken != null) {
+            String tokenAccessToken = latestToken.getAccessToken();
+            weixinToken = tokenAccessToken;
+        } else {
+            Token token = TokenAPI.token(weiXinProperty.getAppid(), weiXinProperty.getAppSecret());
+            String access_token = token.getAccess_token();
+            String errcode = token.getErrcode();
+            int expires_in = token.getExpires_in();
+            String generateID = UUIDGenerator.generate();
+            MessageToken messageToken = new MessageToken();
+            messageToken.setId(generateID);
+            messageToken.setAccessToken(access_token);
+            messageToken.setRequireDate(new Date());
+            messageToken.setExpiresIn(expires_in);
+            messageToken.setScope("client_credential");
+            messageToken.setRemark("OK");
+            messageToken.setTokenType(3); // 3 小程序 1 普通
+            int insertLatestToken = messageTokenService.insertLatestToken(messageToken);
+            if(insertLatestToken>0){
+                weixinToken = access_token;
+            }
+        }
+        return weixinToken;
+    }
 }
