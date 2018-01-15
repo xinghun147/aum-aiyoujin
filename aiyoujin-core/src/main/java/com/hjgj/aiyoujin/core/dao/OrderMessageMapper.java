@@ -18,15 +18,20 @@ public interface OrderMessageMapper {
 
     OrderMessage selectOneByExample(OrderMessageExample example);
 
+    List<OrderMessage> selectByExampleWithBLOBs(OrderMessageExample example);
+
+
     List<OrderMessage> selectByExample(OrderMessageExample example);
 
     OrderMessage selectByPrimaryKey(String id);
 
-    int updateByExampleSelective(@Param("record") OrderMessage record, @Param("example") OrderMessageExample example);
+    int updateByExampleWithBLOBs(@Param("record") OrderMessage record, @Param("example") OrderMessageExample example);
 
     int updateByExample(@Param("record") OrderMessage record, @Param("example") OrderMessageExample example);
 
     int updateByPrimaryKeySelective(OrderMessage record);
+
+    int updateByPrimaryKeyWithBLOBs(OrderMessage record);
 
     int updateByPrimaryKey(OrderMessage record);
 }
