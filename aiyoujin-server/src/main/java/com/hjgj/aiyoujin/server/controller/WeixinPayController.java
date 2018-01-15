@@ -154,13 +154,6 @@ public class WeixinPayController {
             System.out.println("二次签名是" + sb.toString());
             String paySign = MD5Util.MD5Encode(sb.toString(), "UTF-8").toUpperCase();
 //            String paySign = sb.toString();
-            map.put("code", "0");
-            map.put("msg", "恭喜,微信预支付成功!");
-            map.put("timeStamp", weixin.getTimeStamp());
-            map.put("nonceStr", weixin.getNonceStr());
-            map.put("package", "prepay_id=" + prepayId);
-            map.put("signType", "MD5");
-            map.put("paySign", paySign);
 
             orderLog.setPayResultCode(unifiedOrderRespose.getResult_code());
             orderLog.setPayResultMsg(unifiedOrderRespose.getReturn_msg());
@@ -169,6 +162,13 @@ public class WeixinPayController {
             int insertThree = insertThree(wxOrder, orderLog, orderMessage);
             if (insertThree > 0) {
                 map.put("code", "0");
+                map.put("msg", "恭喜,微信预支付成功!");
+                map.put("timeStamp", weixin.getTimeStamp());
+                map.put("nonceStr", weixin.getNonceStr());
+                map.put("package", "prepay_id=" + prepayId);
+                map.put("signType", "MD5");
+                map.put("paySign", paySign);
+                map.put("orderId",wxOrder.getId());
             } else {
                 map.put("code", "1");
             }
