@@ -309,4 +309,10 @@ public class UserOrderService {
     	return map;
    
     }
+    
+    public void takeDelivery(Order order){
+    	order.setStatus(OrderStatusEnum.ORDER_STATUS_PICKPROCESSING.getCode());
+    	order.setUpdateTime(new Date());
+    	orderMapper.updateByPrimaryKey(order);
+    }
 }

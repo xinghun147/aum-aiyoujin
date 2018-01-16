@@ -52,7 +52,7 @@ public class OrderApiController {
      */
     @ApiOperation(value = "查询用户礼物列表")
     @ResponseBody
-    @RequestMapping(value = "/getMyGiftCards", method = RequestMethod.POST)
+    @RequestMapping(value = "/getMyGiftCards", method = RequestMethod.GET)
     public ResultModel getUserAllOrdersByOpenId(@ApiParam(value = "用户ID", required = true) @RequestParam String userId,
                                                 @ApiParam(value = "礼品类型(1持有中,2已送出,3已变现,4已提货)", required = true) @RequestParam String types,
                                                 @ApiParam(value = "第多少页", required = true) @RequestParam Integer pageNum,
@@ -152,7 +152,7 @@ public class OrderApiController {
     
     @ApiOperation(value = "礼品变现")
     @ResponseBody
-    @RequestMapping(value = "/giftToCash", method = RequestMethod.GET)
+    @RequestMapping(value = "/giftToCash", method = RequestMethod.POST)
     public ResultModel giftToCash(@ApiParam(value = "订单ID", required = true) @RequestParam String orderId,
     							@ApiParam(value = "微信提交formId", required = true) @RequestParam String formId) {
         Assert.notNull(orderId, "orderId 不可为空");
@@ -174,6 +174,27 @@ public class OrderApiController {
 				userOrderService.updateOrderStauts(order.getId(), OrderStatusEnum.ORDER_STATUS_CASH_FAIL.getCode());
 				return  ResultModel.error(ResultStatus.ORDER_TO_CASH_FAIL);
 			}
+		} catch (Exception e) {
+			return ResultModel.error(ResultStatus.ORDER_TO_CASH_FAIL);
+		}
+    }
+    
+    
+    @ApiOperation(value = "提货申请")
+    @ResponseBody
+    @RequestMapping(value = "/takeDelivery ", method = RequestMethod.POST)
+    public ResultModel takeDelivery(@ApiParam(value = "订单ID", required = true) @RequestParam String orderId,
+    							@ApiParam(value = "地址", required = true) @RequestParam String address) {
+        Assert.notNull(orderId, "orderId 不可为空");
+        Assert.notNull(address, "地址不可为空");
+		try {
+			Order order = userOrderService.getOrderById(orderId);
+			if(order == null){
+				return ResultModel.error(ResultStatus.ORDER_NOT_EXIST);
+			}
+			order.setAddress(address);
+			userOrderService.takeDelivery(order);
+			return ResultModel.ok();
 		} catch (Exception e) {
 			return ResultModel.error(ResultStatus.ORDER_TO_CASH_FAIL);
 		}
