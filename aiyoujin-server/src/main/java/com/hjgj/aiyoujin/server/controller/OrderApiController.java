@@ -175,7 +175,7 @@ public class OrderApiController {
 				return  ResultModel.error(ResultStatus.ORDER_TO_CASH_FAIL);
 			}
 		} catch (Exception e) {
-			return ResultModel.error(ResultStatus.ORDER_NOT_EXIST);
+			return ResultModel.error(ResultStatus.ORDER_TO_CASH_FAIL);
 		}
     }
 
