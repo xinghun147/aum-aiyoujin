@@ -25,6 +25,7 @@ public enum ResultStatus {
     ORDER_NOT_EXIST(-3005, "订单不存在"),
     ORDER_RECEIVE_FAIL(-3006, "领取失败"),
     ORDER_PAY_UNPAID(-3007, "订单未支付"),
+    ORDER_TO_CASH_FAIL(-3008, "变现失败"),
     
     
     
