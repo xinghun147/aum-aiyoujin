@@ -8,21 +8,25 @@
 </head>
 <body class="childrenBody" style="width:1600px;">
 	<blockquote class="layui-elem-quote news_search">
-	<form id="searchForm" name="searchForm" class="layui-form" action="/member/userList.html">
+	<form id="searchForm" name="searchForm" class="layui-form" action="/user/userList.html">
 		<input type="hidden" id="pageNum" name="pageNum" th:value="${page}?${page.pageNum}"/>
 		  <div class="layui-form-item">
-			<label class="layui-form-label">用户名:</label>
+			<label class="layui-form-label">用户名ID:</label>
 		    <div class="layui-input-inline">
-		    	 <input  type="text" class="layui-input" name="userName"  th:value="${user}?${user.userName}"/>
+		    	 <input  type="text" class="layui-input" name="openId"  th:value="${user}?${user.openId}"/>
 		    </div>
-            <label class="layui-form-label">实名状态:</label>
+		    <label class="layui-form-label">用户昵称:</label>
+		    <div class="layui-input-inline">
+		    	 <input  type="text" class="layui-input" name="nickname"  th:value="${user}?${user.nickname}"/>
+		    </div>
+           <!--  <label class="layui-form-label">实名状态:</label>
                 <div class="layui-input-inline">
                     <select name="realnamed" id="realnamed" lay-filter="realnamed">
                         <option value="">请选择查询认证状态</option>
                         <option value="1" th:selected="${user} ne null  and ${user.realnamed == 1}">已实名</option>
                         <option value="0" th:selected="${user} ne null  and ${user.realnamed == 0}">未实名</option>
                     </select>
-                </div>
+                </div> -->
 		    <button class="layui-btn search_btn"><i class="layui-icon">&#xe615;</i>查询</button>
          </div>
 	</form>
@@ -41,27 +45,27 @@
 		    </colgroup>
 		    <thead>
 				<tr>
-					<th>用户名</th>
-					<th>姓名</th>
-					<th>性别</th>
-                    <th>年龄</th>
-                    <th>生日</th>
+					<th>用户ID</th>
+					<th>头像</th>
+					<th>昵称</th>
+                    <th>手机号</th>
+                    <!-- <th>生日</th>
 					<th>手机号</th>
                     <th>邮箱</th>
                     <th>所属地域</th>
 					<th>是否实名</th>
 					<th>注册时间</th>
-					<th>操作</th>
+					<th>操作</th> -->
 				</tr> 
 		    </thead>
 		    <tbody class="news_content">
 		  	  <th:block th:if="${not #lists.isEmpty(page.list)}">
 			    	<tr th:each="item:${page.list}">
-				    	<td  th:text="${item.userName}"></td>
-				    	<td  th:text="${item.name}"></td>
-				    	<td  th:text="${item.gender}"></td>
-                        <td  th:text="${item.age}"></td>
-                        <td  th:text="${item.birth}"></td>
+				    	<td  th:text="${item.openId}"></td>
+				    	<td><img th:src="${item.avatar}" style="width:70,height=70"></img></td>
+				    	<td  th:text="${item.nickname}"></td>
+                        <td  th:text="${item.mobile}"></td>
+                        <!-- <td  th:text="${item.birth}"></td>
 				    	<td  th:text="${item.mobile}"></td>
                         <td  th:text="${item.email}"></td>
                         <td  th:text="${item.areaId}"></td>
@@ -72,11 +76,11 @@
 				    	<td  th:text="${#dates.format(item.createTime,'yyyy-MM-dd HH:mm:ss')}"></td>
 				    	<td>
 				    		<a th:data="${item.id}" class="layui-btn layui-btn-mini info">查看</a>
-				    		<!-- <a th:data="${item.id}" class="layui-btn layui-btn-danger layui-btn-mini frozen">冻结</a>
-				    		<a th:data="${item.id}" class="layui-btn layui-btn-mini unfrozen"> 解冻</a> -->
+				    		<a th:data="${item.id}" class="layui-btn layui-btn-danger layui-btn-mini frozen">冻结</a>
+				    		<a th:data="${item.id}" class="layui-btn layui-btn-mini unfrozen"> 解冻</a>
                             <a th:data="${item.id}" th:remove="${item.locked == 0} ?none:all" class="layui-btn layui-btn-danger layui-btn-mini lock">锁定</a>
                             <a th:data="${item.id}" th:remove="${item.locked == 1} ?none:all"class="layui-btn layui-btn-mini unlock">解锁</a>
-				    	</td>
+				    	</td> -->
 					</tr>
 				</th:block>
 		    </tbody>

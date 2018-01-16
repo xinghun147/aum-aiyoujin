@@ -8,7 +8,7 @@
 </head>
 <body class="childrenBody">
 <blockquote class="layui-elem-quote news_search">
-    <form id="searchForm" name="searchForm" class="layui-form" action="/order/buyOrderEntry.html">
+    <form id="searchForm" name="searchForm" class="layui-form" action="/order/pickOrderEntry.html">
         <input type="hidden" id="pageNum" name="pageNum" th:value="${page.pageNum}"/>
         <div class="layui-form-item" style="margin-left: -43px;margin-bottom: 2px;">
             <label class="layui-form-label">订单编号:</label>
@@ -27,22 +27,20 @@
         <div class="layui-form-item" style="margin-left: -43px;margin-bottom: 2px;">
             <label class="layui-form-label">状态</label>
             <div class="layui-input-inline">
-                <select name="status"  lay-filter="status">
+                <select name="orderState"  lay-filter="status">
                     <option value="">选择查询提货状态</option>
-                    <option value="10" th:selected="${vo}ne null  and ${vo.orderState == 10}">提货待处理</option>
-                    <option value="11" th:selected="${vo}ne null  and ${vo.orderState == 11}">物流中</option>
-                    <option value="12" th:selected="${vo}ne null  and ${vo.orderState == 12}">已完成</option>
+                    <option value="10" th:selected="${vo.orderState}ne null  and ${vo.orderState == 10}">待发货</option>
+                    <option value="11" th:selected="${vo.orderState}ne null  and ${vo.orderState == 11}">物流中</option>
+                    <option value="12" th:selected="${vo.orderState}ne null  and ${vo.orderState == 12}">已收货</option>
                 </select>
             </div>
-            <label class="layui-form-label">创建时间:</label>
+            <label class="layui-form-label">提货时间:</label>
             <div class="layui-input-inline">
-                <input type="text" class="layui-input" name="startTime" id="startTime" readonly="readonly"
-                       th:value="${vo.startTime}?${#dates.format(vo.startTime, 'yyyy-MM-dd HH:mm:ss')}"/>
+                 <input  type="text" class="layui-input" name="startTime" th:value="${vo.startTime}?${#dates.format(vo.startTime,'yyyy-MM-dd HH:mm:ss')}" id="startTime"/>
             </div>
             <div class="layui-form-mid">-</div>
             <div class="layui-input-inline">
-                <input type="text" class="layui-input" name="endTime" id="endTime" readonly="readonly"
-                       th:value="${vo.endTime}?${#dates.format(vo.endTime, 'yyyy-MM-dd HH:mm:ss')}"/>
+                <input  type="text" class="layui-input" name="endTime" th:value="${vo.endTime}?${#dates.format(vo.endTime,'yyyy-MM-dd HH:mm:ss')}" id="endTime"/>
             </div>
             <button class="layui-btn search_btn"><i class="layui-icon">&#xe615;</i>查询</button>
             <!--<a class="layui-btn layui-btn-normal newsAdd_btn" id="add"><i class="layui-icon">&#xe608;</i>添加</a>-->
@@ -77,16 +75,19 @@
                 <td th:text="${item.productName}"></td>
                 <td th:text="${item.buyAmount}"></td>
                 <th:block th:switch="${item.orderStatus}">
-                    <td th:case="10">已退回</td>
-                    <td th:case="11">送出成功</td>
-                    <td th:case="12">领取成功</td>
+                    <td th:case="10">待发货</td>
+                    <td th:case="11">物流中</td>
+                    <td th:case="12">已收货</td>
                 </th:block>
                 <td th:text="${item.expressCompany}"></td>
                 <td th:text="${item.expressNo}"></td>
                 <td th:text="${item.expressAmount}"></td>
-                <td th:text="${item.createTime}?${#dates.format(item.createTime,'yyyy-MM-dd HH:mm:ss')}"></td>
+                <td th:text="${item.updateTime}?${#dates.format(item.updateTime,'yyyy-MM-dd HH:mm:ss')}"></td>
                 <td>
-                    <a th:data="${item.orderId}" class="layui-btn layui-btn-mini message_edit"> <i class="layui-icon">&#xe642;</i>编辑</a>
+                    <input type="hidden" id="orderNo" name="orderNo" th:value="${item.orderNo}"/>
+                    <th:block th:switch="${item.orderStatus}">
+		               <a th:case="10" class="layui-btn layui-btn-mini add_express"> <i class="layui-icon">&#xe642;</i>填写物流信息</a>
+		            </th:block>
                 </td>
             </tr>
         </th:block>
@@ -94,6 +95,39 @@
     </table>
 </div>
 <div id="paged" align="right"></div>
+<div id="addExpress" style="display: none; padding-top:20px " >
+		<form class="layui-form" action="/order/addExpress.html">
+			<div class="layui-form-item">
+				<label class="layui-form-label">快递公司:</label>
+				<div class="layui-input-inline">
+					<select name="productName" lay-verify="required" lay-search="" data-placeholder="直接选择或搜索选择">
+				       <option th:each="express:${express}" th:value="${express.name}" th:text="${express.name}">快递公司名称</option>
+				    </select>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">快递单号:</label>
+				<div class="layui-input-inline">
+					<input type="text" value="" name="productCode" class="layui-input search_input"/>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">快递费:</label>
+				<div class="layui-input-inline">
+					<input type="text" value="" name="" class="layui-input search_input"/>
+				</div>
+			</div>
+			<div class="layui-form-item" style="margin-top:40px;">
+				<input type="hidden" name="orderId" id="orderId">	
+				<div class="layui-input-block">
+					<div class="layui-layer-btn layui-inline">
+						<button class="layui-btn sendReason" lay-submit="" lay-filter="instantSubmitLog" name="type" value="1">提交</button>
+						<button type="reset" class="layui-btn">重置</button>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
 <script type="text/javascript" th:src="@{/layui/layui.js}"></script>
 <script type="text/javascript" th:src="@{/jquery/jquery-3.2.1.min.js}"></script>
 </body>
@@ -116,9 +150,41 @@
             }
         });
     });
+    
+    layui.use('laydate', function(){
+  	  var laydate = layui.laydate;
+  	  //执行一个laydate实例
+  	  laydate.render({
+  	    elem: '#startTime' //指定元素
+  	    ,type:'datetime'
+  	    ,format: 'yyyy-MM-dd HH:mm:ss'
+  	  });
+  	  //执行一个laydate实例
+  	  laydate.render({
+  	    elem: '#endTime' //指定元素
+  	    ,type:'datetime'
+  	    ,format: 'yyyy-MM-dd HH:mm:ss'
+  	  });
+  	});  
 
     layui.use('layer', function () {
-        var layer = layui.layer, $ = layui.jquery;
+    	 var layer = layui.layer,$=layui.jquery;  
+    	 var form = layui.form;
+      //填写物流信息
+        $(".add_express").bind("click",function() {
+
+            var id = $("#orderNo").val();
+            $("#orderId").val(id);
+            layer.open({
+                type: 1,
+                title:"物流信息",
+                content: $('#addExpress'), 
+                area: ['360px', '400px'],
+                yes:function(index,layero){
+                	if(!$(".desc").val()) return;
+                }
+            });
+        });
 
         //删除
         $(".message_del").bind("click", function () {
@@ -227,7 +293,8 @@
 
         //但是，如果你的HTML是动态生成的，自动渲染就会失效
         //因此你需要在相应的地方，执行下述方法来手动渲染，跟这类似的还有 element.init();
-        // form.render();
+        form.render();
     });
+    
 </script>
 </html>

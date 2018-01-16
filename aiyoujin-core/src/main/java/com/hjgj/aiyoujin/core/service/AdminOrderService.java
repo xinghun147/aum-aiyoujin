@@ -1,14 +1,20 @@
 package com.hjgj.aiyoujin.core.service;
 
+import com.hjgj.aiyoujin.core.common.Constants;
+import com.hjgj.aiyoujin.core.common.utils.UUIDGenerator;
 import com.hjgj.aiyoujin.core.dao.OrderMapper;
 import com.hjgj.aiyoujin.core.model.Order;
 import com.hjgj.aiyoujin.core.model.vo.OrderRequestVo;
 import com.hjgj.aiyoujin.core.model.vo.OrderVO;
 import com.hjgj.aiyoujin.core.model.vo.Page;
+
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -116,4 +122,16 @@ public class AdminOrderService {
         }
         return page;
     }
+    
+    /**
+     * 添加快递信息到订单
+     * @param requestVo
+     */
+    @Transactional
+	public void addExpressToOrder(OrderVO orderVO) {
+		if(StringUtils.isBlank(orderVO.getOrderNo())){
+			orderVO.setUpdateTime(new Date());
+			orderMapper.addExpressToOrder(orderVO);
+		}
+	}
 }

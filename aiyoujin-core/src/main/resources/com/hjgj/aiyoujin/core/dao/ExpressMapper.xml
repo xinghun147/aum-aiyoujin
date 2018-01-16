@@ -284,4 +284,8 @@
   <select id="selectOneByExample" resultMap="BaseResultMap" parameterType="com.hjgj.aiyoujin.core.model.ExpressExample" >
     select <include refid="Base_Column_List" /> from t_express <if test="_parameter != null" >  <include refid="Example_Where_Clause" /> </if> <if test="orderByClause != null" >  order by ${orderByClause} </if>  limit 1
   </select>
+  
+  <select id="findExpressName" resultMap="BaseResultMap" >
+    select NAME from t_express
+  </select>
 </mapper>

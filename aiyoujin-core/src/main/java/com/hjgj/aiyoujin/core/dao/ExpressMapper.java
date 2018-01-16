@@ -21,4 +21,6 @@ public interface ExpressMapper {
     int updateByExampleSelective(@Param("record") Express record, @Param("example") ExpressExample example);
 
     int updateByExample(@Param("record") Express record, @Param("example") ExpressExample example);
+
+	List<Express> findExpressName();
 }

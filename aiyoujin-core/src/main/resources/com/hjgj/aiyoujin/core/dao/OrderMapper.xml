@@ -741,17 +741,17 @@
 		<if test="startTime != null and endTime != null">
 			AND torder.create_time BETWEEN #{startTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
 		</if>
-		<if test="orderNo != null">
+		<if test="orderNo != null and orderNo != ''">
 			AND torder.`code` = #{orderNo,jdbcType=VARCHAR}
 		</if>
-		<if test="orderState != null">
+		<if test="orderState != null and orderState != ''">
 			AND torder.`status` = #{orderState,jdbcType=VARCHAR}
 		</if>
-		<if test="userName != null">
+		<if test="userName != null and userName != ''">
 			AND tuser.nickname = #{userName,jdbcType=VARCHAR}
 		</if>
-		<if test="productName != null">
-			tprod.`name` = #{productName,jdbcType=VARCHAR}
+		<if test="productName != null and productName != ''">
+			AND tprod.`name` = #{productName,jdbcType=VARCHAR}
 		</if>
 	</select>
 
@@ -778,18 +778,28 @@
 		<if test="startTime != null and endTime != null">
 			AND torder.create_time BETWEEN #{startTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
 		</if>
-		<if test="orderNo != null">
+		<if test="orderNo != null and orderNo != ''">
 			AND torder.`code` = #{orderNo,jdbcType=VARCHAR}
 		</if>
-        <if test="orderState != null">
+        <if test="orderState != null and orderState != ''">
 			AND torder.`status` = #{orderState,jdbcType=VARCHAR}
 		</if>
-		<if test="userName != null">
+		<if test="userName != null and userName != ''">
 			AND tuser.nickname = #{userName,jdbcType=VARCHAR}
 		</if>
-		<if test="productName != null">
+		<if test="productName != null and productName != '' ">
 			AND tprod.`name` = #{productName,jdbcType=VARCHAR}
 		</if>
 		ORDER BY torder.create_time desc
 	</select>
+	
+	<insert id="addExpressToOrder" parameterType="com.hjgj.aiyoujin.core.model.vo.OrderVO">
+	    update t_order
+		<trim prefix="set" suffixOverrides=",">
+		 <if test="productCode!=null and productCode!=''">express_no=#{productCode},</if>
+		 <if test="productName!=null and productName!=''">express_company=#{productName},</if>
+		 status='11'
+		</trim>
+		WHERE code=#{orderId} and status ='10'
+	</insert>
 </mapper>

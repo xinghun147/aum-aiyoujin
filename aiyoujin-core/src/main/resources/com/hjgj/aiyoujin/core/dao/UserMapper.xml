@@ -341,4 +341,40 @@
   <select id="selectOneByExample" resultMap="BaseResultMap" parameterType="com.hjgj.aiyoujin.core.model.UserExample" >
     select <include refid="Base_Column_List" /> from t_user <if test="_parameter != null" >  <include refid="Example_Where_Clause" /> </if> <if test="orderByClause != null" >  order by ${orderByClause} </if>  limit 1
   </select>
+  
+  <select id="countUserVo" resultType="java.lang.Integer">
+      	SELECT
+			count(id)
+		FROM
+		 t_user
+		WHERE
+		 deleted = 0
+		<if test="openId != null and openId != ''">
+			AND open_id = #{openId,jdbcType=VARCHAR}
+		</if>
+		<if test="nickname != null and nickname != ''">
+			AND nickname = #{nickname,jdbcType=VARCHAR}
+		</if>
+	</select>
+
+	<!-- TODO 查询用户列表 -->
+	<select id="selectUserVo" resultType="com.hjgj.aiyoujin.core.model.vo.UserVO">
+        SELECT
+            tuser.id AS id,
+            tuser.open_id AS openId,
+            tuser.avatar AS avatar,
+			tuser.nickname AS nickname,
+			tuser.mobile AS mobile
+		FROM
+			t_user AS tuser
+		WHERE
+			tuser.deleted = 0
+		<if test="openId != null and openId != ''">
+			AND tuser.`open_id` = #{openId,jdbcType=VARCHAR}
+		</if>
+		<if test="nickname != null and nickname != ''">
+			AND tuser.`nickname` = #{nickname,jdbcType=VARCHAR}
+		</if>
+		ORDER BY tuser.create_time desc
+	</select>
 </mapper>

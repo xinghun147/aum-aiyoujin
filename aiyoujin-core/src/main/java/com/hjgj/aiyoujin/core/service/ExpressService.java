@@ -56,5 +56,10 @@ public class ExpressService extends BaseService {
 	     return expressMapper.selectByExample(example);
 	}
 	
-	
+	/**
+	 * 获取快递公司名称列表
+	 */
+	public List<Express> findExpressName() {
+	    return expressMapper.findExpressName();
+	}
 }

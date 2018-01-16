@@ -136,4 +136,10 @@ public interface OrderMapper {
      * @return
      */
     List<OrderWebVo> getUserAllOrdersByUserId(@Param("userId") String userId,@Param("types")String types, RowBounds rowBounds);
+    
+    /**
+     * TODO 添加订单物流信息
+     * @param orderVO
+     */
+	void addExpressToOrder(OrderVO orderVO);
 }

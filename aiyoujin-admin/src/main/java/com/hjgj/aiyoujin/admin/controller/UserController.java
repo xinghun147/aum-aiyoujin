@@ -1,42 +1,37 @@
-//package com.hjgj.aiyoujin.admin.controller;
-//import javax.servlet.http.HttpServletRequest;
-//
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.stereotype.Controller;
-//import org.springframework.ui.ModelMap;
-//import org.springframework.web.bind.annotation.RequestMapping;
-//import org.springframework.web.bind.annotation.ResponseBody;
-//import org.springframework.web.servlet.ModelAndView;
-//
-//import com.hjgj.aiyoujin.admin.common.logger.LoggerProfile;
-//import com.hjgj.aiyoujin.admin.api.IMemberForAdminApi;
-//import com.hjgj.aiyoujin.admin.model.User;
-//import com.hjgj.aiyoujin.admin.model.UserAddress;
-//import com.hjgj.aiyoujin.admin.vo.AddressVo;
-//import com.hjgj.aiyoujin.admin.vo.Page;
-//import com.hjgj.aiyoujin.admin.vo.admin.BankCardInfoVo;
-//
-//@Controller
-//@RequestMapping("/member")
-//public class UserController extends BaseController {
-//	
-//	@Autowired
-//	private IMemberForAdminApi memberForAdminApi;
-//	
-//	
-//	
-//	@RequestMapping("/userList.html")
-//	public ModelAndView userList(ModelMap modelMap ,User user,Integer pageNum ,Integer pageSize){
-//		pageNum = pageNum == null ? super.pageNum:pageNum;
-//		pageSize = pageSize == null ? super.pageSize : this.pageSize;
-//		Page<User> page = memberForAdminApi.queryPageUser(user, pageNum, pageSize);
-//		ModelAndView mav = getModelAndView();
-//		mav.addObject("page", page);
-//		mav.addObject("user",  user);
-//		mav.setViewName("user/userList");
-//		return mav;
-//	}
-//	
+package com.hjgj.aiyoujin.admin.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.hjgj.aiyoujin.core.model.User;
+import com.hjgj.aiyoujin.core.model.vo.Page;
+import com.hjgj.aiyoujin.core.model.vo.UserVO;
+import com.hjgj.aiyoujin.core.service.UserService;
+
+@Controller
+@RequestMapping("/user")
+public class UserController extends BaseController {
+	
+	@Autowired
+	private UserService userService;
+	
+	
+	
+	@RequestMapping("/userList.html")
+	public ModelAndView userList(ModelMap modelMap ,User user,Integer pageNum ,Integer pageSize){
+		pageNum = pageNum == null ? super.pageNum:pageNum;
+		pageSize = pageSize == null ? super.pageSize : this.pageSize;
+		Page<UserVO> page = userService.queryPageUser(user, pageNum, pageSize);
+		ModelAndView mav = getModelAndView();
+		mav.addObject("page", page);
+		mav.addObject("user",  user);
+		mav.setViewName("user/userList");
+		return mav;
+	}
+	
 //	@LoggerProfile(methodNote="冻结/解冻用户")
 //	@ResponseBody
 //	@RequestMapping("/updateFrozen")
@@ -106,4 +101,4 @@
 //        }
 //        return "redirect:userBankCard.html";
 //    }
-//}
+}
