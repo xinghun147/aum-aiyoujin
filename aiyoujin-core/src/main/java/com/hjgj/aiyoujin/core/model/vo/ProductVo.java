@@ -15,9 +15,9 @@ public class ProductVo implements Serializable {
 
     private BigDecimal buyPrice;
     
-    private String [] middlePictures;//产品详情图片
+    private String [] middlePictures;//订单详情图片(带文字、和不带文字)
     
-    private String [] largePictures;//订单详情图片
+    private String [] largePictures; //产品详情图片
 
     public String getId() {
         return id;

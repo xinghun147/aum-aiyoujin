@@ -1,5 +1,7 @@
 package com.hjgj.aiyoujin.core.service;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -26,6 +28,7 @@ import com.hjgj.aiyoujin.core.model.Order;
 import com.hjgj.aiyoujin.core.model.OrderExample;
 import com.hjgj.aiyoujin.core.model.OrderLog;
 import com.hjgj.aiyoujin.core.model.OrderMessage;
+import com.hjgj.aiyoujin.core.model.User;
 import com.hjgj.aiyoujin.core.model.vo.OrderWebVo;
 import com.hjgj.aiyoujin.core.model.vo.Page;
 import com.hjgj.aiyoujin.core.model.vo.ProductVo;
@@ -55,6 +58,9 @@ public class UserOrderService {
     
     @Autowired
     private OrderMessageService orderMessageService;
+    
+    @Autowired
+    private WxMPService wxMPService;
 
     
     
@@ -94,6 +100,7 @@ public class UserOrderService {
         Order order = new Order();
         order.setId(orderId);
         order.setStatus(orderStatus);
+        order.setUpdateTime(new Date());
         return 	orderMapper.updateByPrimaryKeySelective(order);
     }
 
@@ -211,10 +218,14 @@ public class UserOrderService {
     public OrderWebVo queryOrderDetail(String orderId) throws Exception{
     	Order order = userOrderMapper.selectByPrimaryKey(orderId);
     	ProductVo product = productService.queryGoodsDetail(order.getProductId());
+    	Order orderFrom = userOrderMapper.selectByPrimaryKey(order.getSourceOrderId());
+    	User userFrom  = userService.getUserByUserId(orderFrom.getUserId());
     	OrderWebVo orderVo = new OrderWebVo();
     	orderVo.setSellAmount(order.getSellAmount());
     	orderVo.setProductName(product.getName());
     	orderVo.setProductId(order.getProductId());
+    	orderVo.setFromNickName(userFrom.getNickname());
+    	orderVo.setFromAvatar(userFrom.getAvatar());
     	orderVo.setLargePictures(product.getLargePictures());
     	orderVo.setOrderStatus(OrderStatusEnum.switchOrderStateName(order.getStatus()));
     	orderVo.setOrderId(order.getId());
@@ -248,5 +259,52 @@ public class UserOrderService {
         	this.updateOrderStauts(order.getSourceOrderId(),OrderStatusEnum.ORDER_STATUS_SEND_SUCCESS.getCode());
         }
        return count;
+    }
+    
+    /**
+     * 
+     * @Title:        giftToCash 
+     * @Description:  f
+     * @param:        @param order
+     * @param:        @return
+     * @param:        @throws Exception    
+     * @return:       int    
+     * @throws 			
+     * @author        ailiming@gold32.com
+     * @Date          2018年1月16日 下午4:54:30
+     */
+    @Transactional
+    public Map giftToCash(Order order,String openId) throws Exception{
+    	Map map = null;;
+        OrderLog log = new OrderLog();
+    	try {
+    		//变现单位为：分
+    		DecimalFormat df = new DecimalFormat("#");
+            String money = df.format(order.getSellAmount().multiply(new BigDecimal(100)));
+    		 map = wxMPService.promotionTransfers(openId,UUIDGenerator.generate(),order.getCode(),money,"商户向用户微信打款");
+    		if(map.get("code").equals("0")){
+    			//1、修改订单状态为  ：已变现
+    			this.updateOrderStauts(order.getId(), OrderStatusEnum.ORDER_STATUS_CASH_SUCCESS.getCode());
+    			log.setStatus(1);
+    		}else{
+    			this.updateOrderStauts(order.getId(), OrderStatusEnum.ORDER_STATUS_CASH_FAIL.getCode());
+    			log.setStatus(2);
+    		}
+		} finally {
+	        if(map != null){
+	        	log.setCreateTime(new Date());
+	        	log.setId(UUIDGenerator.generate());
+	        	log.setOrderId(order.getId());
+	        	log.setPayId(map.get("wxpayOrderNo").toString());
+	        	log.setPayResultMsg(map.get("msg").toString());
+	        	log.setPayType(0);
+	        	log.setReqTime(new Date());
+	        	log.setRespTime(new Date());
+	        	log.setCreateBy("System");
+	        	orderLogMapper.insertSelective(log);
+	        }
+		}
+    	return map;
+   
     }
 }

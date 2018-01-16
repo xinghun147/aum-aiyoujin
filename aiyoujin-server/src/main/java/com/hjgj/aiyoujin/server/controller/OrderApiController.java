@@ -1,5 +1,10 @@
 package com.hjgj.aiyoujin.server.controller;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.util.Date;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
@@ -17,6 +22,7 @@ import com.hjgj.aiyoujin.core.service.UserOrderService;
 import com.hjgj.aiyoujin.core.service.UserService;
 import com.hjgj.aiyoujin.server.common.ResultModel;
 import com.hjgj.aiyoujin.server.common.ResultStatus;
+import com.hjgj.aiyoujin.server.webBiz.WeixinPush;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -30,6 +36,10 @@ public class OrderApiController {
 
     @Autowired
     private UserService userService;
+    
+    @Autowired
+    private WeixinPush weixinPush;
+    
 
     /**
      * 查询用户的所有订单详情
@@ -134,6 +144,36 @@ public class OrderApiController {
 		try {
 			OrderWebVo order = userOrderService.queryOrderDetail(orderId);
 			return ResultModel.ok(order);
+		} catch (Exception e) {
+			return ResultModel.error(ResultStatus.ORDER_NOT_EXIST);
+		}
+    }
+    
+    
+    @ApiOperation(value = "礼品变现")
+    @ResponseBody
+    @RequestMapping(value = "/giftToCash", method = RequestMethod.GET)
+    public ResultModel giftToCash(@ApiParam(value = "订单ID", required = true) @RequestParam String orderId,
+    							@ApiParam(value = "微信提交formId", required = true) @RequestParam String formId) {
+        Assert.notNull(orderId, "orderId 不可为空");
+		try {
+			Order order = userOrderService.getOrderById(orderId);
+			if(order == null){
+				return ResultModel.error(ResultStatus.ORDER_NOT_EXIST);
+			}
+			User user = userService.getUserByUserId(order.getUserId());
+			Map map = userOrderService.giftToCash(order,user.getId());
+			if(map.get("code").equals("0")){
+				//变现单位为：分
+	    		DecimalFormat df = new DecimalFormat("#");
+	            String money = df.format(order.getSellAmount().multiply(new BigDecimal(100)));
+	            //给用户推送通知 
+				weixinPush.payResultNotifySell(money,"微信零钱",new Date(), formId, user.getOpenId());
+				return ResultModel.ok();
+			}else{
+				userOrderService.updateOrderStauts(order.getId(), OrderStatusEnum.ORDER_STATUS_CASH_FAIL.getCode());
+				return  ResultModel.error(ResultStatus.ORDER_TO_CASH_FAIL);
+			}
 		} catch (Exception e) {
 			return ResultModel.error(ResultStatus.ORDER_NOT_EXIST);
 		}

@@ -29,6 +29,11 @@ public class OrderWebVo {
      * 来源 昵称
      */
     private String fromNickName;
+    
+    /**
+     * 赠送人头像
+     */
+    private String fromAvatar;
 
     /**
      * 到达 昵称
@@ -74,7 +79,6 @@ public class OrderWebVo {
      * 产品图片
      */
     private String productImgUrl;
-    
     
     private String [] largePictures;//订单详情图片
     
@@ -234,5 +238,13 @@ public class OrderWebVo {
 
 	public void setVideoUrl(String videoUrl) {
 		this.videoUrl = videoUrl;
+	}
+
+	public String getFromAvatar() {
+		return fromAvatar;
+	}
+
+	public void setFromAvatar(String fromAvatar) {
+		this.fromAvatar = fromAvatar;
 	}
 }
