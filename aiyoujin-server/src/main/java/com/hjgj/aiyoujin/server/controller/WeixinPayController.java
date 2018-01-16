@@ -112,6 +112,7 @@ public class WeixinPayController {
         wxOrder.setCode(orderNo); // 订单号
         wxOrder.setUserId(userByOpenId.getId());
         wxOrder.setBuyAmount(product.getBuyPrice());
+        wxOrder.setSellAmount(product.getSellPrice());
         // 订单状态：0待支付、1支付成功、2支付失败、3送出待收、4已退回、5送出成功、
         //	  6领取成功、7变现待处理、8变现成功、9变现失败、10提货待处理、11物流中、12已收货
 

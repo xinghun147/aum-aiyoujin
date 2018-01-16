@@ -1,5 +1,23 @@
 package com.hjgj.aiyoujin.core.service;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.session.RowBounds;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.hjgj.aiyoujin.core.common.Constants;
+import com.hjgj.aiyoujin.core.common.OrderStatusEnum;
+import com.hjgj.aiyoujin.core.common.exception.BusinessException;
+import com.hjgj.aiyoujin.core.common.utils.CommonUtils;
+import com.hjgj.aiyoujin.core.common.utils.UUIDGenerator;
 import com.hjgj.aiyoujin.core.dao.OrderLogMapper;
 import com.hjgj.aiyoujin.core.dao.OrderMapper;
 import com.hjgj.aiyoujin.core.dao.OrderMessageMapper;
@@ -11,20 +29,6 @@ import com.hjgj.aiyoujin.core.model.OrderMessage;
 import com.hjgj.aiyoujin.core.model.User;
 import com.hjgj.aiyoujin.core.model.vo.OrderWebVo;
 import com.hjgj.aiyoujin.core.model.vo.Page;
-import com.sun.org.apache.xpath.internal.operations.Or;
-
-import org.apache.commons.lang3.StringUtils;
-import org.apache.ibatis.session.RowBounds;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Service
 public class UserOrderService {
@@ -46,6 +50,10 @@ public class UserOrderService {
     @Autowired
     private OrderMessageMapper orderMessageMapper;
     
+    @Autowired
+    private ProductService productService;
+
+    
     
     @Transactional
     public int createOrder(Order order, OrderLog orderLog, OrderMessage orderMessage) {
@@ -53,6 +61,12 @@ public class UserOrderService {
         if(userOrderMapper.insert(order) > 0){
         	orderLogMapper.insert(orderLog);
         	orderMessageMapper.insert(orderMessage);
+        	//扣减库存
+        	try {
+				productService.updateQuantity(order.getProductId(),-1);
+			} catch (BusinessException e) {
+				logger.error("创建订单扣减库存异常", e.getMsg());
+			}
         }
         return insertOrder;
     }
@@ -198,5 +212,22 @@ public class UserOrderService {
     public int insertOrder(Order order){
         int fromOrderResult = userOrderMapper.insert(order);
         return fromOrderResult;
+    }
+    
+    
+    @Transactional
+    public int receiveOrder(Order order) throws Exception{
+    	String orderNo = CommonUtils.generateOrderNo("TF");
+    	order.setId(UUIDGenerator.generate());
+    	order.setCreateTime(new Date());
+    	order.setDeleted(Constants.DelFlag.NO.ordinal());
+    	order.setCode(orderNo);
+    	//添加新订单
+       int count = userOrderMapper.insert(order);
+        if(count > 0){
+        	//更新订单状态为  领取成功
+        	this.updateOrderStauts(order.getSourceOrderId(),OrderStatusEnum.ORDER_STATUS_SEND_SUCCESS.getCode());
+        }
+       return count;
     }
 }
