@@ -138,6 +138,7 @@ public class WeixinPayController {
         orderLog.setRespTime(updateTime);
 
         OrderMessage orderMessage = new OrderMessage();
+        orderMessage.setId(UUIDGenerator.generate());
         orderMessage.setContent(weixin.getContent());
         orderMessage.setCreateTime(nowDate);
         orderMessage.setDeleted(0);
