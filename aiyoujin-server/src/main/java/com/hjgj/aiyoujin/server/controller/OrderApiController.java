@@ -154,7 +154,7 @@ public class OrderApiController {
     @ResponseBody
     @RequestMapping(value = "/giftToCash", method = RequestMethod.GET)
     public ResultModel giftToCash(@ApiParam(value = "订单ID", required = true) @RequestParam String orderId,
-    							@ApiParam(value = "微信提交fromId", required = true) @RequestParam String formId) {
+    							@ApiParam(value = "微信提交formId", required = true) @RequestParam String formId) {
         Assert.notNull(orderId, "orderId 不可为空");
 		try {
 			Order order = userOrderService.getOrderById(orderId);
