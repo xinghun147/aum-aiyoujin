@@ -23,7 +23,7 @@
 			<div class="layui-input-inline">
 				<input type="text" value="" name="code" class="layui-input search_input" th:value="${vo.code}"/>
 			</div>
-			  <label class="layui-form-label">创建时间:</label>
+			<label class="layui-form-label">创建时间:</label>
 			<div class="layui-input-inline">
 				<input  type="text" class="layui-input" name="createTime" id="startTime" readonly="readonly" th:value="${vo.createTime}?${#dates.format(vo.createTime, 'yyyy-MM-dd HH:mm:ss')}"/>
 			</div>

@@ -9,5 +9,7 @@ public interface WXProperties {
     String WeiXinMchId = "1350996801";
 
     // 微信公众号id
-    String WeiXinAppid = "wx8a6904d897d2ddc2";
+    String WeiXinAppid = "wxbad011f34af54919";
+
+    String WeiXinSpbillCreateIp = "58.132.211.84";
 }
