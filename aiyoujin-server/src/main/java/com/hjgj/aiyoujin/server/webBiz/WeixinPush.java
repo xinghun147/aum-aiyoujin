@@ -1,22 +1,25 @@
 package com.hjgj.aiyoujin.server.webBiz;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.LinkedHashMap;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Component;
+
 import com.hjgj.aiyoujin.core.common.utils.UUIDGenerator;
 import com.hjgj.aiyoujin.core.model.MessageToken;
 import com.hjgj.aiyoujin.core.service.MessageTokenService;
 import com.hjgj.aiyoujin.server.config.WeiXinProperty;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+
 import weixin.popular.api.MessageAPI;
 import weixin.popular.api.TokenAPI;
 import weixin.popular.bean.BaseResult;
 import weixin.popular.bean.message.templatemessage.TemplateMessageItem;
 import weixin.popular.bean.message.templatemessage.WxopenTemplateMessage;
 import weixin.popular.bean.token.Token;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.LinkedHashMap;
 
 @Component
 public class WeixinPush {
@@ -35,6 +38,7 @@ public class WeixinPush {
      * @param prePayId
      * @param openId
      */
+    @Async
     public void payResultNotify(String prodName,String payMoney,Date payTime,String prePayId,String openId) {
         String weixinToken = null;
         while (weixinToken == null){
@@ -78,6 +82,7 @@ public class WeixinPush {
      * @param prePayId
      * @param openId
      */
+    @Async
     public void payResultNotifyFail(String prodName,String payMoney,String failCause,Date payTime,String prePayId,String openId) {
         String weixinToken = null;
         while (weixinToken == null){
@@ -126,6 +131,7 @@ public class WeixinPush {
      * @param prePayId
      * @param openId
      */
+    @Async
     public void payResultNotifySell(String amount,String arrivalType,Date arrivalTime,String prePayId,String openId) {
         String weixinToken = null;
         while (weixinToken == null){
@@ -171,6 +177,7 @@ public class WeixinPush {
      * @param prePayId
      * @param openId
      */
+    @Async
     public void giftResultNotifyCarry(String prodName,String userName,String phoneNumber,String address,String prePayId,String openId) {
         String weixinToken = null;
         while (weixinToken == null){
@@ -214,6 +221,7 @@ public class WeixinPush {
     }
    
    
+    @Async
     public void giftResultNotifyFail(String prodName,String number,Date receiveTime,String userName,String prePayId,String openId) {
         String weixinToken = null;
         while (weixinToken == null){

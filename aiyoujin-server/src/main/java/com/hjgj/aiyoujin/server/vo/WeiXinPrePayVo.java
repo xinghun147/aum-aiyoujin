@@ -1,7 +1,5 @@
 package com.hjgj.aiyoujin.server.vo;
 
-import java.math.BigDecimal;
-
 public class WeiXinPrePayVo {
 
     /**
@@ -34,8 +32,14 @@ public class WeiXinPrePayVo {
      */
     //private String userId;
 
+    /**
+     * 留言内容
+     */
     private String content;
 
+    /**
+     * 图片或视频url
+     */
     private String mediaUrl;
 
     public String getTimeStamp() {

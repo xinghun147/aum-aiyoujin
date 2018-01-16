@@ -1,5 +1,6 @@
 package com.hjgj.aiyoujin.server.controller;
 
+import com.hjgj.aiyoujin.core.common.OrderStatusEnum;
 import com.hjgj.aiyoujin.core.common.utils.CommonUtils;
 import com.hjgj.aiyoujin.core.common.utils.UUIDGenerator;
 import com.hjgj.aiyoujin.core.model.Order;
@@ -23,7 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.Date;
 
 @Controller
-@RequestMapping(value = "order")
+@RequestMapping(value = "/order")
 public class OrderApiController {
 
     @Autowired
@@ -43,7 +44,7 @@ public class OrderApiController {
      */
     @ApiOperation(value = "查询用户的所有礼品卡详情")
     @ResponseBody
-    @RequestMapping(value = "getMyGiftCards", method = RequestMethod.POST)
+    @RequestMapping(value = "/getMyGiftCards", method = RequestMethod.POST)
     public ResultModel getUserAllOrdersByOpenId(@ApiParam(value = "用户OpenId", required = true) @RequestParam String openId,
                                                 @ApiParam(value = "礼品类型", required = true) @RequestParam String types,
                                                 @ApiParam(value = "第多少页", required = true) @RequestParam Integer pageNum,
@@ -60,9 +61,38 @@ public class OrderApiController {
 
     @ApiOperation(value = "发送礼品卡")
     @ResponseBody
-    @RequestMapping(value = "sendGiftCard", method = RequestMethod.POST)
-    public ResultModel sendGiftCard(@ApiParam(value = "用户OpenId", required = true) @RequestParam String openId,
-                                    @ApiParam(value = "订单ID", required = true) @RequestParam String orderId) {
+    @RequestMapping(value = "/sendGiftCard", method = RequestMethod.POST)
+    public ResultModel sendGiftCard(@ApiParam(value = "订单ID", required = true) @RequestParam String orderId) {
+        Assert.notNull(orderId, "orderId 不可为空");
+//        String orderNo = CommonUtils.generateOrderNo("TF");
+//        Date nowDate = new Date();
+//        User byOpenId = userService.getUserByOpenId(openId);
+//        Order orderById = userOrderService.getOrderById(orderId);
+//        Order fromOrder = new Order();
+//        fromOrder.setId(UUIDGenerator.generate());
+//        fromOrder.setUserId(byOpenId.getId());
+//        fromOrder.setBuyAmount(orderById.getBuyAmount());
+//        fromOrder.setProductId(orderById.getProductId());
+//        fromOrder.setCreateTime(nowDate);
+//        fromOrder.setDeleted(0);
+//        fromOrder.setFromOrderId(orderId);
+//        fromOrder.setCode(orderNo);
+        // 3送出待收、4已退回、5送出成功、6领取成功
+//        fromOrder.setStatus(Integer.valueOf(3));
+        int insertFromOrder = userOrderService.updateOrderStauts(orderId, OrderStatusEnum.ORDER_STATUS_UNRECEIVE.getCode());
+        if (insertFromOrder > 0) {
+            return ResultModel.ok("赠送成功");
+        } else {
+            return ResultModel.error(ResultStatus.ERROR_EMPTY_VAL_RETURNED);
+        }
+
+    }
+
+    @ApiOperation(value = "接收礼品卡")
+    @ResponseBody
+    @RequestMapping(value = "/receiveGiftCard", method = RequestMethod.POST)
+    public ResultModel receiveGiftCard(@ApiParam(value = "领取礼品用户OpenId", required = true) @RequestParam String openId,
+                                       @ApiParam(value = "订单ID", required = true) @RequestParam String orderId) {
         Assert.notNull(openId, "openId不可为空");
         Assert.notNull(orderId, "orderId 不可为空");
         String orderNo = CommonUtils.generateOrderNo("TF");
@@ -77,46 +107,14 @@ public class OrderApiController {
         fromOrder.setCreateTime(nowDate);
         fromOrder.setDeleted(0);
         fromOrder.setFromOrderId(orderId);
+        fromOrder.setSourceOrderId(orderId);
         fromOrder.setCode(orderNo);
         // 3送出待收、4已退回、5送出成功、6领取成功
-        fromOrder.setStatus(Integer.valueOf(3));
-        int insertFromOrder = userOrderService.insertFromOrder(fromOrder);
-        if (insertFromOrder > 0) {
-            return ResultModel.ok("赠送成功");
-        } else {
-            return ResultModel.error(ResultStatus.ERROR_EMPTY_VAL_RETURNED);
-        }
-
-    }
-
-    @ApiOperation(value = "接收礼品卡")
-    @ResponseBody
-    @RequestMapping(value = "receiveGiftCard", method = RequestMethod.POST)
-    public ResultModel receiveGiftCard(@ApiParam(value = "用户OpenId", required = true) @RequestParam String openId,
-                                       @ApiParam(value = "订单ID", required = true) @RequestParam String orderId) {
-        Assert.notNull(openId, "openId不可为空");
-        Assert.notNull(orderId, "orderId 不可为空");
-        Date nowDate = new Date();
-        User byOpenId = userService.getUserByOpenId(openId);
-        Order orderById = userOrderService.getOrderById(orderId);
-        Order fromOrder = new Order();
-        fromOrder.setId(UUIDGenerator.generate());
-        fromOrder.setUserId(byOpenId.getId());
-        fromOrder.setBuyAmount(orderById.getBuyAmount());
-        fromOrder.setProductId(orderById.getProductId());
-        fromOrder.setCreateTime(nowDate);
-        fromOrder.setDeleted(0);
-        fromOrder.setFromOrderId(orderId);
-        // 3送出待收、4已退回、5送出成功、6领取成功
-        fromOrder.setStatus(Integer.valueOf(6));
+        fromOrder.setStatus(OrderStatusEnum.ORDER_STATUS_RECEIVED.getCode());
 
         try {
-            int insertOrder = userOrderService.insertOrder(fromOrder);
-            int updateOrderByCodeState = userOrderService.updateOrderByCodeState(orderById.getCode(), Integer.valueOf(5));
-
-            if (insertOrder > 0 && updateOrderByCodeState > 0) {
-                return ResultModel.ok("赠送成功");
-            }
+           userOrderService.insertOrder(fromOrder);
+            userOrderService.updateOrderByCodeState(orderById.getCode(), Integer.valueOf(5));
         } catch (Exception e) {
             e.printStackTrace();
             return ResultModel.error(ResultStatus.ERROR_EMPTY_VAL_RETURNED);
@@ -126,7 +124,7 @@ public class OrderApiController {
 
     @ApiOperation(value = "查看订单状态")
     @ResponseBody
-    @RequestMapping(value = "getOrderStatus", method = RequestMethod.GET)
+    @RequestMapping(value = "/getOrderStatus", method = RequestMethod.GET)
     public ResultModel checkOrderStatus(@ApiParam(value = "订单ID", required = true) @RequestParam String orderId) {
         Assert.notNull(orderId, "orderId 不可为空");
         Order orderById = userOrderService.getOrderById(orderId);

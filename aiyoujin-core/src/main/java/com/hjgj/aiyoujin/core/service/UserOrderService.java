@@ -1,13 +1,19 @@
 package com.hjgj.aiyoujin.core.service;
 
 import com.hjgj.aiyoujin.core.dao.OrderLogMapper;
+import com.hjgj.aiyoujin.core.dao.OrderMapper;
+import com.hjgj.aiyoujin.core.dao.OrderMessageMapper;
 import com.hjgj.aiyoujin.core.dao.UserOrderMapper;
 import com.hjgj.aiyoujin.core.model.Order;
 import com.hjgj.aiyoujin.core.model.OrderExample;
+import com.hjgj.aiyoujin.core.model.OrderLog;
+import com.hjgj.aiyoujin.core.model.OrderMessage;
 import com.hjgj.aiyoujin.core.model.User;
 import com.hjgj.aiyoujin.core.model.vo.OrderWebVo;
 import com.hjgj.aiyoujin.core.model.vo.Page;
 import com.sun.org.apache.xpath.internal.operations.Or;
+
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,12 +33,52 @@ public class UserOrderService {
 
     @Autowired
     private UserOrderMapper userOrderMapper;
+    
+    @Autowired
+    private OrderMapper orderMapper;
 
     @Autowired
     private UserService userService;
 
     @Autowired
     private OrderLogMapper orderLogMapper;
+    
+    @Autowired
+    private OrderMessageMapper orderMessageMapper;
+    
+    
+    @Transactional
+    public int createOrder(Order order, OrderLog orderLog, OrderMessage orderMessage) {
+        int insertOrder = userOrderMapper.insert(order);
+        if(userOrderMapper.insert(order) > 0){
+        	orderLogMapper.insert(orderLog);
+        	orderMessageMapper.insert(orderMessage);
+        }
+        return insertOrder;
+    }
+    
+    /**
+     * 
+     * @Title:        updateStauts 
+     * @Description:  更新订单状态
+     * @param:        @param orderId
+     * @param:        @param orderStatus
+     * @param:        @return    
+     * @return:       int    
+     * @throws 			
+     * @author        ailiming@gold32.com
+     * @Date          2018年1月16日 上午11:55:59
+     */
+    public int updateOrderStauts(String orderId,Integer orderStatus) {
+    	if(StringUtils.isBlank(orderId) || orderStatus == null){
+    		logger.error("更新订单状态参数不能问空！");
+    		return 0;
+    	}
+        Order order = new Order();
+        order.setId(orderId);
+        order.setStatus(orderStatus);
+        return 	orderMapper.updateByPrimaryKeySelective(order);
+    }
 
     /**
      * 查询用户所有的订单

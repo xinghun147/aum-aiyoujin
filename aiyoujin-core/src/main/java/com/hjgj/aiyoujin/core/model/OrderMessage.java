@@ -9,7 +9,7 @@ public class OrderMessage {
 
     private String content;
 
-    private String link;
+    private String imageUrl;
 
     private String title;
 
@@ -19,7 +19,7 @@ public class OrderMessage {
 
     private Date updateTime;
 
-    private byte[] vodeoUrl;
+    private String videoUrl;
 
     public String getId() {
         return id;
@@ -45,12 +45,12 @@ public class OrderMessage {
         this.content = content == null ? null : content.trim();
     }
 
-    public String getLink() {
-        return link;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setLink(String link) {
-        this.link = link == null ? null : link.trim();
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl == null ? null : imageUrl.trim();
     }
 
     public String getTitle() {
@@ -85,11 +85,11 @@ public class OrderMessage {
         this.updateTime = updateTime;
     }
 
-    public byte[] getVodeoUrl() {
-        return vodeoUrl;
+    public String getVideoUrl() {
+        return videoUrl;
     }
 
-    public void setVodeoUrl(byte[] vodeoUrl) {
-        this.vodeoUrl = vodeoUrl;
+    public void setVideoUrl(String videoUrl) {
+        this.videoUrl = videoUrl == null ? null : videoUrl.trim();
     }
 }
