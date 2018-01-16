@@ -88,7 +88,7 @@ public class WeixinPayController {
 
         Date nowDate = new Date();
         Order wxOrder = new Order();
-        wxOrder.setBuyAmount(weixin.getPayMoney());
+        wxOrder.setBuyAmount(product.getBuyPrice());
         wxOrder.setId(UUIDGenerator.generate());
         wxOrder.setDeleted(0);
         wxOrder.setCreateTime(nowDate);
