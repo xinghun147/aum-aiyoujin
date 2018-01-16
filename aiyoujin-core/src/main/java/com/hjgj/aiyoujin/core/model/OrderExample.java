@@ -1185,6 +1185,136 @@ public class OrderExample {
             addCriterion("to_order_id not between", value1, value2, "toOrderId");
             return (Criteria) this;
         }
+
+        public Criteria andExpressFeeIsNull() {
+            addCriterion("express_fee is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpressFeeIsNotNull() {
+            addCriterion("express_fee is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpressFeeEqualTo(Long value) {
+            addCriterion("express_fee =", value, "expressFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpressFeeNotEqualTo(Long value) {
+            addCriterion("express_fee <>", value, "expressFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpressFeeGreaterThan(Long value) {
+            addCriterion("express_fee >", value, "expressFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpressFeeGreaterThanOrEqualTo(Long value) {
+            addCriterion("express_fee >=", value, "expressFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpressFeeLessThan(Long value) {
+            addCriterion("express_fee <", value, "expressFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpressFeeLessThanOrEqualTo(Long value) {
+            addCriterion("express_fee <=", value, "expressFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpressFeeIn(List<Long> values) {
+            addCriterion("express_fee in", values, "expressFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpressFeeNotIn(List<Long> values) {
+            addCriterion("express_fee not in", values, "expressFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpressFeeBetween(Long value1, Long value2) {
+            addCriterion("express_fee between", value1, value2, "expressFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpressFeeNotBetween(Long value1, Long value2) {
+            addCriterion("express_fee not between", value1, value2, "expressFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddressIsNull() {
+            addCriterion("address is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddressIsNotNull() {
+            addCriterion("address is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddressEqualTo(String value) {
+            addCriterion("address =", value, "address");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddressNotEqualTo(String value) {
+            addCriterion("address <>", value, "address");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddressGreaterThan(String value) {
+            addCriterion("address >", value, "address");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddressGreaterThanOrEqualTo(String value) {
+            addCriterion("address >=", value, "address");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddressLessThan(String value) {
+            addCriterion("address <", value, "address");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddressLessThanOrEqualTo(String value) {
+            addCriterion("address <=", value, "address");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddressLike(String value) {
+            addCriterion("address like", value, "address");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddressNotLike(String value) {
+            addCriterion("address not like", value, "address");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddressIn(List<String> values) {
+            addCriterion("address in", values, "address");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddressNotIn(List<String> values) {
+            addCriterion("address not in", values, "address");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddressBetween(String value1, String value2) {
+            addCriterion("address between", value1, value2, "address");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddressNotBetween(String value1, String value2) {
+            addCriterion("address not between", value1, value2, "address");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

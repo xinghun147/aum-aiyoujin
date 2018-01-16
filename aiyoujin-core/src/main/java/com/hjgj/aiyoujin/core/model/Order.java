@@ -36,6 +36,10 @@ public class Order {
 
     private String toOrderId;
 
+    private Long expressFee;
+
+    private String address;
+
     public String getId() {
         return id;
     }
@@ -162,5 +166,21 @@ public class Order {
 
     public void setToOrderId(String toOrderId) {
         this.toOrderId = toOrderId == null ? null : toOrderId.trim();
+    }
+
+    public Long getExpressFee() {
+        return expressFee;
+    }
+
+    public void setExpressFee(Long expressFee) {
+        this.expressFee = expressFee;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address == null ? null : address.trim();
     }
 }
