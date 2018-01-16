@@ -43,13 +43,15 @@ public class OrderApiController {
     @ApiOperation(value = "查询用户礼物列表")
     @ResponseBody
     @RequestMapping(value = "/getMyGiftCards", method = RequestMethod.POST)
-    public ResultModel getUserAllOrdersByOpenId(@ApiParam(value = "用户OpenId", required = true) @RequestParam String openId,
-                                                @ApiParam(value = "礼品类型", required = true) @RequestParam String types,
+    public ResultModel getUserAllOrdersByOpenId(@ApiParam(value = "用户ID", required = true) @RequestParam String userId,
+                                                @ApiParam(value = "礼品类型(1持有中,2已送出,3已变现,4已提货)", required = true) @RequestParam String types,
                                                 @ApiParam(value = "第多少页", required = true) @RequestParam Integer pageNum,
                                                 @ApiParam(value = "每页多少", required = true) @RequestParam Integer pageSize) {
+    	 Assert.notNull(userId, "userId 不可为空");
+    	 Assert.notNull(types, "types 不可为空");
         pageNum = pageNum == null ? 1 : pageNum;
         pageSize = pageSize == null ? 50 : pageSize;
-        Page<OrderWebVo> allOrders = userOrderService.getUserAllOrders(openId, types, pageNum, pageSize);
+        Page<OrderWebVo> allOrders = userOrderService.getUserAllOrders(userId, types, pageNum, pageSize);
         if (allOrders != null) {
             return ResultModel.ok(allOrders);
         } else {

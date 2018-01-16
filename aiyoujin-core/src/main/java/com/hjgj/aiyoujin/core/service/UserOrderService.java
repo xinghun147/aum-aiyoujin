@@ -103,21 +103,16 @@ public class UserOrderService {
      * @param pageSize
      * @return
      */
-    public Page<OrderWebVo> getUserAllOrders(String openId, String types, Integer pageNum, Integer pageSize) {
-        User user = userService.getUserByOpenId(openId);
-        if (user == null) {
-            return null;
-        } else {
-            Page<OrderWebVo> page = new Page<>(pageNum, pageSize, true);
-            RowBounds rowBounds = new RowBounds(page.getStartRow(), pageSize);
-            int count = userOrderMapper.countUserAllOrdersByUserId(openId, types, rowBounds);
-            if (count > 0) {
-                List<OrderWebVo> orderVOList = userOrderMapper.getUserAllOrdersByUserId(openId, types, rowBounds);
-                page.setList(orderVOList);
-                page.setTotal(count);
-            }
-            return page;
+    public Page<OrderWebVo> getUserAllOrders(String userId, String types, Integer pageNum, Integer pageSize) {
+        Page<OrderWebVo> page = new Page<>(pageNum, pageSize, true);
+        RowBounds rowBounds = new RowBounds(page.getStartRow(), pageSize);
+        int count = userOrderMapper.countUserAllOrdersByUserId(userId, types, rowBounds);
+        if (count > 0) {
+            List<OrderWebVo> orderVOList = userOrderMapper.getUserAllOrdersByUserId(userId, types, rowBounds);
+            page.setList(orderVOList);
+            page.setTotal(count);
         }
+        return page;
     }
 
     /**

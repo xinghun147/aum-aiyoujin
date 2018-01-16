@@ -140,7 +140,6 @@
 		oneOrder.id          AS orderId,
 		oneOrder.`status`    AS orderStatus,
 		oneOrder.user_id     AS userId,
-		oneUser.nickname     AS userNickName,
 		fromUser.nickname    AS fromNickName,
 		toUser.nickname      AS toNickName,
 		oneProd.id           AS productId,
@@ -153,13 +152,14 @@
 		oneProdPic.path      AS productImgUrl
 		FROM
 		t_order AS oneOrder
-		LEFT JOIN t_order AS fromOrder ON oneOrder.from_order_id = fromOrder.id
-		LEFT JOIN t_user AS oneUser ON oneOrder.user_id = oneUser.id
-		LEFT JOIN t_user AS fromUser ON fromUser.id = fromOrder.user_id
-		LEFT JOIN t_order AS toOrder ON toOrder.id = oneOrder.to_order_id
-		LEFT JOIN t_user AS toUser ON toUser.id = toOrder.user_id
+		<!--来源订单(赠送方)-->
+		LEFT JOIN t_order AS fromOrder ON oneOrder.source_order_id = fromOrder.id
+		<!--来源用户(赠送方)-->
+		LEFT JOIN t_user AS fromUser ON fromOrder.user_id = oneOrder.id
+		<!--领取方用户 -->
+		LEFT JOIN t_user AS toUser ON toUser.id = fromOrder.user_id
 		LEFT JOIN t_product AS oneProd ON oneProd.id = oneOrder.product_id
-		LEFT JOIN t_product_picture AS oneProdPic ON oneOrder.product_id = oneProdPic.product_id
+		LEFT JOIN t_product_picture AS oneProdPic ON oneOrder.product_id = oneProdPic.product_id and oneProdPic.type=0
 		WHERE
 		oneOrder.user_id = #{userId,jdbcType=VARCHAR}
 		AND oneOrder.deleted = 0
