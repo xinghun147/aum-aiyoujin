@@ -57,8 +57,8 @@ public class UserOrderService {
     
     @Transactional
     public int createOrder(Order order, OrderLog orderLog, OrderMessage orderMessage) {
-        int insertOrder = userOrderMapper.insert(order);
-        if(userOrderMapper.insert(order) > 0){
+        int count = userOrderMapper.insert(order);
+        if(count > 0){
         	orderLogMapper.insert(orderLog);
         	orderMessageMapper.insert(orderMessage);
         	//扣减库存
@@ -68,7 +68,7 @@ public class UserOrderService {
 				logger.error("创建订单扣减库存异常", e.getMsg());
 			}
         }
-        return insertOrder;
+        return count;
     }
     
     /**
