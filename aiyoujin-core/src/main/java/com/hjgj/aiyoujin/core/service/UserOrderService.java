@@ -218,14 +218,16 @@ public class UserOrderService {
     public OrderWebVo queryOrderDetail(String orderId) throws Exception{
     	Order order = userOrderMapper.selectByPrimaryKey(orderId);
     	ProductVo product = productService.queryGoodsDetail(order.getProductId());
-    	Order orderFrom = userOrderMapper.selectByPrimaryKey(order.getSourceOrderId());
-    	User userFrom  = userService.getUserByUserId(orderFrom.getUserId());
     	OrderWebVo orderVo = new OrderWebVo();
+    	if(StringUtils.isNotBlank(order.getSourceOrderId())){
+    		Order orderFrom = userOrderMapper.selectByPrimaryKey(order.getSourceOrderId());
+    		User userFrom  = userService.getUserByUserId(orderFrom.getUserId());
+    		orderVo.setFromNickName(userFrom.getNickname());
+    		orderVo.setFromAvatar(userFrom.getAvatar());
+    	}
     	orderVo.setSellAmount(order.getSellAmount());
     	orderVo.setProductName(product.getName());
     	orderVo.setProductId(order.getProductId());
-    	orderVo.setFromNickName(userFrom.getNickname());
-    	orderVo.setFromAvatar(userFrom.getAvatar());
     	orderVo.setLargePictures(product.getLargePictures());
     	orderVo.setOrderStatus(OrderStatusEnum.switchOrderStateName(order.getStatus()));
     	orderVo.setOrderId(order.getId());
