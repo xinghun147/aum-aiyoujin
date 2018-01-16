@@ -8,9 +8,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hjgj.aiyoujin.core.model.OrderMessage;
 import com.hjgj.aiyoujin.core.model.ProductMessage;
 import com.hjgj.aiyoujin.core.model.vo.Page;
+import com.hjgj.aiyoujin.core.service.OrderMessageService;
 import com.hjgj.aiyoujin.core.service.ProductMessageService;
+import com.hjgj.aiyoujin.core.vo.OrderMessageVo;
 import com.hjgj.aiyoujin.server.common.ResultModel;
 import com.hjgj.aiyoujin.server.common.ResultStatus;
 
@@ -30,6 +33,8 @@ public class MessageApiController{
     @Autowired
     private ProductMessageService productMessageService;
     
+    @Autowired
+    private OrderMessageService orderMessageService;
     
     @ApiOperation(value = "查询留言模板")
 	@RequestMapping(value = "queryProductMessage", method = RequestMethod.GET)
@@ -47,4 +52,20 @@ public class MessageApiController{
 			return ResultModel.error(ResultStatus.SYSTEM_ERROR);
 		}
 	}
+    @ApiOperation(value = "根据订单查询留言")
+   	@RequestMapping(value = "queryOrderMessage", method = RequestMethod.GET)
+   	public ResultModel queryOrderMessage(String orderId) {
+   		try {
+   			OrderMessage om=orderMessageService.queryMessage(orderId);
+   			OrderMessageVo omVo= new OrderMessageVo();
+   			omVo.setTitle(om.getTitle());
+   			omVo.setContent(om.getContent());
+   			omVo.setImageUrl(om.getImageUrl());
+   			omVo.setVideoUrl(om.getVideoUrl());
+   			return ResultModel.ok(omVo);
+   		} catch (Exception e) {
+   			logger.error("查询商品列表接口异常,e:{}", e);
+   			return ResultModel.error(ResultStatus.SYSTEM_ERROR);
+   		}
+   	}
 }

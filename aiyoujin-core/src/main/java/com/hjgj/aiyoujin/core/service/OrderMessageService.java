@@ -28,7 +28,7 @@ public class OrderMessageService extends BaseService  {
 	}
 	
 	
-	public OrderMessage queryAddress(String orderId){
+	public OrderMessage queryMessage(String orderId){
 		OrderMessageExample example = new OrderMessageExample();
 		Criteria criteria = example.createCriteria();
 		if(StringUtils.isNotBlank(orderId)){
