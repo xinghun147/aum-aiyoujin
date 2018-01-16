@@ -26,9 +26,9 @@ import com.hjgj.aiyoujin.core.model.Order;
 import com.hjgj.aiyoujin.core.model.OrderExample;
 import com.hjgj.aiyoujin.core.model.OrderLog;
 import com.hjgj.aiyoujin.core.model.OrderMessage;
-import com.hjgj.aiyoujin.core.model.User;
 import com.hjgj.aiyoujin.core.model.vo.OrderWebVo;
 import com.hjgj.aiyoujin.core.model.vo.Page;
+import com.hjgj.aiyoujin.core.model.vo.ProductVo;
 
 @Service
 public class UserOrderService {
@@ -52,6 +52,9 @@ public class UserOrderService {
     
     @Autowired
     private ProductService productService;
+    
+    @Autowired
+    private OrderMessageService orderMessageService;
 
     
     
@@ -202,6 +205,27 @@ public class UserOrderService {
 
     public Order getOrderById(String orderId) {
         return userOrderMapper.selectByPrimaryKey(orderId);
+    }
+    
+    
+    public OrderWebVo queryOrderDetail(String orderId) throws Exception{
+    	Order order = userOrderMapper.selectByPrimaryKey(orderId);
+    	ProductVo product = productService.queryGoodsDetail(order.getProductId());
+    	OrderWebVo orderVo = new OrderWebVo();
+    	orderVo.setSellAmount(order.getSellAmount());
+    	orderVo.setProductName(product.getName());
+    	orderVo.setProductId(order.getProductId());
+    	orderVo.setLargePictures(product.getLargePictures());
+    	orderVo.setOrderStatus(OrderStatusEnum.switchOrderStateName(order.getStatus()));
+    	orderVo.setOrderId(order.getId());
+    	orderVo.setUserId(order.getUserId());
+    	OrderMessage om = orderMessageService.queryMessage(order.getId());
+    	if(om != null){
+    		orderVo.setMessage(om.getContent());
+    		orderVo.setVideoUrl(om.getVideoUrl());
+    		orderVo.setImageUrl(om.getImageUrl());
+    	}
+    	return orderVo;
     }
 
     public int insertOrder(Order order){

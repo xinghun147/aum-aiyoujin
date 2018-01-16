@@ -125,5 +125,18 @@ public class OrderApiController {
         }
         return ResultModel.error(ResultStatus.ORDER_PAY_UNPAID);
     }
+    
+    @ApiOperation(value = "查看订单详情")
+    @ResponseBody
+    @RequestMapping(value = "/queryOrderDetail", method = RequestMethod.GET)
+    public ResultModel queryOrderDetail(@ApiParam(value = "订单ID", required = true) @RequestParam String orderId) {
+        Assert.notNull(orderId, "orderId 不可为空");
+		try {
+			OrderWebVo order = userOrderService.queryOrderDetail(orderId);
+			return ResultModel.ok(order);
+		} catch (Exception e) {
+			return ResultModel.error(ResultStatus.ORDER_NOT_EXIST);
+		}
+    }
 
 }
