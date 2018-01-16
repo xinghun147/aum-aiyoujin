@@ -289,7 +289,7 @@ public class WeixinPayController {
                             userOrderService.updateOrderAndOrderLogByMap(hashMap);
                             
                             DecimalFormat df = new DecimalFormat("#");
-                            weixinPush.payResultNotify(productName, df.format(buyMoney.multiply(new BigDecimal(100))), updateTime, prepayId, payResultVo.getOpenid());
+                            weixinPush.payResultNotify(productName, df.format(buyMoney), updateTime, prepayId, payResultVo.getOpenid());
                         } else if ("FAIL".equals(result_code.trim())) {
                             Map orderProduct = userOrderService.getOrderProduct(selfOrder.getId());
                             String orderId = (String) orderProduct.get("orderId");
@@ -312,7 +312,7 @@ public class WeixinPayController {
                             userOrderService.updateOrderAndOrderLogByMap(hashMap);
                             
                             DecimalFormat df = new DecimalFormat("#");
-                            weixinPush.payResultNotifyFail(productName, df.format(buyMoney.multiply(new BigDecimal(100))), "系统正忙...", updateTime, prepayId, payResultVo.getOpenid());
+                            weixinPush.payResultNotifyFail(productName, df.format(buyMoney), "系统正忙...", updateTime, prepayId, payResultVo.getOpenid());
                         }
                     } else if (status.equals(Integer.valueOf(0))) {  // 待支付状态
                         String result_code = payResultVo.getResult_code();
@@ -346,7 +346,7 @@ public class WeixinPayController {
                             userOrderService.updateOrderAndOrderLogByMap(hashMap);
                             
                             DecimalFormat df = new DecimalFormat("#");
-                            weixinPush.payResultNotify(productName, df.format(buyMoney.multiply(new BigDecimal(100))), updateTime, prepayId, payResultVo.getOpenid());
+                            weixinPush.payResultNotify(productName, df.format(buyMoney), updateTime, prepayId, payResultVo.getOpenid());
                         } else if ("FAIL".equals(result_code.trim())) {
                             Map orderProduct = userOrderService.getOrderProduct(selfOrder.getId());
                             Date updateTime = (Date) orderProduct.get("updateTime");
@@ -368,7 +368,7 @@ public class WeixinPayController {
                             userOrderService.updateOrderAndOrderLogByMap(hashMap);
                             
                             DecimalFormat df = new DecimalFormat("#");
-                            weixinPush.payResultNotifyFail(productName, df.format(buyMoney.multiply(new BigDecimal(100))), "系统正忙", updateTime, prepayId, payResultVo.getOpenid());
+                            weixinPush.payResultNotifyFail(productName, df.format(buyMoney), "系统正忙", updateTime, prepayId, payResultVo.getOpenid());
                         }
                     } else if (status.equals(Integer.valueOf(2))) { // 支付失败
                         String result_code = payResultVo.getResult_code();
@@ -403,7 +403,7 @@ public class WeixinPayController {
                             userOrderService.updateOrderAndOrderLogByMap(hashMap);
                             
                             DecimalFormat df = new DecimalFormat("#");
-                            weixinPush.payResultNotify(productName, df.format(buyMoney.multiply(new BigDecimal(100))), updateTime, prepayId, payResultVo.getOpenid());
+                            weixinPush.payResultNotify(productName, df.format(buyMoney), updateTime, prepayId, payResultVo.getOpenid());
 
                         } else if ("FAIL".equals(result_code.trim())) {
                             userOrderService.updateOrderByCodeState(payResultVo.getOut_trade_no(), Integer.valueOf(1));
@@ -428,7 +428,7 @@ public class WeixinPayController {
                             userOrderService.updateOrderAndOrderLogByMap(hashMap);
                             
                             DecimalFormat df = new DecimalFormat("#");
-                            weixinPush.payResultNotifyFail(productName, df.format(buyMoney.multiply(new BigDecimal(100))), "订单异常", updateTime, prepayId, payResultVo.getOpenid());
+                            weixinPush.payResultNotifyFail(productName, df.format(buyMoney), "订单异常", updateTime, prepayId, payResultVo.getOpenid());
                         }
                     }
                 } else { // 订单不存在
