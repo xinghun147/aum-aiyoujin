@@ -1,17 +1,10 @@
 package com.hjgj.aiyoujin.server.controller;
 
-import com.hjgj.aiyoujin.core.common.utils.CommonUtils;
-import com.hjgj.aiyoujin.core.common.utils.UUIDGenerator;
-import com.hjgj.aiyoujin.core.model.Order;
-import com.hjgj.aiyoujin.core.model.User;
-import com.hjgj.aiyoujin.core.model.vo.OrderWebVo;
-import com.hjgj.aiyoujin.core.model.vo.Page;
-import com.hjgj.aiyoujin.core.service.UserOrderService;
-import com.hjgj.aiyoujin.core.service.UserService;
-import com.hjgj.aiyoujin.server.common.ResultModel;
-import com.hjgj.aiyoujin.server.common.ResultStatus;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.util.Date;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
@@ -20,10 +13,22 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.Date;
+import com.hjgj.aiyoujin.core.common.OrderStatusEnum;
+import com.hjgj.aiyoujin.core.model.Order;
+import com.hjgj.aiyoujin.core.model.User;
+import com.hjgj.aiyoujin.core.model.vo.OrderWebVo;
+import com.hjgj.aiyoujin.core.model.vo.Page;
+import com.hjgj.aiyoujin.core.service.UserOrderService;
+import com.hjgj.aiyoujin.core.service.UserService;
+import com.hjgj.aiyoujin.server.common.ResultModel;
+import com.hjgj.aiyoujin.server.common.ResultStatus;
+import com.hjgj.aiyoujin.server.webBiz.WeixinPush;
+
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 
 @Controller
-@RequestMapping(value = "order")
+@RequestMapping(value = "/order")
 public class OrderApiController {
 
     @Autowired
@@ -31,26 +36,32 @@ public class OrderApiController {
 
     @Autowired
     private UserService userService;
+    
+    @Autowired
+    private WeixinPush weixinPush;
+    
 
     /**
      * 查询用户的所有订单详情
      *
-     * @param openId
+     * @param userId
      * @param types
      * @param pageNum
      * @param pageSize
      * @return
      */
-    @ApiOperation(value = "查询用户的所有礼品卡详情")
+    @ApiOperation(value = "查询用户礼物列表")
     @ResponseBody
-    @RequestMapping(value = "getMyGiftCards", method = RequestMethod.POST)
-    public ResultModel getUserAllOrdersByOpenId(@ApiParam(value = "用户OpenId", required = true) @RequestParam String openId,
-                                                @ApiParam(value = "礼品类型", required = true) @RequestParam String types,
+    @RequestMapping(value = "/getMyGiftCards", method = RequestMethod.POST)
+    public ResultModel getUserAllOrdersByOpenId(@ApiParam(value = "用户ID", required = true) @RequestParam String userId,
+                                                @ApiParam(value = "礼品类型(1持有中,2已送出,3已变现,4已提货)", required = true) @RequestParam String types,
                                                 @ApiParam(value = "第多少页", required = true) @RequestParam Integer pageNum,
                                                 @ApiParam(value = "每页多少", required = true) @RequestParam Integer pageSize) {
+    	 Assert.notNull(userId, "userId 不可为空");
+    	 Assert.notNull(types, "types 不可为空");
         pageNum = pageNum == null ? 1 : pageNum;
         pageSize = pageSize == null ? 50 : pageSize;
-        Page<OrderWebVo> allOrders = userOrderService.getUserAllOrders(openId, types, pageNum, pageSize);
+        Page<OrderWebVo> allOrders = userOrderService.getUserAllOrders(userId, types, pageNum, pageSize);
         if (allOrders != null) {
             return ResultModel.ok(allOrders);
         } else {
@@ -58,84 +69,114 @@ public class OrderApiController {
         }
     }
 
-    @ApiOperation(value = "发送礼品卡")
+    @ApiOperation(value = "赠送礼物")
     @ResponseBody
-    @RequestMapping(value = "sendGiftCard", method = RequestMethod.POST)
-    public ResultModel sendGiftCard(@ApiParam(value = "用户OpenId", required = true) @RequestParam String openId,
-                                    @ApiParam(value = "订单ID", required = true) @RequestParam String orderId) {
-        Assert.notNull(openId, "openId不可为空");
+    @RequestMapping(value = "/sendGift", method = RequestMethod.POST)
+    public ResultModel sendGiftCard(@ApiParam(value = "订单ID", required = true) @RequestParam String orderId) {
         Assert.notNull(orderId, "orderId 不可为空");
-        String orderNo = CommonUtils.generateOrderNo("TF");
-        Date nowDate = new Date();
-        User byOpenId = userService.getUserByOpenId(openId);
-        Order orderById = userOrderService.getOrderById(orderId);
-        Order fromOrder = new Order();
-        fromOrder.setId(UUIDGenerator.generate());
-        fromOrder.setUserId(byOpenId.getId());
-        fromOrder.setBuyAmount(orderById.getBuyAmount());
-        fromOrder.setProductId(orderById.getProductId());
-        fromOrder.setCreateTime(nowDate);
-        fromOrder.setDeleted(0);
-        fromOrder.setFromOrderId(orderId);
-        fromOrder.setCode(orderNo);
+//        String orderNo = CommonUtils.generateOrderNo("TF");
+//        Date nowDate = new Date();
+//        User byOpenId = userService.getUserByOpenId(openId);
+//        Order orderById = userOrderService.getOrderById(orderId);
+//        Order fromOrder = new Order();
+//        fromOrder.setId(UUIDGenerator.generate());
+//        fromOrder.setUserId(byOpenId.getId());
+//        fromOrder.setBuyAmount(orderById.getBuyAmount());
+//        fromOrder.setProductId(orderById.getProductId());
+//        fromOrder.setCreateTime(nowDate);
+//        fromOrder.setDeleted(0);
+//        fromOrder.setFromOrderId(orderId);
+//        fromOrder.setCode(orderNo);
         // 3送出待收、4已退回、5送出成功、6领取成功
-        fromOrder.setStatus(Integer.valueOf(3));
-        int insertFromOrder = userOrderService.insertFromOrder(fromOrder);
+//        fromOrder.setStatus(Integer.valueOf(3));
+        int insertFromOrder = userOrderService.updateOrderStauts(orderId, OrderStatusEnum.ORDER_STATUS_UNRECEIVE.getCode());
         if (insertFromOrder > 0) {
-            return ResultModel.ok("赠送成功");
+            return ResultModel.ok();
         } else {
-            return ResultModel.error(ResultStatus.ERROR_EMPTY_VAL_RETURNED);
+            return ResultModel.error(ResultStatus.ORDER_NOT_EXIST);
         }
 
     }
 
-    @ApiOperation(value = "接收礼品卡")
+    @ApiOperation(value = "领取礼物")
     @ResponseBody
-    @RequestMapping(value = "receiveGiftCard", method = RequestMethod.POST)
-    public ResultModel receiveGiftCard(@ApiParam(value = "用户OpenId", required = true) @RequestParam String openId,
+    @RequestMapping(value = "/receiveGift", method = RequestMethod.POST)
+    public ResultModel receiveGiftCard(@ApiParam(value = "领取礼品用户OpenId", required = true) @RequestParam String openId,
                                        @ApiParam(value = "订单ID", required = true) @RequestParam String orderId) {
         Assert.notNull(openId, "openId不可为空");
         Assert.notNull(orderId, "orderId 不可为空");
-        Date nowDate = new Date();
-        User byOpenId = userService.getUserByOpenId(openId);
-        Order orderById = userOrderService.getOrderById(orderId);
+        User byUser = userService.getUserByOpenId(openId);
+        Order orderBy = userOrderService.getOrderById(orderId);
         Order fromOrder = new Order();
-        fromOrder.setId(UUIDGenerator.generate());
-        fromOrder.setUserId(byOpenId.getId());
-        fromOrder.setBuyAmount(orderById.getBuyAmount());
-        fromOrder.setProductId(orderById.getProductId());
-        fromOrder.setCreateTime(nowDate);
-        fromOrder.setDeleted(0);
+        fromOrder.setUserId(byUser.getId());
+        fromOrder.setBuyAmount(orderBy.getBuyAmount());
+        fromOrder.setProductId(orderBy.getProductId());
         fromOrder.setFromOrderId(orderId);
+        fromOrder.setSourceOrderId(orderId);
         // 3送出待收、4已退回、5送出成功、6领取成功
-        fromOrder.setStatus(Integer.valueOf(6));
-
+        fromOrder.setStatus(OrderStatusEnum.ORDER_STATUS_RECEIVED.getCode());
         try {
-            int insertOrder = userOrderService.insertOrder(fromOrder);
-            int updateOrderByCodeState = userOrderService.updateOrderByCodeState(orderById.getCode(), Integer.valueOf(5));
-
-            if (insertOrder > 0 && updateOrderByCodeState > 0) {
-                return ResultModel.ok("赠送成功");
-            }
+           userOrderService.receiveOrder(fromOrder);
+          return ResultModel.ok();
         } catch (Exception e) {
-            e.printStackTrace();
-            return ResultModel.error(ResultStatus.ERROR_EMPTY_VAL_RETURNED);
+        	e.printStackTrace();
+            return ResultModel.error(ResultStatus.ORDER_RECEIVE_FAIL);
         }
-        return ResultModel.ok("赠送失败");
     }
 
-    @ApiOperation(value = "查看订单状态")
+    @ApiOperation(value = "查看订单支付状态")
     @ResponseBody
-    @RequestMapping(value = "getOrderStatus", method = RequestMethod.GET)
+    @RequestMapping(value = "/getOrderStatus", method = RequestMethod.GET)
     public ResultModel checkOrderStatus(@ApiParam(value = "订单ID", required = true) @RequestParam String orderId) {
         Assert.notNull(orderId, "orderId 不可为空");
-        Order orderById = userOrderService.getOrderById(orderId);
-        if (orderById == null) {
-            return ResultModel.error(ResultStatus.ERROR_NOT_FIND_DATA);
-        } else {
-            Integer status = orderById.getStatus();
-            return ResultModel.ok(status);
+        Order order = userOrderService.getOrderById(orderId);
+        if(order != null && order.getStatus() == OrderStatusEnum.ORDER_STATUS_PAY_PAID.getCode()){
+        	return ResultModel.ok();
         }
+        return ResultModel.error(ResultStatus.ORDER_PAY_UNPAID);
+    }
+    
+    @ApiOperation(value = "查看订单详情")
+    @ResponseBody
+    @RequestMapping(value = "/queryOrderDetail", method = RequestMethod.GET)
+    public ResultModel queryOrderDetail(@ApiParam(value = "订单ID", required = true) @RequestParam String orderId) {
+        Assert.notNull(orderId, "orderId 不可为空");
+		try {
+			OrderWebVo order = userOrderService.queryOrderDetail(orderId);
+			return ResultModel.ok(order);
+		} catch (Exception e) {
+			return ResultModel.error(ResultStatus.ORDER_NOT_EXIST);
+		}
+    }
+    
+    
+    @ApiOperation(value = "礼品变现")
+    @ResponseBody
+    @RequestMapping(value = "/giftToCash", method = RequestMethod.GET)
+    public ResultModel giftToCash(@ApiParam(value = "订单ID", required = true) @RequestParam String orderId,
+    							@ApiParam(value = "微信提交formId", required = true) @RequestParam String formId) {
+        Assert.notNull(orderId, "orderId 不可为空");
+		try {
+			Order order = userOrderService.getOrderById(orderId);
+			if(order == null){
+				return ResultModel.error(ResultStatus.ORDER_NOT_EXIST);
+			}
+			User user = userService.getUserByUserId(order.getUserId());
+			Map map = userOrderService.giftToCash(order,user.getId());
+			if(map.get("code").equals("0")){
+				//变现单位为：分
+	    		DecimalFormat df = new DecimalFormat("#");
+	            String money = df.format(order.getSellAmount().multiply(new BigDecimal(100)));
+	            //给用户推送通知 
+				weixinPush.payResultNotifySell(money,"微信零钱",new Date(), formId, user.getOpenId());
+				return ResultModel.ok();
+			}else{
+				userOrderService.updateOrderStauts(order.getId(), OrderStatusEnum.ORDER_STATUS_CASH_FAIL.getCode());
+				return  ResultModel.error(ResultStatus.ORDER_TO_CASH_FAIL);
+			}
+		} catch (Exception e) {
+			return ResultModel.error(ResultStatus.ORDER_TO_CASH_FAIL);
+		}
     }
 
 }

@@ -1,12 +1,13 @@
 package com.hjgj.aiyoujin.server.webBiz;
 
-import com.hjgj.aiyoujin.core.vo.UnifiedOrderRequest;
-import com.hjgj.aiyoujin.core.vo.UnifiedOrderRespose;
-import com.hjgj.aiyoujin.server.config.WeiXinProperty;
-import com.hjgj.aiyoujin.server.util.WxSignUtil;
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.xml.XmlFriendlyNameCoder;
-import com.thoughtworks.xstream.io.xml.XppDriver;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.nio.charset.Charset;
+import java.text.DecimalFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHeaders;
@@ -20,15 +21,16 @@ import org.apache.http.message.BasicHeader;
 import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import weixin.popular.client.LocalHttpClient;
 
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.nio.charset.Charset;
-import java.text.DecimalFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import com.hjgj.aiyoujin.core.vo.UnifiedOrderRequest;
+import com.hjgj.aiyoujin.core.vo.UnifiedOrderRespose;
+import com.hjgj.aiyoujin.server.config.WeiXinProperty;
+import com.hjgj.aiyoujin.server.util.WxSignUtil;
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.XmlFriendlyNameCoder;
+import com.thoughtworks.xstream.io.xml.XppDriver;
+
+import weixin.popular.client.LocalHttpClient;
 
 @Component
 public class WeixinOrder {

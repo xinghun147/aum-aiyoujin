@@ -5,14 +5,12 @@
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="order_id" jdbcType="VARCHAR" property="orderId" />
     <result column="content" jdbcType="VARCHAR" property="content" />
-    <result column="link" jdbcType="VARCHAR" property="link" />
+    <result column="image_url" jdbcType="VARCHAR" property="imageUrl" />
     <result column="title" jdbcType="VARCHAR" property="title" />
     <result column="deleted" jdbcType="INTEGER" property="deleted" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-  </resultMap>
-  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.hjgj.aiyoujin.core.model.OrderMessage">
-    <result column="vodeo_url" jdbcType="VARBINARY" property="vodeoUrl" />
+    <result column="video_url" jdbcType="VARCHAR" property="videoUrl" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -73,27 +71,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, order_id, content, link, title, deleted, create_time, update_time
+    id, order_id, content, image_url, title, deleted, create_time, update_time, video_url
   </sql>
-  <sql id="Blob_Column_List">
-    vodeo_url
-  </sql>
-  <select id="selectByExampleWithBLOBs" parameterType="com.hjgj.aiyoujin.core.model.OrderMessageExample" resultMap="ResultMapWithBLOBs">
-    select
-    <if test="distinct">
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
-    from t_order_message
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null">
-      order by ${orderByClause}
-    </if>
-  </select>
   <select id="selectByExample" parameterType="com.hjgj.aiyoujin.core.model.OrderMessageExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
@@ -111,11 +90,9 @@
       limit #{limitOffset} , #{limitRows}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
     from t_order_message
     where id = #{id,jdbcType=VARCHAR}
   </select>
@@ -131,12 +108,12 @@
   </delete>
   <insert id="insert" parameterType="com.hjgj.aiyoujin.core.model.OrderMessage">
     insert into t_order_message (id, order_id, content, 
-      link, title, deleted, 
-      create_time, update_time, vodeo_url
+      image_url, title, deleted, 
+      create_time, update_time, video_url
       )
     values (#{id,jdbcType=VARCHAR}, #{orderId,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, 
-      #{link,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{deleted,jdbcType=INTEGER}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{vodeoUrl,jdbcType=VARBINARY}
+      #{imageUrl,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{deleted,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{videoUrl,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.hjgj.aiyoujin.core.model.OrderMessage">
@@ -151,8 +128,8 @@
       <if test="content != null">
         content,
       </if>
-      <if test="link != null">
-        link,
+      <if test="imageUrl != null">
+        image_url,
       </if>
       <if test="title != null">
         title,
@@ -166,8 +143,8 @@
       <if test="updateTime != null">
         update_time,
       </if>
-      <if test="vodeoUrl != null">
-        vodeo_url,
+      <if test="videoUrl != null">
+        video_url,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -180,8 +157,8 @@
       <if test="content != null">
         #{content,jdbcType=VARCHAR},
       </if>
-      <if test="link != null">
-        #{link,jdbcType=VARCHAR},
+      <if test="imageUrl != null">
+        #{imageUrl,jdbcType=VARCHAR},
       </if>
       <if test="title != null">
         #{title,jdbcType=VARCHAR},
@@ -195,8 +172,8 @@
       <if test="updateTime != null">
         #{updateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="vodeoUrl != null">
-        #{vodeoUrl,jdbcType=VARBINARY},
+      <if test="videoUrl != null">
+        #{videoUrl,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -218,8 +195,8 @@
       <if test="record.content != null">
         content = #{record.content,jdbcType=VARCHAR},
       </if>
-      <if test="record.link != null">
-        link = #{record.link,jdbcType=VARCHAR},
+      <if test="record.imageUrl != null">
+        image_url = #{record.imageUrl,jdbcType=VARCHAR},
       </if>
       <if test="record.title != null">
         title = #{record.title,jdbcType=VARCHAR},
@@ -233,25 +210,10 @@
       <if test="record.updateTime != null">
         update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.vodeoUrl != null">
-        vodeo_url = #{record.vodeoUrl,jdbcType=VARBINARY},
+      <if test="record.videoUrl != null">
+        video_url = #{record.videoUrl,jdbcType=VARCHAR},
       </if>
     </set>
-    <if test="_parameter != null">
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByExampleWithBLOBs" parameterType="map">
-    update t_order_message
-    set id = #{record.id,jdbcType=VARCHAR},
-      order_id = #{record.orderId,jdbcType=VARCHAR},
-      content = #{record.content,jdbcType=VARCHAR},
-      link = #{record.link,jdbcType=VARCHAR},
-      title = #{record.title,jdbcType=VARCHAR},
-      deleted = #{record.deleted,jdbcType=INTEGER},
-      create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-      vodeo_url = #{record.vodeoUrl,jdbcType=VARBINARY}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -261,11 +223,12 @@
     set id = #{record.id,jdbcType=VARCHAR},
       order_id = #{record.orderId,jdbcType=VARCHAR},
       content = #{record.content,jdbcType=VARCHAR},
-      link = #{record.link,jdbcType=VARCHAR},
+      image_url = #{record.imageUrl,jdbcType=VARCHAR},
       title = #{record.title,jdbcType=VARCHAR},
       deleted = #{record.deleted,jdbcType=INTEGER},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      video_url = #{record.videoUrl,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -279,8 +242,8 @@
       <if test="content != null">
         content = #{content,jdbcType=VARCHAR},
       </if>
-      <if test="link != null">
-        link = #{link,jdbcType=VARCHAR},
+      <if test="imageUrl != null">
+        image_url = #{imageUrl,jdbcType=VARCHAR},
       </if>
       <if test="title != null">
         title = #{title,jdbcType=VARCHAR},
@@ -294,33 +257,22 @@
       <if test="updateTime != null">
         update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="vodeoUrl != null">
-        vodeo_url = #{vodeoUrl,jdbcType=VARBINARY},
+      <if test="videoUrl != null">
+        video_url = #{videoUrl,jdbcType=VARCHAR},
       </if>
     </set>
-    where id = #{id,jdbcType=VARCHAR}
-  </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.hjgj.aiyoujin.core.model.OrderMessage">
-    update t_order_message
-    set order_id = #{orderId,jdbcType=VARCHAR},
-      content = #{content,jdbcType=VARCHAR},
-      link = #{link,jdbcType=VARCHAR},
-      title = #{title,jdbcType=VARCHAR},
-      deleted = #{deleted,jdbcType=INTEGER},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP},
-      vodeo_url = #{vodeoUrl,jdbcType=VARBINARY}
     where id = #{id,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.hjgj.aiyoujin.core.model.OrderMessage">
     update t_order_message
     set order_id = #{orderId,jdbcType=VARCHAR},
       content = #{content,jdbcType=VARCHAR},
-      link = #{link,jdbcType=VARCHAR},
+      image_url = #{imageUrl,jdbcType=VARCHAR},
       title = #{title,jdbcType=VARCHAR},
       deleted = #{deleted,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP}
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      video_url = #{videoUrl,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
   <select id="selectOneByExample" parameterType="com.hjgj.aiyoujin.core.model.OrderMessageExample" resultMap="BaseResultMap">

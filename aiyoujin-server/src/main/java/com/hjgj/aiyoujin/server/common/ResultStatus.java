@@ -22,6 +22,10 @@ public enum ResultStatus {
     ORDER_PARAMS_AMOUNT_LTE_ZERO(-3002, "金额不能小于等于0"),
     ORDER_PARAMS_WEIGHT_LTE_ZERO(-3003, "克重不能小于等于0"),
     ORDER_PARAMS_BOTH_ISNULL(-3004, "购买克重和金额不能全部为空"),
+    ORDER_NOT_EXIST(-3005, "订单不存在"),
+    ORDER_RECEIVE_FAIL(-3006, "领取失败"),
+    ORDER_PAY_UNPAID(-3007, "订单未支付"),
+    ORDER_TO_CASH_FAIL(-3008, "变现失败"),
     
     
     

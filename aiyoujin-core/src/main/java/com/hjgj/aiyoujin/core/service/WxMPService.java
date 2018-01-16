@@ -1,39 +1,73 @@
 package com.hjgj.aiyoujin.core.service;
 
+import com.alibaba.fastjson.JSON;
 import com.hjgj.aiyoujin.core.common.WXProperties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import weixin.popular.api.PayMchAPI;
+import weixin.popular.bean.paymch.Transfers;
+import weixin.popular.bean.paymch.TransfersResult;
+import weixin.popular.client.LocalHttpClient;
 
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 微信 商户 平台 服务
+ *
  * @author sunii
  * @version 1.0
  */
 @Service
 public class WxMPService {
 
+    protected final Logger logger = LoggerFactory.getLogger(WxMPService.class);
 
-    // 企业给用户打钱 地址
-    protected static final String REFUND_URL = "https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers";
+    /**
+     * TODO 付款金额单位是分,必须由元转换为分(且为整数)
+     * @param openId
+     * @param nonceStr
+     * @param orderNo
+     * @param amount
+     * @param desc
+     * @return
+     */
+    public Map promotionTransfers(String openId, String nonceStr, String orderNo, String amount, String desc) {
+        //String responseStr = "";
+        HashMap<String, Object> hashMap = new HashMap<>();
+        Transfers transfers = new Transfers();
+        transfers.setAmount(amount);
+        // NO_CHECK：不校验真实姓名
+        // FORCE_CHECK：强校验真实姓名
+        transfers.setCheck_name("NO_CHECK");
+        transfers.setDesc(desc);
+        transfers.setMch_appid(WXProperties.WeiXinAppid);
+        transfers.setMchid(WXProperties.WeiXinMchId);
+        transfers.setNonce_str(nonceStr);
+        transfers.setOpenid(openId);
+        transfers.setPartner_trade_no(orderNo);
+        transfers.setSign_type("MD5");
+        transfers.setSpbill_create_ip(WXProperties.WeiXinSpbillCreateIp);
+        InputStream resource = getClass().getClassLoader().getResourceAsStream("config/apiclient_cert.p12");
+        LocalHttpClient.initMchKeyStore(WXProperties.WeiXinMchId, resource);
+        TransfersResult transfersResult = PayMchAPI.mmpaymkttransfersPromotionTransfers(transfers, WXProperties.weixinApiKey);
 
+        if (null != transfersResult && "SUCCESS".equals(transfersResult.getReturn_code()) && "SUCCESS".equals(transfersResult.getResult_code())) {
+            hashMap.put("code","0");
+            hashMap.put("msg",transfersResult.getReturn_msg());
+            hashMap.put("wxpayOrderNo",transfersResult.getPayment_no());
+            hashMap.put("wxpayTime",transfersResult.getPayment_time());
 
-    // NO_CHECK：不校验真实姓名
-    // FORCE_CHECK：强校验真实姓名
-    public void refundToUser(String openId) {
-        SortedMap<String, String> packageParams = new TreeMap<String, String>();
-        packageParams.put("mch_appid", WXProperties.WeiXinAppid);
-        packageParams.put("mchid",WXProperties.WeiXinMchId);
-        packageParams.put("nonce_str",WXProperties.WeiXinMchId);
-        packageParams.put("partner_trade_no",WXProperties.WeiXinMchId);
-        packageParams.put("openid",WXProperties.WeiXinMchId);
-        packageParams.put("",WXProperties.WeiXinMchId);
-        packageParams.put("check_name","NO_CHECK");
-//        packageParams.put("re_user_name","NO_CHECK");
-        packageParams.put("amount",WXProperties.WeiXinMchId); // 企业付款金额，单位为分
-        packageParams.put("desc",WXProperties.WeiXinMchId); // 企业付款描述信息 企业付款操作说明信息
-        packageParams.put("spbill_create_ip",WXProperties.WeiXinMchId); // 调用接口的机器Ip地址
+            logger.info("打款成功");
+        } else {
+            hashMap.put("code","1");
+            hashMap.put("msg",transfersResult.getReturn_msg());
+            logger.error("打款失败");
+        }
+        //responseStr = JSON.toJSONString(hashMap);
+        return hashMap;
     }
 
 }

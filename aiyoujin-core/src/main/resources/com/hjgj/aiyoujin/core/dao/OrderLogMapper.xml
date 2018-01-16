@@ -405,8 +405,8 @@
 	<update id="updateOrderLogByMap" parameterType="map">
 		update t_order_log
 		<set>
-			<if test="status != null">
-				`status` = #{logStatus,jdbcType=INTEGER},
+			<if test="logStatus != null">
+				status = #{logStatus,jdbcType=INTEGER},
 			</if>
 			<if test="payId != null">
 				pay_id = #{payId,jdbcType=VARCHAR},
@@ -418,6 +418,6 @@
 				update_by = #{updateBy,jdbcType=VARCHAR},
 			</if>
 		</set>
-		where id = #{orderNo,jdbcType=VARCHAR}
+		where order_id = #{orderId,jdbcType=VARCHAR}
 	</update>
 </mapper>
