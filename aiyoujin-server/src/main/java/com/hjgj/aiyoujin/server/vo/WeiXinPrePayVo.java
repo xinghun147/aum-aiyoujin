@@ -27,12 +27,12 @@ public class WeiXinPrePayVo {
     /**
      * 支付金额
      */
-    private BigDecimal payMoney;
+    //private BigDecimal payMoney;
 
     /**
      * 用户id
      */
-    private String userId;
+    //private String userId;
 
     private String content;
 
@@ -62,29 +62,12 @@ public class WeiXinPrePayVo {
         this.openId = openId;
     }
 
-
     public String getProductId() {
         return productId;
     }
 
     public void setProductId(String productId) {
         this.productId = productId;
-    }
-
-    public BigDecimal getPayMoney() {
-        return payMoney;
-    }
-
-    public void setPayMoney(BigDecimal payMoney) {
-        this.payMoney = payMoney;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
     }
 
     public String getContent() {
