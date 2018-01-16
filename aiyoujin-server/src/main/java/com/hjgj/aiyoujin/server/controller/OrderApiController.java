@@ -34,7 +34,7 @@ public class OrderApiController {
     /**
      * 查询用户的所有订单详情
      *
-     * @param openId
+     * @param userId
      * @param types
      * @param pageNum
      * @param pageSize
