@@ -12,6 +12,7 @@ import weixin.popular.client.LocalHttpClient;
 
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 微信 商户 平台 服务
@@ -33,8 +34,8 @@ public class WxMPService {
      * @param desc
      * @return
      */
-    public String promotionTransfers(String openId, String nonceStr, String orderNo, String amount, String desc) {
-        String responseStr = "";
+    public Map promotionTransfers(String openId, String nonceStr, String orderNo, String amount, String desc) {
+        //String responseStr = "";
         HashMap<String, Object> hashMap = new HashMap<>();
         Transfers transfers = new Transfers();
         transfers.setAmount(amount);
@@ -65,8 +66,8 @@ public class WxMPService {
             hashMap.put("msg",transfersResult.getReturn_msg());
             logger.error("打款失败");
         }
-        responseStr = JSON.toJSONString(hashMap);
-        return responseStr;
+        //responseStr = JSON.toJSONString(hashMap);
+        return hashMap;
     }
 
 }

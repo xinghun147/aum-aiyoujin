@@ -181,8 +181,8 @@
 	<update id="updateOrderByMap" parameterType="map">
 		UPDATE t_order
 		<set>
-			<if test="status != null">
-				`status` = #{orderStatus,jdbcType=INTEGER},
+			<if test="orderStatus != null">
+				status = #{orderStatus,jdbcType=INTEGER},
 			</if>
 			<if test="reason != null">
 				reason = #{reason,jdbcType=VARCHAR},
@@ -209,12 +209,13 @@
 				to_order_id = #{toOrderId,jdbcType=VARCHAR},
 			</if>
 		</set>
-		where `code` = #{orderNo,jdbcType=VARCHAR}
+		where id = #{orderId,jdbcType=VARCHAR}
 	</update>
 
 	<select id="getOrderProduct" resultType="java.util.Map">
 		SELECT
 			torder.id AS orderId,
+			torder.`code` AS orderNo,
 			orderLog.prepay_id AS prepayId,
 			tuser.open_id AS openId,
 			tprod.`name` AS productName,

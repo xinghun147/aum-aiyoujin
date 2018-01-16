@@ -275,9 +275,11 @@ public class WeixinPayController {
                             String productName = (String) orderProduct.get("productName");
                             String prepayId = (String) orderProduct.get("prepayId");
                             BigDecimal buyMoney = (BigDecimal) orderProduct.get("buyMoney");
+                            String orderNo = (String) orderProduct.get("orderNo");
 
                             HashMap<String, Object> hashMap = new HashMap<>();
-                            hashMap.put("orderNo", orderId);
+                            hashMap.put("orderId", orderId);
+                            hashMap.put("orderNo", orderNo);
                             hashMap.put("updateTime", updateTime);
                             hashMap.put("updateBy", "wexinCallBack");
                             //hashMap.put("prepayId",prepayId);
@@ -295,9 +297,12 @@ public class WeixinPayController {
                             String prepayId = (String) orderProduct.get("prepayId");
                             String productName = (String) orderProduct.get("productName");
                             BigDecimal buyMoney = (BigDecimal) orderProduct.get("buyMoney");
+                            String orderNo = (String) orderProduct.get("orderNo");
+
 
                             HashMap<String, Object> hashMap = new HashMap<>();
-                            hashMap.put("orderNo", orderId);
+                            hashMap.put("orderId", orderId);
+                            hashMap.put("orderNo", orderNo);
                             hashMap.put("updateTime", updateTime);
                             hashMap.put("updateBy", "wexinCallBack");
                             //hashMap.put("prepayId",prepayId);
@@ -321,14 +326,17 @@ public class WeixinPayController {
                             out.print(builder.toString());
                             out.close();
                             Map orderProduct = userOrderService.getOrderProduct(selfOrder.getId());
+
                             String orderId = (String) orderProduct.get("orderId");
+                            String orderNo = (String) orderProduct.get("orderNo");
                             Date updateTime = (Date) orderProduct.get("updateTime");
                             String prepayId = (String) orderProduct.get("prepayId");
                             String productName = (String) orderProduct.get("productName");
                             BigDecimal buyMoney = (BigDecimal) orderProduct.get("buyMoney");
 
                             HashMap<String, Object> hashMap = new HashMap<>();
-                            hashMap.put("orderNo", orderId);
+                            hashMap.put("orderId", orderId);
+                            hashMap.put("orderNo", orderNo);
                             hashMap.put("updateTime", updateTime);
                             hashMap.put("updateBy", "wexinCallBack");
                             //hashMap.put("prepayId",prepayId);
@@ -343,12 +351,14 @@ public class WeixinPayController {
                             Map orderProduct = userOrderService.getOrderProduct(selfOrder.getId());
                             Date updateTime = (Date) orderProduct.get("updateTime");
                             String orderId = (String) orderProduct.get("orderId");
+                            String orderNo = (String) orderProduct.get("orderNo");
                             String prepayId = (String) orderProduct.get("prepayId");
                             String productName = (String) orderProduct.get("productName");
                             BigDecimal buyMoney = (BigDecimal) orderProduct.get("buyMoney");
 
                             HashMap<String, Object> hashMap = new HashMap<>();
-                            hashMap.put("orderNo", orderId);
+                            hashMap.put("orderId", orderId);
+                            hashMap.put("orderNo", orderNo);
                             hashMap.put("updateTime", updateTime);
                             hashMap.put("updateBy", "wexinCallBack");
                             //hashMap.put("prepayId",prepayId);
@@ -376,12 +386,14 @@ public class WeixinPayController {
                             Map orderProduct = userOrderService.getOrderProduct(selfOrder.getId());
                             Date updateTime = (Date) orderProduct.get("updateTime");
                             String orderId = (String) orderProduct.get("orderId");
+                            String orderNo = (String) orderProduct.get("orderNo");
                             String prepayId = (String) orderProduct.get("prepayId");
                             String productName = (String) orderProduct.get("productName");
                             BigDecimal buyMoney = (BigDecimal) orderProduct.get("buyMoney");
 
                             HashMap<String, Object> hashMap = new HashMap<>();
-                            hashMap.put("orderNo", orderId);
+                            hashMap.put("orderNo", orderNo);
+                            hashMap.put("orderId", orderId);
                             hashMap.put("updateTime", updateTime);
                             hashMap.put("updateBy", "wexinCallBack");
                             //hashMap.put("prepayId",prepayId);
@@ -398,13 +410,15 @@ public class WeixinPayController {
 
                             Map orderProduct = userOrderService.getOrderProduct(selfOrder.getId());
                             String orderId = (String) orderProduct.get("orderId");
+                            String orderNo = (String) orderProduct.get("orderNo");
                             Date updateTime = (Date) orderProduct.get("updateTime");
                             String prepayId = (String) orderProduct.get("prepayId");
                             String productName = (String) orderProduct.get("productName");
                             BigDecimal buyMoney = (BigDecimal) orderProduct.get("buyMoney");
 
                             HashMap<String, Object> hashMap = new HashMap<>();
-                            hashMap.put("orderNo", orderId);
+                            hashMap.put("orderNo", orderNo);
+                            hashMap.put("orderId", orderId);
                             hashMap.put("updateTime", updateTime);
                             hashMap.put("updateBy", "wexinCallBack");
                             //hashMap.put("prepayId",prepayId);
