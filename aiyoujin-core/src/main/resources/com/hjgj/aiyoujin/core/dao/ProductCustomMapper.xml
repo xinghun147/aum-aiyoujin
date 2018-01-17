@@ -17,7 +17,7 @@
    </select>
    
    <select id="queryGoodsDetail" parameterType="java.lang.String" resultType="com.hjgj.aiyoujin.core.model.vo.ProductVo">
-   SELECT t.id id,t.`name` name,t.buy_price buyPrice,p.imageUrls middlePictures,p1.imageUrls largePictures
+   SELECT t.id id,t.`name` name,t.buy_price buyPrice,p.imageUrls middlePictures,p1.imageUrls largePictures,t.quantity quantity
 	FROM t_product t 
 	LEFT JOIN 
    (SELECT GROUP_CONCAT(path ORDER BY sort_no ASC) imageUrls,

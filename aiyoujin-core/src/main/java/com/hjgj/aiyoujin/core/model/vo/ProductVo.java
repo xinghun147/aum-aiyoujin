@@ -18,6 +18,8 @@ public class ProductVo implements Serializable {
     private String [] middlePictures;//订单详情图片(带文字、和不带文字)
     
     private String [] largePictures; //产品详情图片
+    
+    private Integer quantity;//库存数量
 
     public String getId() {
         return id;
@@ -65,5 +67,13 @@ public class ProductVo implements Serializable {
 
 	public void setLargePictures(String largePictures) {
 		this.largePictures = largePictures.split(",");
+	}
+
+	public Integer getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(Integer quantity) {
+		this.quantity = quantity;
 	}
 }
