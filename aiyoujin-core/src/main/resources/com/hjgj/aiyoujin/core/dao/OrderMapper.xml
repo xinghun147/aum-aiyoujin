@@ -504,13 +504,13 @@
 		<if test="startTime != null and endTime != null">
 			AND torder.create_time BETWEEN #{startTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
 		</if>
-		<if test="orderNo != null">
+		<if test="orderNo != null and orderNo != ''">
 			AND torder.`code` = #{orderNo,jdbcType=VARCHAR}
 		</if>
-		<if test="userName != null">
+		<if test="userName != null and userName != ''">
 			AND tuser.nickname = #{userName,jdbcType=VARCHAR}
 		</if>
-		<if test="productName != null">
+		<if test="productName != null and productName != ''">
 			AND tprod.`name` = #{productName,jdbcType=VARCHAR}
 		</if>
 	</select>
@@ -537,13 +537,13 @@
 		<if test="startTime != null and endTime != null">
 			AND torder.create_time BETWEEN #{startTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
 		</if>
-		<if test="orderNo != null">
+		<if test="orderNo != null and orderNo != ''">
 			AND torder.`code` = #{orderNo,jdbcType=VARCHAR}
 		</if>
-		<if test="userName != null">
+		<if test="userName != null and userName != ''">
 			AND tuser.nickname = #{userName,jdbcType=VARCHAR}
 		</if>
-		<if test="productName != null">
+		<if test="productName != null and productName != ''">
 			AND tprod.`name` = #{productName,jdbcType=VARCHAR}
 		</if>
 		ORDER BY torder.create_time desc
@@ -638,14 +638,17 @@
 		<if test="startTime != null and endTime != null">
 			AND torder.create_time BETWEEN #{startTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
 		</if>
-		<if test="orderNo != null">
+		<if test="orderNo != null and orderNo != ''">
 			AND torder.`code` = #{orderNo,jdbcType=VARCHAR}
 		</if>
-		<if test="userName != null">
+		<if test="userName != null and userName != ''">
 			AND tuser.nickname = #{userName,jdbcType=VARCHAR}
 		</if>
-		<if test="productName != null">
+		<if test="productName != null and productName != ''">
 			AND tprod.`name` = #{productName,jdbcType=VARCHAR}
+		</if>
+		<if test="orderState != null and orderState != ''">
+			AND torder.`status` = #{orderState,jdbcType=VARCHAR}
 		</if>
 	</select>
 
@@ -671,14 +674,17 @@
 		<if test="startTime != null and endTime != null">
 			AND torder.create_time BETWEEN #{startTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
 		</if>
-		<if test="orderNo != null">
+		<if test="orderNo != null and orderNo != ''">
 			AND torder.`code` = #{orderNo,jdbcType=VARCHAR}
 		</if>
-		<if test="userName != null">
+		<if test="userName != null and userName != ''">
 			AND tuser.nickname = #{userName,jdbcType=VARCHAR}
 		</if>
-		<if test="productName != null">
+		<if test="productName != null and productName != ''">
 			AND tprod.`name` = #{productName,jdbcType=VARCHAR}
+		</if>
+		<if test="orderState != null and orderState != ''">
+			AND torder.`status` = #{orderState,jdbcType=VARCHAR}
 		</if>
 		ORDER BY torder.create_time desc
 	</select>
@@ -699,14 +705,17 @@
 		<if test="startTime != null and endTime != null">
 			AND torder.create_time BETWEEN #{startTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
 		</if>
-		<if test="orderNo != null">
+		<if test="orderNo != null and orderNo != ''">
 			AND torder.`code` = #{orderNo,jdbcType=VARCHAR}
 		</if>
-		<if test="userName != null">
+		<if test="userName != null and userName != ''">
 			AND tuser.nickname = #{userName,jdbcType=VARCHAR}
 		</if>
-		<if test="productName != null">
+		<if test="productName != null and productName != ''">
 			AND tprod.`name` = #{productName,jdbcType=VARCHAR}
+		</if>
+		<if test="orderState != null and orderState != ''">
+			AND torder.`status` = #{orderState,jdbcType=VARCHAR}
 		</if>
 	</select>
 
@@ -735,14 +744,17 @@
 		<if test="startTime != null and endTime != null">
 			AND torder.create_time BETWEEN #{startTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
 		</if>
-		<if test="orderNo != null">
+		<if test="orderNo != null and orderNo != ''">
 			AND torder.`code` = #{orderNo,jdbcType=VARCHAR}
 		</if>
-		<if test="userName != null">
+		<if test="userName != null and userName != ''">
 			AND tuser.nickname = #{userName,jdbcType=VARCHAR}
 		</if>
-		<if test="productName != null">
+		<if test="productName != null and productName != ''">
 			AND tprod.`name` = #{productName,jdbcType=VARCHAR}
+		</if>
+		<if test="orderState != null and orderState != ''">
+			AND torder.`status` = #{orderState,jdbcType=VARCHAR}
 		</if>
 		ORDER BY torder.create_time desc
 	</select>

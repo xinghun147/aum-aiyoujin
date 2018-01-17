@@ -8,7 +8,7 @@
 </head>
 <body class="childrenBody">
 <blockquote class="layui-elem-quote news_search">
-    <form id="searchForm" name="searchForm" class="layui-form" action="/order/buyOrderEntry.html">
+    <form id="searchForm" name="searchForm" class="layui-form" action="/order/sendOrderEntry.html">
         <input type="hidden" id="pageNum" name="pageNum" th:value="${page.pageNum}"/>
         <div class="layui-form-item" style="margin-left: -43px;margin-bottom: 2px;">
             <label class="layui-form-label">订单编号:</label>
@@ -31,7 +31,7 @@
         <div class="layui-form-item" style="margin-left: -43px;margin-bottom: 2px;">
             <label class="layui-form-label">状态</label>
             <div class="layui-input-inline">
-                <select name="status"  lay-filter="status">
+                <select name="orderState"  lay-filter="status">
                     <option value="">选择查询转送状态</option>
                     <option value="3" th:selected="${vo}ne null  and ${vo.orderState == 3}">送出待接收</option>
                     <option value="4" th:selected="${vo}ne null  and ${vo.orderState == 4}">已退回</option>
@@ -69,7 +69,6 @@
             <th>状态</th>
             <th>赠送时间</th>
             <th>接收时间</th>
-            <th>操作</th>
         </tr>
         </thead>
         <tbody class="news_content">
@@ -89,10 +88,7 @@
                     <td th:case="6">领取成功</td>
                 </th:block>
                 <td th:text="${item.createTime}?${#dates.format(item.createTime,'yyyy-MM-dd HH:mm:ss')}"></td>
-                <td th:text="${item.updateTime}?${#dates.format(item.updateTime,'yyyy-MM-dd HH:mm:ss')}"></td>
-                <td>
-                    <a th:data="${item.orderId}" class="layui-btn layui-btn-mini message_edit"> <i class="layui-icon">&#xe642;</i>编辑</a>
-                </td>
+                <td th:text="${item.updateTime}?${#dates.format(item.updateTime,'yyyy-MM-dd HH:mm:ss')}"></td>            
             </tr>
         </th:block>
         </tbody>
@@ -121,6 +117,22 @@
             }
         });
     });
+    
+    layui.use('laydate', function(){
+    	  var laydate = layui.laydate;
+    	  //执行一个laydate实例
+    	  laydate.render({
+    	    elem: '#startTime' //指定元素
+    	    ,type:'datetime'
+    	    ,format: 'yyyy-MM-dd HH:mm:ss'
+    	  });
+    	  //执行一个laydate实例
+    	  laydate.render({
+    	    elem: '#endTime' //指定元素
+    	    ,type:'datetime'
+    	    ,format: 'yyyy-MM-dd HH:mm:ss'
+    	  });
+    });  
 
     layui.use('layer', function () {
         var layer = layui.layer, $ = layui.jquery;

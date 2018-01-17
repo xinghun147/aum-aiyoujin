@@ -50,7 +50,7 @@
             <th>订单金额</th>
             <th>支付状态</th>
             <th>买入时间</th>
-            <th>操作</th>
+            <!-- <th>操作</th> -->
         </tr>
         </thead>
         <tbody class="news_content">
@@ -68,15 +68,15 @@
                     <td th:case="2">支付失败</td>
                 </th:block>
                 <td th:text="${item.createTime}?${#dates.format(item.createTime,'yyyy-MM-dd HH:mm:ss')}"></td>
-                <td>
+                <!-- <td>
                     <a th:data="${item.orderId}" class="layui-btn layui-btn-mini message_edit"> <i class="layui-icon">&#xe642;</i>编辑</a>
-                    <!--<th:block th:if="${item.status == 0}">-->
-                    <!--<a th:data="${item.id}" class="layui-btn layui-btn-danger layui-btn-mini message_push"> <i-->
-                    <!--class="layui-icon">&#xe642;</i>推送</a>-->
-                    <!--<a th:data="${item.id}" class="layui-btn layui-btn-danger layui-btn-mini message_del"><i-->
-                    <!--class="layui-icon">&#xe640;</i> 删除</a>-->
-                    <!--</th:block>-->
-                </td>
+                    <th:block th:if="${item.status == 0}">
+                    <a th:data="${item.id}" class="layui-btn layui-btn-danger layui-btn-mini message_push"> <i
+                    class="layui-icon">&#xe642;</i>推送</a>
+                    <a th:data="${item.id}" class="layui-btn layui-btn-danger layui-btn-mini message_del"><i
+                    class="layui-icon">&#xe640;</i> 删除</a>
+                    </th:block>
+                </td> -->
             </tr>
         </th:block>
         </tbody>
@@ -208,7 +208,23 @@
             });
         };
     });
-
+    
+    layui.use('laydate', function(){
+  	  var laydate = layui.laydate;
+  	  //执行一个laydate实例
+  	  laydate.render({
+  	    elem: '#startTime' //指定元素
+  	    ,type:'datetime'
+  	    ,format: 'yyyy-MM-dd HH:mm:ss' //可任意组合
+  	  });
+  	  //执行一个laydate实例
+  	  laydate.render({
+  	    elem: '#endTime' //指定元素
+  	    ,type:'datetime'
+  	    ,format: 'yyyy-MM-dd HH:mm:ss' //可任意组合
+  	  });
+  	});
+    
     layui.use('form', function () {
         var form = layui.form; //只有执行了这一步，部分表单元素才会自动修饰成功
 

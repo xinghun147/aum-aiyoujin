@@ -8,7 +8,7 @@
 </head>
 <body class="childrenBody">
 <blockquote class="layui-elem-quote news_search">
-    <form id="searchForm" name="searchForm" class="layui-form" action="/order/buyOrderEntry.html">
+    <form id="searchForm" name="searchForm" class="layui-form" action="/order/sellOrderEntry.html">
         <input type="hidden" id="pageNum" name="pageNum" th:value="${page.pageNum}"/>
         <div class="layui-form-item" style="margin-left: -43px;margin-bottom: 2px;">
             <label class="layui-form-label">订单编号:</label>
@@ -22,6 +22,17 @@
             <label class="layui-form-label">产品名称:</label>
             <div class="layui-input-inline">
                 <input type="text" class="layui-input" name="productName" th:value="${vo.productName}"/>
+            </div>
+            </div>
+            <div class="layui-form-item" style="margin-left: -43px;margin-bottom: 2px;">
+            <label class="layui-form-label">状态</label>
+            <div class="layui-input-inline">
+                <select name="orderState"  lay-filter="status">
+                    <option value="">请选择订单状态</option>
+                    <option value="7" th:selected="${vo}ne null  and ${vo.orderState == 7}">待处理</option>
+                    <option value="8" th:selected="${vo}ne null  and ${vo.orderState == 8}">变现成功</option>
+                    <option value="9" th:selected="${vo}ne null  and ${vo.orderState == 9}">变现失败</option>               
+                </select>
             </div>
             <label class="layui-form-label">创建时间:</label>
             <div class="layui-input-inline">
@@ -64,10 +75,9 @@
                 <td th:text="${item.buyAmount}"></td>
                 <td th:text="${item.sellAmount}"></td>
                 <th:block th:switch="${item.orderStatus}">
-                    <td th:case="3">送出待接收</td>
-                    <td th:case="4">已退回</td>
-                    <td th:case="5">送出成功</td>
-                    <td th:case="6">领取成功</td>
+                    <td th:case="7">待处理</td>
+                    <td th:case="8">变现成功</td>
+                    <td th:case="9">变现失败</td>
                 </th:block>
                 <td th:text="${item.createTime}?${#dates.format(item.createTime,'yyyy-MM-dd HH:mm:ss')}"></td>
                 <td>
