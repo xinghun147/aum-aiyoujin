@@ -36,7 +36,7 @@ public class Order {
 
     private String toOrderId;
 
-    private Long expressFee;
+    private BigDecimal expressFee;
 
     private String address;
 
@@ -168,11 +168,11 @@ public class Order {
         this.toOrderId = toOrderId == null ? null : toOrderId.trim();
     }
 
-    public Long getExpressFee() {
+    public BigDecimal getExpressFee() {
         return expressFee;
     }
 
-    public void setExpressFee(Long expressFee) {
+    public void setExpressFee(BigDecimal expressFee) {
         this.expressFee = expressFee;
     }
 

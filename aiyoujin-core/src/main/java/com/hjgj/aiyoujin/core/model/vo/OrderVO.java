@@ -37,6 +37,8 @@ public class OrderVO {
 
     private String expressNo;
 
+    private BigDecimal expressFee;
+
     private BigDecimal expressAmount;
 
     private String sourceOrderId;
@@ -173,6 +175,14 @@ public class OrderVO {
 
     public void setExpressNo(String expressNo) {
         this.expressNo = expressNo;
+    }
+
+    public BigDecimal getExpressFee() {
+        return expressFee;
+    }
+
+    public void setExpressFee(BigDecimal expressFee) {
+        this.expressFee = expressFee;
     }
 
     public BigDecimal getExpressAmount() {

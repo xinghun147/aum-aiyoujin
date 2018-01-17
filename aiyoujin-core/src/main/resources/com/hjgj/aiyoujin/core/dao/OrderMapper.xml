@@ -787,6 +787,7 @@
 			torder.`status` AS orderStatus,
 			torder.express_no AS expressNo,
             torder.express_company AS expressCompany,
+            torder.express_fee AS expressFee,
             torder.update_time AS updateTime
 		FROM
 			t_order AS torder
@@ -816,8 +817,9 @@
 	<insert id="addExpressToOrder" parameterType="com.hjgj.aiyoujin.core.model.vo.OrderVO">
 	    update t_order
 		<trim prefix="set" suffixOverrides=",">
-		 <if test="productCode!=null and productCode!=''">express_no=#{productCode},</if>
-		 <if test="productName!=null and productName!=''">express_company=#{productName},</if>
+		 <if test="expressNo!=null and expressNo!=''">express_no=#{expressNo},</if>
+		 <if test="expressCompany!=null and expressCompany!=''">express_company=#{expressCompany},</if>
+		 <if test="expressFee!=null and expressFee!=''">express_fee=#{expressFee},</if>
 		 status='11'
 		</trim>
 		WHERE code=#{orderId} and status ='10'

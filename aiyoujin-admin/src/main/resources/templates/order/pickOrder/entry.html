@@ -81,7 +81,7 @@
                 </th:block>
                 <td th:text="${item.expressCompany}"></td>
                 <td th:text="${item.expressNo}"></td>
-                <td th:text="${item.expressAmount}"></td>
+                <td th:text="${item.expressFee}"></td>
                 <td th:text="${item.updateTime}?${#dates.format(item.updateTime,'yyyy-MM-dd HH:mm:ss')}"></td>
                 <td>
                     <input type="hidden" id="orderNo" name="orderNo" th:value="${item.orderNo}"/>
@@ -100,7 +100,7 @@
 			<div class="layui-form-item">
 				<label class="layui-form-label">快递公司:</label>
 				<div class="layui-input-inline">
-					<select name="productName" lay-verify="required" lay-search="" data-placeholder="直接选择或搜索选择">
+					<select name="expressCompany" lay-verify="required" lay-search="" data-placeholder="直接选择或搜索选择">
 				       <option th:each="express:${express}" th:value="${express.name}" th:text="${express.name}">快递公司名称</option>
 				    </select>
 				</div>
@@ -108,13 +108,13 @@
 			<div class="layui-form-item">
 				<label class="layui-form-label">快递单号:</label>
 				<div class="layui-input-inline">
-					<input type="text" value="" name="productCode" class="layui-input search_input"/>
+					<input type="text" value="" name="expressNo" class="layui-input search_input"/>
 				</div>
 			</div>
 			<div class="layui-form-item">
 				<label class="layui-form-label">快递费:</label>
 				<div class="layui-input-inline">
-					<input type="text" value="" name="" class="layui-input search_input"/>
+					<input type="text" value="" name="expressFee" class="layui-input search_input"/>
 				</div>
 			</div>
 			<div class="layui-form-item" style="margin-top:40px;">
