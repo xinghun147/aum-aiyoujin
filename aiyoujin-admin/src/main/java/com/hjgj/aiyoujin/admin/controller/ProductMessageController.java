@@ -15,11 +15,12 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 
+
 /**
  * Created by Lin on 2017/9/5.
  */
 @Controller
-@RequestMapping("/productMessage")
+@RequestMapping(value = "/productMessage")
 public class ProductMessageController extends BaseController {
 
     @Autowired
