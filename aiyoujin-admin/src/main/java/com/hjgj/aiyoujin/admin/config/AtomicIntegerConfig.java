@@ -1,15 +1,15 @@
 package com.hjgj.aiyoujin.admin.config;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Configuration
 public class AtomicIntegerConfig {
 
-	@Bean
-	public AtomicInteger atomicIntegerBean(){
-		return new AtomicInteger(0);
-	}
+    @Bean
+    public AtomicInteger atomicIntegerBean() {
+        return new AtomicInteger(0);
+    }
 }

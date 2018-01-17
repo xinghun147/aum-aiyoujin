@@ -4,11 +4,11 @@ import java.io.Serializable;
 
 public class ResultModel implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
     private int code;
-    
+
     private String message;
-    
+
     private Object data;
 
     public int getCode() {
@@ -58,7 +58,7 @@ public class ResultModel implements Serializable {
     public static ResultModel error(ResultStatus error) {
         return new ResultModel(error);
     }
-    
+
     public static ResultModel error(int code, String message) {
         return new ResultModel(code, message);
     }

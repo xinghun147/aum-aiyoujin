@@ -7,7 +7,6 @@ import com.hjgj.aiyoujin.core.model.User;
 import com.hjgj.aiyoujin.core.model.UserExample;
 import com.hjgj.aiyoujin.core.model.vo.Page;
 import com.hjgj.aiyoujin.core.model.vo.UserVO;
-
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,7 +22,8 @@ public class UserService {
 
     /**
      * TODO 爱有金后台用户列表
-     * @param userVO
+     *
+     * @param user
      * @param pageNum
      * @param pageSize
      * @return
@@ -39,7 +39,7 @@ public class UserService {
         }
         return page;
     }
-    
+
     public User insertUser(User user) throws Exception {
         user.setId(UUIDGenerator.generate());
         user.setCreateTime(new Date());
@@ -60,7 +60,7 @@ public class UserService {
         }
         return null;
     }
-    
+
     public User getUserByUserId(String userId) {
         return userMapper.selectByPrimaryKey(userId);
     }

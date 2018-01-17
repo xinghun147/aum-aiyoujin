@@ -14,10 +14,11 @@ public class OrderLogService {
 
     /**
      * 新增订单日志
+     *
      * @param orderLog
      * @return
      */
-    public int insertOrderLog(OrderLog orderLog){
+    public int insertOrderLog(OrderLog orderLog) {
         int insert = orderLogMapper.insert(orderLog);
         return insert;
     }

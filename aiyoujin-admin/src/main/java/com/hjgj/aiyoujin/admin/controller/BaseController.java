@@ -1,12 +1,7 @@
 package com.hjgj.aiyoujin.admin.controller;
 
-import java.io.IOException;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import javax.servlet.http.HttpServletRequest;
-
+import com.hjgj.aiyoujin.admin.common.utils.CustomerDateEditor;
+import com.hjgj.aiyoujin.admin.common.utils.FtpUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -19,13 +14,16 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.hjgj.aiyoujin.admin.common.utils.CustomerDateEditor;
-import com.hjgj.aiyoujin.admin.common.utils.FtpUtils;
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class BaseController {
-	protected final Logger logger = LoggerFactory.getLogger(super.getClass().getName());
-    
-	@Autowired
+    protected final Logger logger = LoggerFactory.getLogger(super.getClass().getName());
+
+    @Autowired
     private AtomicInteger atomicInteger;
 
     @Value("${ftp.ip}")
@@ -39,14 +37,14 @@ public class BaseController {
 
     @Value("${ftp.pass}")
     protected String ftpPass;
-    
+
     @Value("${express.address}")
-	private String expressAddress;
+    private String expressAddress;
 
-	@Value("${aliyun.market.appcode}")
-	private String appcode;
+    @Value("${aliyun.market.appcode}")
+    private String appcode;
 
-	
+
     protected int pageNum = 1;
     protected int pageSize = 10;
 
@@ -127,7 +125,7 @@ public class BaseController {
         sb.append(fileType);
         return sb.toString();
     }
-    
+
     /**
      * 快递接口
      * @param expressNo
