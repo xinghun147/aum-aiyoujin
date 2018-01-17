@@ -4,13 +4,13 @@
     <meta charset="utf-8"/>
     <title>变现订单</title>
     <link rel="stylesheet" type="text/css" th:href="@{/layui/css/layui.css}" media="all"/>
-    <!--<link rel="stylesheet" type="text/css" th:href="@{/css/news.css}" media="all"/>-->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/news.css}" media="all"/>
 </head>
 <body class="childrenBody">
 <blockquote class="layui-elem-quote news_search">
     <form id="searchForm" name="searchForm" class="layui-form" action="sellOrderEntry.html">
         <input type="hidden" id="pageNum" name="pageNum" th:value="${page.pageNum}"/>
-        <div class="layui-form-item" style="margin-left: -43px;margin-bottom: 2px;">
+        <div class="layui-form-item" style="margin-left: -30px;margin-bottom: 2px;">
             <label class="layui-form-label">订单编号:</label>
             <div class="layui-input-inline">
                 <input type="text" class="layui-input" name="orderNo" th:value="${vo.orderNo}"/>
@@ -23,17 +23,17 @@
             <div class="layui-input-inline">
                 <input type="text" class="layui-input" name="productName" th:value="${vo.productName}"/>
             </div>
-            </div>
-            <div class="layui-form-item" style="margin-left: -43px;margin-bottom: 2px;">
             <label class="layui-form-label">状态</label>
             <div class="layui-input-inline">
-                <select name="orderState"  lay-filter="status">
+                <select name="orderState" lay-filter="status">
                     <option value="">请选择订单状态</option>
                     <option value="7" th:selected="${vo}ne null  and ${vo.orderState == 7}">待处理</option>
                     <option value="8" th:selected="${vo}ne null  and ${vo.orderState == 8}">变现成功</option>
-                    <option value="9" th:selected="${vo}ne null  and ${vo.orderState == 9}">变现失败</option>               
+                    <option value="9" th:selected="${vo}ne null  and ${vo.orderState == 9}">变现失败</option>
                 </select>
             </div>
+        </div>
+        <div class="layui-form-item" style="margin-left: -30px;margin-bottom: 0px;margin-top: 12px;">
             <label class="layui-form-label">创建时间:</label>
             <div class="layui-input-inline">
                 <input type="text" class="layui-input" name="startTime" id="startTime" readonly="readonly"
@@ -75,9 +75,9 @@
                 <td th:text="${item.buyAmount}"></td>
                 <td th:text="${item.sellAmount}"></td>
                 <th:block th:switch="${item.orderStatus}">
-                    <td th:case="7">待处理</td>
-                    <td th:case="8">变现成功</td>
-                    <td th:case="9">变现失败</td>
+                    <td th:case="7" style="color: #31A89D">待处理</td>
+                    <td th:case="8" style="color: #7fff00">变现成功</td>
+                    <td th:case="9" style="color: #e47214">变现失败</td>
                 </th:block>
                 <td th:text="${item.createTime}?${#dates.format(item.createTime,'yyyy-MM-dd HH:mm:ss')}"></td>
                 <td>
@@ -99,7 +99,7 @@
 <script type="text/javascript" th:src="@{/jquery/jquery-3.2.1.min.js}"></script>
 </body>
 <script th:inline="javascript">
-    layui.use('laypage', function () {
+    layui.use(['laypage', 'form', 'laydate'], function () {
         var laypage = layui.laypage;
         //执行一个laypage实例
         laypage.render({
@@ -116,119 +116,26 @@
                 }
             }
         });
-    });
-
-    layui.use('layer', function () {
-        var layer = layui.layer, $ = layui.jquery;
-
-        //删除
-        $(".message_del").bind("click", function () {
-            var id = $(this).attr("data");
-            layer.confirm('确定要删除吗?', {
-                    icon: 3,
-                    skin: 'layui-layer-lan',
-                    closeBtn: 0
-                },
-                function () {
-                    $.get("toDelete.html?id=" + id, function (datas) {
-                        console.log(datas);
-                        var result = JSON.parse(datas);
-                        if (result.code > 0) {
-                            layer.msg(result.msg, {
-                                time: 2000, //3s后自动关闭
-                            });
-                            setTimeout(function () {
-                                location.reload(true);
-                            }, 500);
-                        } else {
-                            layer.msg(result.msg, {
-                                time: 1000, //1s后自动关闭
-                            });
-                            setTimeout(function () {
-                                location.reload(true);
-                            }, 500)
-                        }
-                    })
-                }, function () {
-                });
+        var laydate = layui.laydate;
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#startTime' //指定元素
+            , type: 'datetime'
+            , format: 'yyyy-MM-dd HH:mm:ss' //可任意组合
+            , max: 1
         });
-
-
-        //编辑
-        $(".message_edit").bind("click", function () {
-            var id = $(this).attr("data");
-            console.log(id);
-            //Ajax获取
-            $.post('toEdit.html', {"id": id}, function (data) {
-                layer.open({
-                    type: 1,
-                    title: "编辑消息"
-                    , area: ['900px', '460px']
-                    , shade: 0
-                    , content: data
-                    , yes: function (index, layero) {
-                        layer.close(index);
-                    }
-                });
-            });
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#endTime' //指定元素
+            , type: 'datetime'
+            , format: 'yyyy-MM-dd HH:mm:ss' //可任意组合
+            , max: 1
         });
-
-        //推送
-        $(".message_push").bind("click", function () {
-            var id = $(this).attr("data");
-            layer.confirm('确认推送吗?', {icon: 3, title: '提醒'}, function (index) {
-                //Ajax获取
-                $.post('pushMessage', {id: id}, function (data) {
-                    if (data) {
-                        $("#searchForm").submit();
-                        layer.close(index);
-                    } else {
-                        layer.msg("推送失败请稍后再试");
-                    }
-                });
-            });
-        });
-
-        //新增
-        $("#add").bind("click", function () {
-            $.get('toInsert.html', function (data) {
-                layer.open({
-                    type: 1,
-                    title: "添加消息"
-                    , area: ['680px', '450px']
-                    , shade: 0
-                    , content: data
-                    , yes: function (index, layero) {
-                        layer.close(index);
-                    }
-                });
-            });
-        });
-
-        function form_html(id, title) {
-            $.post('messageAdd.html', {id: id}, function (data) {
-                layer.open({
-                    type: 1,
-                    title: title
-                    , area: ['680px', '450px']
-                    , shade: 0
-                    , content: data
-                    , yes: function (index, layero) {
-                        layer.close(index);
-                    }
-                });
-            });
-        };
-    });
-
-    layui.use('form', function () {
         var form = layui.form; //只有执行了这一步，部分表单元素才会自动修饰成功
-
-        //……
-
         //但是，如果你的HTML是动态生成的，自动渲染就会失效
         //因此你需要在相应的地方，执行下述方法来手动渲染，跟这类似的还有 element.init();
-        // form.render();
+        form.render();
     });
+
 </script>
 </html>

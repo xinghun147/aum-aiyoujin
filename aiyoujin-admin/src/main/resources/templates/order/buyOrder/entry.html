@@ -4,13 +4,13 @@
     <meta charset="utf-8"/>
     <title>买入订单</title>
     <link rel="stylesheet" type="text/css" th:href="@{/layui/css/layui.css}" media="all"/>
-    <!--<link rel="stylesheet" type="text/css" th:href="@{/css/news.css}" media="all"/>-->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/news.css}" media="all"/>
 </head>
 <body class="childrenBody">
 <blockquote class="layui-elem-quote news_search">
     <form id="searchForm" name="searchForm" class="layui-form" action="buyOrderEntry.html">
         <input type="hidden" id="pageNum" name="pageNum" th:value="${page.pageNum}"/>
-        <div class="layui-form-item" style="margin-left: -43px;margin-bottom: 2px;">
+        <div class="layui-form-item" style="margin-left: -20px;margin-bottom: 2px;">
             <label class="layui-form-label">订单编号:</label>
             <div class="layui-input-inline">
                 <input type="text" class="layui-input" name="orderNo" th:value="${orderNo}"/>
@@ -38,12 +38,12 @@
         </div>
     </form>
 </blockquote>
-<div class="layui-form news_list" style="min-width: 1680px;">
+<div class="layui-form news_list" style="min-width: 1680px;text-align-all: center">
     <table class="layui-table">
         <thead>
         <tr>
-            <th>订单编号</th>
-            <th>用户OpenId</th>
+            <th style="width: 180px;">订单编号</th>
+            <th style="width: 272px;">用户OpenId</th>
             <th>用户名称</th>
             <th>产品编号</th>
             <th>产品名称</th>
@@ -63,9 +63,9 @@
                 <td th:text="${item.productName}"></td>
                 <td th:text="${item.buyAmount}"></td>
                 <th:block th:switch="${item.orderStatus}">
-                    <td th:case="0">待支付</td>
-                    <td th:case="1">支付成功</td>
-                    <td th:case="2">支付失败</td>
+                    <td th:case="0" style="color: #e47214">待支付</td>
+                    <td th:case="1" style="color: #006400">支付成功</td>
+                    <td th:case="2" style="color: #ff0000">支付失败</td>
                 </th:block>
                 <td th:text="${item.createTime}?${#dates.format(item.createTime,'yyyy-MM-dd HH:mm:ss')}"></td>
                 <!-- <td>
@@ -87,7 +87,7 @@
 <script type="text/javascript" th:src="@{/jquery/jquery-3.2.1.min.js}"></script>
 </body>
 <script th:inline="javascript">
-    layui.use('laypage', function () {
+    layui.use(['laypage','form'], function () {
         var laypage = layui.laypage;
         //执行一个laypage实例
         laypage.render({
@@ -104,135 +104,31 @@
                 }
             }
         });
-    });
-
-    layui.use('layer', function () {
-        var layer = layui.layer, $ = layui.jquery;
-
-        //删除
-        $(".message_del").bind("click", function () {
-            var id = $(this).attr("data");
-            layer.confirm('确定要删除吗?', {
-                    icon: 3,
-                    skin: 'layui-layer-lan',
-                    closeBtn: 0
-                },
-                function () {
-                    $.get("toDelete.html?id=" + id, function (datas) {
-                        console.log(datas);
-                        var result = JSON.parse(datas);
-                        if (result.code > 0) {
-                            layer.msg(result.msg, {
-                                time: 2000, //3s后自动关闭
-                            });
-                            setTimeout(function () {
-                                location.reload(true);
-                            }, 500);
-                        } else {
-                            layer.msg(result.msg, {
-                                time: 1000, //1s后自动关闭
-                            });
-                            setTimeout(function () {
-                                location.reload(true);
-                            }, 500)
-                        }
-                    })
-                }, function () {
-                });
-        });
-
-
-        //编辑
-        $(".message_edit").bind("click", function () {
-            var id = $(this).attr("data");
-            console.log(id);
-            //Ajax获取
-            $.post('toEdit.html', {"id": id}, function (data) {
-                layer.open({
-                    type: 1,
-                    title: "编辑消息"
-                    , area: ['900px', '460px']
-                    , shade: 0
-                    , content: data
-                    , yes: function (index, layero) {
-                        layer.close(index);
-                    }
-                });
-            });
-        });
-
-        //推送
-        $(".message_push").bind("click", function () {
-            var id = $(this).attr("data");
-            layer.confirm('确认推送吗?', {icon: 3, title: '提醒'}, function (index) {
-                //Ajax获取
-                $.post('pushMessage', {id: id}, function (data) {
-                    if (data) {
-                        $("#searchForm").submit();
-                        layer.close(index);
-                    } else {
-                        layer.msg("推送失败请稍后再试");
-                    }
-                });
-            });
-        });
-
-        //新增
-        $("#add").bind("click", function () {
-            $.get('toInsert.html', function (data) {
-                layer.open({
-                    type: 1,
-                    title: "添加消息"
-                    , area: ['680px', '450px']
-                    , shade: 0
-                    , content: data
-                    , yes: function (index, layero) {
-                        layer.close(index);
-                    }
-                });
-            });
-        });
-
-        function form_html(id, title) {
-            $.post('messageAdd.html', {id: id}, function (data) {
-                layer.open({
-                    type: 1,
-                    title: title
-                    , area: ['680px', '450px']
-                    , shade: 0
-                    , content: data
-                    , yes: function (index, layero) {
-                        layer.close(index);
-                    }
-                });
-            });
-        };
-    });
-    
-    layui.use('laydate', function(){
-  	  var laydate = layui.laydate;
-  	  //执行一个laydate实例
-  	  laydate.render({
-  	    elem: '#startTime' //指定元素
-  	    ,type:'datetime'
-  	    ,format: 'yyyy-MM-dd HH:mm:ss' //可任意组合
-  	  });
-  	  //执行一个laydate实例
-  	  laydate.render({
-  	    elem: '#endTime' //指定元素
-  	    ,type:'datetime'
-  	    ,format: 'yyyy-MM-dd HH:mm:ss' //可任意组合
-  	  });
-  	});
-    
-    layui.use('form', function () {
         var form = layui.form; //只有执行了这一步，部分表单元素才会自动修饰成功
 
         //……
 
         //但是，如果你的HTML是动态生成的，自动渲染就会失效
         //因此你需要在相应的地方，执行下述方法来手动渲染，跟这类似的还有 element.init();
-        // form.render();
+        form.render();
+    });
+
+    layui.use('laydate', function () {
+        var laydate = layui.laydate;
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#startTime' //指定元素
+            , type: 'datetime'
+            , format: 'yyyy-MM-dd HH:mm:ss' //可任意组合
+            , max: 1
+        });
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#endTime' //指定元素
+            , type: 'datetime'
+            , format: 'yyyy-MM-dd HH:mm:ss' //可任意组合
+            , max: 1
+        });
     });
 </script>
 </html>
