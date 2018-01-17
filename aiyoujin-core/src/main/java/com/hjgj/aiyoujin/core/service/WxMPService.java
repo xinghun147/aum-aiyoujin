@@ -26,6 +26,7 @@ public class WxMPService {
 
     /**
      * TODO 付款金额单位是分,必须由元转换为分(且为整数)
+     *
      * @param openId
      * @param nonceStr
      * @param orderNo
@@ -54,15 +55,15 @@ public class WxMPService {
         TransfersResult transfersResult = PayMchAPI.mmpaymkttransfersPromotionTransfers(transfers, WXProperties.weixinApiKey);
 
         if (null != transfersResult && "SUCCESS".equals(transfersResult.getReturn_code()) && "SUCCESS".equals(transfersResult.getResult_code())) {
-            hashMap.put("code","0");
-            hashMap.put("msg",transfersResult.getReturn_msg());
-            hashMap.put("wxpayOrderNo",transfersResult.getPayment_no());
-            hashMap.put("wxpayTime",transfersResult.getPayment_time());
+            hashMap.put("code", "0");
+            hashMap.put("msg", transfersResult.getReturn_msg());
+            hashMap.put("wxpayOrderNo", transfersResult.getPayment_no());
+            hashMap.put("wxpayTime", transfersResult.getPayment_time());
 
             logger.info("打款成功");
         } else {
-            hashMap.put("code","1");
-            hashMap.put("msg",transfersResult.getReturn_msg());
+            hashMap.put("code", "1");
+            hashMap.put("msg", transfersResult.getReturn_msg());
             logger.error("打款失败");
         }
         //responseStr = JSON.toJSONString(hashMap);

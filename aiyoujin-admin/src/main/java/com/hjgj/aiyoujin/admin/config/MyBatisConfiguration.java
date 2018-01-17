@@ -1,7 +1,5 @@
 package com.hjgj.aiyoujin.admin.config;
 
-import javax.sql.DataSource;
-
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.annotation.MapperScan;
@@ -12,19 +10,21 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import javax.sql.DataSource;
+
 @Configuration
 @MapperScan({"com.hjgj.aiyoujin.core.dao"})
 public class MyBatisConfiguration {
-	
-	@Autowired
-	private DataSource dataSource;
-	
-	@Bean
+
+    @Autowired
+    private DataSource dataSource;
+
+    @Bean
     public PlatformTransactionManager txManager() {
         return new DataSourceTransactionManager(this.dataSource);
     }
-	
-	@Bean
+
+    @Bean
     public SqlSessionTemplate sqlSessionTemplateBean() throws Exception {
         SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
         sqlSessionFactoryBean.setDataSource(this.dataSource);
@@ -33,5 +33,5 @@ public class MyBatisConfiguration {
         sqlSessionFactoryBean.setConfigLocation(resolver.getResource("classpath:com/mybatis-config.xml"));
         return new SqlSessionTemplate(sqlSessionFactoryBean.getObject());
     }
-	
+
 }

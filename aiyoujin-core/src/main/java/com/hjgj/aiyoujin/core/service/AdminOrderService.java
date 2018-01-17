@@ -147,4 +147,9 @@ public class AdminOrderService {
         List<Order> ordersList = orderMapper.selectByExample(example);
         return ordersList;
     }
+
+    public int updateOrderbyCondition(Order order){
+        int update = orderMapper.updateByPrimaryKeySelective(order);
+        return update;
+    }
 }

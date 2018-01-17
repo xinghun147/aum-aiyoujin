@@ -17,6 +17,7 @@ public class MessageTokenService {
 
     /**
      * 获取最新的Token
+     *
      * @param beforeTime
      * @param nowTime
      * @return
@@ -36,6 +37,7 @@ public class MessageTokenService {
 
     /**
      * 新增AccessToken
+     *
      * @param messageToken
      */
     public int insertLatestToken(MessageToken messageToken) {
@@ -45,6 +47,7 @@ public class MessageTokenService {
 
     /**
      * 获取AccessToken
+     *
      * @param id
      * @return
      */

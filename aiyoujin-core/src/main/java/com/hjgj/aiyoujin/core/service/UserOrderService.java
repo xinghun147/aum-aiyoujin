@@ -1,20 +1,5 @@
 package com.hjgj.aiyoujin.core.service;
 
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.lang3.StringUtils;
-import org.apache.ibatis.session.RowBounds;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.hjgj.aiyoujin.core.common.Constants;
 import com.hjgj.aiyoujin.core.common.OrderStatusEnum;
 import com.hjgj.aiyoujin.core.common.exception.BusinessException;
@@ -32,6 +17,20 @@ import com.hjgj.aiyoujin.core.model.User;
 import com.hjgj.aiyoujin.core.model.vo.OrderWebVo;
 import com.hjgj.aiyoujin.core.model.vo.Page;
 import com.hjgj.aiyoujin.core.model.vo.ProductVo;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.session.RowBounds;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class UserOrderService {
@@ -40,7 +39,7 @@ public class UserOrderService {
 
     @Autowired
     private UserOrderMapper userOrderMapper;
-    
+
     @Autowired
     private OrderMapper orderMapper;
 
@@ -49,59 +48,57 @@ public class UserOrderService {
 
     @Autowired
     private OrderLogMapper orderLogMapper;
-    
+
     @Autowired
     private OrderMessageMapper orderMessageMapper;
-    
+
     @Autowired
     private ProductService productService;
-    
+
     @Autowired
     private OrderMessageService orderMessageService;
-    
+
     @Autowired
     private WxMPService wxMPService;
 
-    
-    
+
     @Transactional
     public int createOrder(Order order, OrderLog orderLog, OrderMessage orderMessage) {
         int count = userOrderMapper.insert(order);
-        if(count > 0){
-        	orderLogMapper.insert(orderLog);
-        	orderMessageMapper.insert(orderMessage);
-        	//扣减库存
-        	try {
-				productService.updateQuantity(order.getProductId(),-1);
-			} catch (BusinessException e) {
-				logger.error("创建订单扣减库存异常", e.getMsg());
-			}
+        if (count > 0) {
+            orderLogMapper.insert(orderLog);
+            orderMessageMapper.insert(orderMessage);
+            //扣减库存
+            try {
+                productService.updateQuantity(order.getProductId(), -1);
+            } catch (BusinessException e) {
+                logger.error("创建订单扣减库存异常", e.getMsg());
+            }
         }
         return count;
     }
-    
+
     /**
-     * 
-     * @Title:        updateStauts 
-     * @Description:  更新订单状态
-     * @param:        @param orderId
-     * @param:        @param orderStatus
-     * @param:        @return    
-     * @return:       int    
-     * @throws 			
-     * @author        ailiming@gold32.com
-     * @Date          2018年1月16日 上午11:55:59
+     * @throws
+     * @Title: updateStauts
+     * @Description: 更新订单状态
+     * @param: @param orderId
+     * @param: @param orderStatus
+     * @param: @return
+     * @return: int
+     * @author ailiming@gold32.com
+     * @Date 2018年1月16日 上午11:55:59
      */
-    public int updateOrderStauts(String orderId,Integer orderStatus) {
-    	if(StringUtils.isBlank(orderId) || orderStatus == null){
-    		logger.error("更新订单状态参数不能问空！");
-    		return 0;
-    	}
+    public int updateOrderStauts(String orderId, Integer orderStatus) {
+        if (StringUtils.isBlank(orderId) || orderStatus == null) {
+            logger.error("更新订单状态参数不能问空！");
+            return 0;
+        }
         Order order = new Order();
         order.setId(orderId);
         order.setStatus(orderStatus);
         order.setUpdateTime(new Date());
-        return 	orderMapper.updateByPrimaryKeySelective(order);
+        return orderMapper.updateByPrimaryKeySelective(order);
     }
 
     /**
@@ -213,106 +210,106 @@ public class UserOrderService {
     public Order getOrderById(String orderId) {
         return userOrderMapper.selectByPrimaryKey(orderId);
     }
-    
-    
-    public OrderWebVo queryOrderDetail(String orderId) throws Exception{
-    	Order order = userOrderMapper.selectByPrimaryKey(orderId);
-    	ProductVo product = productService.queryGoodsDetail(order.getProductId());
-    	OrderWebVo orderVo = new OrderWebVo();
-    	if(StringUtils.isNotBlank(order.getSourceOrderId())){
-    		Order orderFrom = userOrderMapper.selectByPrimaryKey(order.getSourceOrderId());
-    		User userFrom  = userService.getUserByUserId(orderFrom.getUserId());
-    		orderVo.setFromNickName(userFrom.getNickname());
-    		orderVo.setFromAvatar(userFrom.getAvatar());
-    	}
-    	orderVo.setSellAmount(order.getSellAmount());
-    	orderVo.setProductName(product.getName());
-    	orderVo.setProductId(order.getProductId());
-    	orderVo.setLargePictures(product.getLargePictures());
-    	orderVo.setOrderStatus(OrderStatusEnum.switchOrderStateName(order.getStatus()));
-    	orderVo.setOrderId(order.getId());
-    	orderVo.setUserId(order.getUserId());
-    	OrderMessage om = orderMessageService.queryMessage(order.getId());
-    	if(om != null){
-    		orderVo.setMessage(om.getContent());
-    		orderVo.setVideoUrl(om.getVideoUrl());
-    		orderVo.setImageUrl(om.getImageUrl());
-    	}
-    	return orderVo;
+
+
+    public OrderWebVo queryOrderDetail(String orderId) throws Exception {
+        Order order = userOrderMapper.selectByPrimaryKey(orderId);
+        ProductVo product = productService.queryGoodsDetail(order.getProductId());
+        OrderWebVo orderVo = new OrderWebVo();
+        if (StringUtils.isNotBlank(order.getSourceOrderId())) {
+            Order orderFrom = userOrderMapper.selectByPrimaryKey(order.getSourceOrderId());
+            User userFrom = userService.getUserByUserId(orderFrom.getUserId());
+            orderVo.setFromNickName(userFrom.getNickname());
+            orderVo.setFromAvatar(userFrom.getAvatar());
+        }
+        orderVo.setSellAmount(order.getSellAmount());
+        orderVo.setProductName(product.getName());
+        orderVo.setProductId(order.getProductId());
+        orderVo.setLargePictures(product.getLargePictures());
+        orderVo.setOrderStatus(OrderStatusEnum.switchOrderStateName(order.getStatus()));
+        orderVo.setOrderId(order.getId());
+        orderVo.setUserId(order.getUserId());
+        OrderMessage om = orderMessageService.queryMessage(order.getId());
+        if (om != null) {
+            orderVo.setMessage(om.getContent());
+            orderVo.setVideoUrl(om.getVideoUrl());
+            orderVo.setImageUrl(om.getImageUrl());
+        }
+        return orderVo;
     }
 
-    public int insertOrder(Order order){
+    public int insertOrder(Order order) {
         int fromOrderResult = userOrderMapper.insert(order);
         return fromOrderResult;
     }
-    
-    
+
+
     @Transactional
-    public int receiveOrder(Order order) throws Exception{
-    	String orderNo = CommonUtils.generateOrderNo("TF");
-    	order.setId(UUIDGenerator.generate());
-    	order.setCreateTime(new Date());
-    	order.setDeleted(Constants.DelFlag.NO.ordinal());
-    	order.setCode(orderNo);
-    	//添加新订单
-       int count = userOrderMapper.insert(order);
-        if(count > 0){
-        	//更新订单状态为  领取成功
-        	this.updateOrderStauts(order.getSourceOrderId(),OrderStatusEnum.ORDER_STATUS_SEND_SUCCESS.getCode());
+    public int receiveOrder(Order order) throws Exception {
+        String orderNo = CommonUtils.generateOrderNo("TF");
+        order.setId(UUIDGenerator.generate());
+        order.setCreateTime(new Date());
+        order.setDeleted(Constants.DelFlag.NO.ordinal());
+        order.setCode(orderNo);
+        //添加新订单
+        int count = userOrderMapper.insert(order);
+        if (count > 0) {
+            //更新订单状态为  领取成功
+            this.updateOrderStauts(order.getSourceOrderId(), OrderStatusEnum.ORDER_STATUS_SEND_SUCCESS.getCode());
         }
-       return count;
+        return count;
     }
-    
+
     /**
-     * 
-     * @Title:        giftToCash 
-     * @Description:  f
-     * @param:        @param order
-     * @param:        @return
-     * @param:        @throws Exception    
-     * @return:       int    
-     * @throws 			
-     * @author        ailiming@gold32.com
-     * @Date          2018年1月16日 下午4:54:30
+     * @throws
+     * @Title: giftToCash
+     * @Description: f
+     * @param: @param order
+     * @param: @return
+     * @param: @throws Exception
+     * @return: int
+     * @author ailiming@gold32.com
+     * @Date 2018年1月16日 下午4:54:30
      */
     @Transactional
-    public Map giftToCash(Order order,String openId) throws Exception{
-    	Map map = null;;
+    public Map giftToCash(Order order, String openId) throws Exception {
+        Map map = null;
+        ;
         OrderLog log = new OrderLog();
-    	try {
-    		//变现单位为：分
-    		DecimalFormat df = new DecimalFormat("#");
+        try {
+            //变现单位为：分
+            DecimalFormat df = new DecimalFormat("#");
             String money = df.format(order.getSellAmount().multiply(new BigDecimal(100)));
-    		 map = wxMPService.promotionTransfers(openId,UUIDGenerator.generate(),order.getCode(),money,"商户向用户微信打款");
-    		if(map.get("code").equals("0")){
-    			//1、修改订单状态为  ：已变现
-    			this.updateOrderStauts(order.getId(), OrderStatusEnum.ORDER_STATUS_CASH_SUCCESS.getCode());
-    			log.setStatus(1);
-    		}else{
-    			this.updateOrderStauts(order.getId(), OrderStatusEnum.ORDER_STATUS_CASH_FAIL.getCode());
-    			log.setStatus(2);
-    		}
-		} finally {
-	        if(map != null){
-	        	log.setCreateTime(new Date());
-	        	log.setId(UUIDGenerator.generate());
-	        	log.setOrderId(order.getId());
-	        	log.setPayId(map.get("wxpayOrderNo").toString());
-	        	log.setPayResultMsg(map.get("msg").toString());
-	        	log.setPayType(0);
-	        	log.setReqTime(new Date());
-	        	log.setRespTime(new Date());
-	        	log.setCreateBy("System");
-	        	orderLogMapper.insertSelective(log);
-	        }
-		}
-    	return map;
-   
+            map = wxMPService.promotionTransfers(openId, UUIDGenerator.generate(), order.getCode(), money, "商户向用户微信打款");
+            if (map.get("code").equals("0")) {
+                //1、修改订单状态为  ：已变现
+                this.updateOrderStauts(order.getId(), OrderStatusEnum.ORDER_STATUS_CASH_SUCCESS.getCode());
+                log.setStatus(1);
+            } else {
+                this.updateOrderStauts(order.getId(), OrderStatusEnum.ORDER_STATUS_CASH_FAIL.getCode());
+                log.setStatus(2);
+            }
+        } finally {
+            if (map != null) {
+                log.setCreateTime(new Date());
+                log.setId(UUIDGenerator.generate());
+                log.setOrderId(order.getId());
+                log.setPayId(map.get("wxpayOrderNo").toString());
+                log.setPayResultMsg(map.get("msg").toString());
+                log.setPayType(0);
+                log.setReqTime(new Date());
+                log.setRespTime(new Date());
+                log.setCreateBy("System");
+                orderLogMapper.insertSelective(log);
+            }
+        }
+        return map;
+
     }
-    
-    public void takeDelivery(Order order){
-    	order.setStatus(OrderStatusEnum.ORDER_STATUS_PICKPROCESSING.getCode());
-    	order.setUpdateTime(new Date());
-    	orderMapper.updateByPrimaryKey(order);
+
+    public void takeDelivery(Order order) {
+        order.setStatus(OrderStatusEnum.ORDER_STATUS_PICKPROCESSING.getCode());
+        order.setUpdateTime(new Date());
+        orderMapper.updateByPrimaryKey(order);
     }
 }
