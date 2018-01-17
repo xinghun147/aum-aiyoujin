@@ -5,11 +5,14 @@ import com.hjgj.aiyoujin.core.dao.OrderMessageMapper;
 import com.hjgj.aiyoujin.core.model.OrderMessage;
 import com.hjgj.aiyoujin.core.model.OrderMessageExample;
 import com.hjgj.aiyoujin.core.model.OrderMessageExample.Criteria;
+import com.hjgj.aiyoujin.core.model.vo.Page;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 
 @Service
@@ -35,5 +38,26 @@ public class OrderMessageService extends BaseService {
         }
         return orderMessageMapper.selectOneByExample(example);
     }
-
+	
+	public Page<OrderMessage> queryPageProductMessage(OrderMessage orderMessage,Integer pageNum, Integer pageSize){
+		Page<OrderMessage> page = new Page<OrderMessage>(pageNum,pageSize,true);
+		OrderMessageExample example = new OrderMessageExample();
+		Criteria criteria = example.createCriteria();
+		if(StringUtils.isNotBlank(orderMessage.getOrderId())){
+			criteria.andOrderIdEqualTo(orderMessage.getOrderId());
+		}
+		example.setOrderByClause("create_time desc");
+		int total = orderMessageMapper.countByExample(example);
+		if(total > 0){
+			example.setLimitOffset(page.getStartRow());
+			example.setLimitRows(pageSize);
+			List<OrderMessage>  list = orderMessageMapper.selectByExample(example);
+			page.setTotal(total);
+			page.setList(list);
+		}
+		return page;
+	}
+	public OrderMessage findProduct(String id){
+		return orderMessageMapper.selectByPrimaryKey(id);
+	}
 }
