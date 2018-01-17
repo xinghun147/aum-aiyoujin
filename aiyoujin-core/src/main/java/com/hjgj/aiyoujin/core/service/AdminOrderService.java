@@ -1,13 +1,11 @@
 package com.hjgj.aiyoujin.core.service;
 
-import com.hjgj.aiyoujin.core.common.Constants;
-import com.hjgj.aiyoujin.core.common.utils.UUIDGenerator;
 import com.hjgj.aiyoujin.core.dao.OrderMapper;
 import com.hjgj.aiyoujin.core.model.Order;
+import com.hjgj.aiyoujin.core.model.OrderExample;
 import com.hjgj.aiyoujin.core.model.vo.OrderRequestVo;
 import com.hjgj.aiyoujin.core.model.vo.OrderVO;
 import com.hjgj.aiyoujin.core.model.vo.Page;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -49,6 +46,7 @@ public class AdminOrderService {
 
     /**
      * TODO 后台系统 买入订单主页
+     *
      * @param orderRequestVo
      * @param pageNum
      * @param pageSize
@@ -67,7 +65,8 @@ public class AdminOrderService {
     }
 
     /**
-     *  TODO 后台系统 变现订单主页
+     * TODO 后台系统 变现订单主页
+     *
      * @param orderRequestVo
      * @param pageNum
      * @param pageSize
@@ -86,7 +85,8 @@ public class AdminOrderService {
     }
 
     /**
-     *  TODO 后台系统 转送订单主页
+     * TODO 后台系统 转送订单主页
+     *
      * @param orderRequestVo
      * @param pageNum
      * @param pageSize
@@ -105,7 +105,8 @@ public class AdminOrderService {
     }
 
     /**
-     *  TODO 后台系统 提货订单主页
+     * TODO 后台系统 提货订单主页
+     *
      * @param orderRequestVo
      * @param pageNum
      * @param pageSize
@@ -122,16 +123,28 @@ public class AdminOrderService {
         }
         return page;
     }
-    
+
     /**
      * 添加快递信息到订单
-     * @param requestVo
+     *
+     * @param orderVO
      */
     @Transactional
-	public void addExpressToOrder(OrderVO orderVO) {
-		if(StringUtils.isBlank(orderVO.getOrderNo())){
-			orderVO.setUpdateTime(new Date());
-			orderMapper.addExpressToOrder(orderVO);
-		}
-	}
+    public void addExpressToOrder(OrderVO orderVO) {
+        if (StringUtils.isBlank(orderVO.getOrderNo())) {
+            orderVO.setUpdateTime(new Date());
+            orderMapper.addExpressToOrder(orderVO);
+        }
+    }
+
+    /**
+     * 获取未处理的订单
+     */
+    public List<Order> getUnresolvedOrder(List<Integer> statusList,Date startTime,Date endTime) {
+        OrderExample example = new OrderExample();
+        OrderExample.Criteria criteria = example.createCriteria();
+        criteria.andStatusIn(statusList).andDeletedEqualTo(0).andCreateTimeGreaterThanOrEqualTo(startTime).andCreateTimeLessThanOrEqualTo(endTime);
+        List<Order> ordersList = orderMapper.selectByExample(example);
+        return ordersList;
+    }
 }

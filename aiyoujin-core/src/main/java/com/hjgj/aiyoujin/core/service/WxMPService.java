@@ -1,6 +1,5 @@
 package com.hjgj.aiyoujin.core.service;
 
-import com.alibaba.fastjson.JSON;
 import com.hjgj.aiyoujin.core.common.WXProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,7 +47,7 @@ public class WxMPService {
         transfers.setNonce_str(nonceStr);
         transfers.setOpenid(openId);
         transfers.setPartner_trade_no(orderNo);
-        transfers.setSign_type("MD5");
+        //transfers.setSign_type("MD5");
         transfers.setSpbill_create_ip(WXProperties.WeiXinSpbillCreateIp);
         InputStream resource = getClass().getClassLoader().getResourceAsStream("config/apiclient_cert.p12");
         LocalHttpClient.initMchKeyStore(WXProperties.WeiXinMchId, resource);
