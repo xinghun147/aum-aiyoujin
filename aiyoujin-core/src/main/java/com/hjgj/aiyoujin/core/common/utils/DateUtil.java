@@ -194,8 +194,35 @@ public class DateUtil {
         String dateStr = sdf.format(date);
         return dateStr;
     }
-    
-    public static void main(String[] args) {
+
+	/**
+	 * 给指定日期加几个小时
+	 * @param date 指定的日期
+	 * @param numHours 需要往后加的小时数
+	 * @return 加好后的日期
+	 */
+	public static Date addHoursToDate(Date date, int numHours) {
+		Calendar c = Calendar.getInstance();
+		c.setTime(date);
+		c.add(Calendar.HOUR_OF_DAY, numHours);
+		return c.getTime();
+	}
+
+	/**
+	 * 给指定日期加几天
+	 * @param date 指定的日期
+	 * @param numDays 需要往后加的天数
+	 * @return 加好后的日期
+	 */
+	public static Date addDaysToDate(Date date, int numDays) {
+		Calendar c = Calendar.getInstance();
+		c.setTime(date);
+		c.add(Calendar.DATE, numDays);
+		return c.getTime();
+	}
+
+
+	public static void main(String[] args) {
     	System.out.println(getDays());
     	System.out.println(getAfterDayWeek("3"));
     }

@@ -140,7 +140,7 @@ public class AdminOrderService {
     /**
      * 获取未处理的订单
      */
-    public List<Order> getUnresolvedOrder(List<Integer> statusList,Date startTime,Date endTime) {
+    public List<Order> getUnresolvedOrder(List<Integer> statusList, Date startTime, Date endTime) {
         OrderExample example = new OrderExample();
         OrderExample.Criteria criteria = example.createCriteria();
         criteria.andStatusIn(statusList).andDeletedEqualTo(0).andCreateTimeGreaterThanOrEqualTo(startTime).andCreateTimeLessThanOrEqualTo(endTime);
@@ -148,8 +148,17 @@ public class AdminOrderService {
         return ordersList;
     }
 
-    public int updateOrderbyCondition(Order order){
+    public int updateOrderbyCondition(Order order) {
         int update = orderMapper.updateByPrimaryKeySelective(order);
         return update;
+    }
+
+    public List<Order> getUntransferOrder(List<Integer> statusList, Date updateTime) {
+        OrderExample example = new OrderExample();
+        OrderExample.Criteria criteria = example.createCriteria();
+        criteria.andStatusIn(statusList).andDeletedEqualTo(0);
+        criteria.andUpdateTimeGreaterThanOrEqualTo(updateTime);
+        List<Order> ordersList = orderMapper.selectByExample(example);
+        return ordersList;
     }
 }

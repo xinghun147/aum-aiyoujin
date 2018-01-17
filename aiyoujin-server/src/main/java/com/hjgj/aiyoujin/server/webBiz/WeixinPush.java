@@ -1,25 +1,23 @@
 package com.hjgj.aiyoujin.server.webBiz;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.LinkedHashMap;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Component;
-
 import com.hjgj.aiyoujin.core.common.utils.UUIDGenerator;
 import com.hjgj.aiyoujin.core.model.MessageToken;
 import com.hjgj.aiyoujin.core.service.MessageTokenService;
 import com.hjgj.aiyoujin.server.config.WeiXinProperty;
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Component;
 import weixin.popular.api.MessageAPI;
 import weixin.popular.api.TokenAPI;
 import weixin.popular.bean.BaseResult;
 import weixin.popular.bean.message.templatemessage.TemplateMessageItem;
 import weixin.popular.bean.message.templatemessage.WxopenTemplateMessage;
 import weixin.popular.bean.token.Token;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.LinkedHashMap;
 
 @Component
 public class WeixinPush {
@@ -32,6 +30,7 @@ public class WeixinPush {
 
     /**
      * 微信支付成功通知
+     *
      * @param prodName
      * @param payMoney
      * @param payTime
@@ -39,19 +38,19 @@ public class WeixinPush {
      * @param openId
      */
     @Async
-    public void payResultNotify(String prodName,String payMoney,Date payTime,String prePayId,String openId) {
+    public void payResultNotify(String prodName, String payMoney, Date payTime, String prePayId, String openId) {
         String weixinToken = null;
-        while (weixinToken == null){
+        while (weixinToken == null) {
             weixinToken = getRightAccessToken();
         }
         // 物品名称
         TemplateMessageItem keyword1 = new TemplateMessageItem();
         keyword1.setValue(prodName);
         keyword1.setColor("#333333");
-        
+
         // 付款金额
         TemplateMessageItem keyword2 = new TemplateMessageItem();
-        keyword2.setValue(payMoney+"元");
+        keyword2.setValue(payMoney + "元");
         keyword2.setColor("#333333");
 
         // 付款时间
@@ -71,10 +70,17 @@ public class WeixinPush {
         wxopenTemplateMessage.setTemplate_id("xeZ-PIsudhp2uxzIng9iD6rIzBCwq7zg093tlpJ3Ev4");
 
         BaseResult baseResult = MessageAPI.messageWxopenTemplateSend(weixinToken, wxopenTemplateMessage);
+        String errcode = baseResult.getErrcode();
+        if (errcode != null && "0".equals(errcode)) {
+
+        }
+
 
     }
+
     /**
      * 微信支付失败通知
+     *
      * @param prodName
      * @param payMoney
      * @param failCause
@@ -83,9 +89,9 @@ public class WeixinPush {
      * @param openId
      */
     @Async
-    public void payResultNotifyFail(String prodName,String payMoney,String failCause,Date payTime,String prePayId,String openId) {
+    public void payResultNotifyFail(String prodName, String payMoney, String failCause, Date payTime, String prePayId, String openId) {
         String weixinToken = null;
-        while (weixinToken == null){
+        while (weixinToken == null) {
             weixinToken = getRightAccessToken();
         }
         // 物品名称
@@ -95,7 +101,7 @@ public class WeixinPush {
 
         // 付款金额
         TemplateMessageItem keyword2 = new TemplateMessageItem();
-        keyword2.setValue(payMoney+"元");
+        keyword2.setValue(payMoney + "元");
         keyword2.setColor("#333333");
 
         // 付款时间
@@ -106,13 +112,13 @@ public class WeixinPush {
         TemplateMessageItem keyword4 = new TemplateMessageItem();
         keyword3.setValue(failCause);
         keyword3.setColor("#333333");
-        
+
         LinkedHashMap<String, TemplateMessageItem> linkedHashMap = new LinkedHashMap<String, TemplateMessageItem>();
         linkedHashMap.put("keyword1", keyword1);
         linkedHashMap.put("keyword2", keyword2);
         linkedHashMap.put("keyword3", keyword3);
         linkedHashMap.put("keyword4", keyword4);
-        
+
         WxopenTemplateMessage wxopenTemplateMessage = new WxopenTemplateMessage();
         wxopenTemplateMessage.setTouser(openId);
         wxopenTemplateMessage.setData(linkedHashMap);
@@ -123,8 +129,10 @@ public class WeixinPush {
         BaseResult baseResult = MessageAPI.messageWxopenTemplateSend(weixinToken, wxopenTemplateMessage);
 
     }
+
     /**
      * 卖出资金到账通知
+     *
      * @param amount
      * @param arrivalType
      * @param arrivalTime
@@ -132,9 +140,9 @@ public class WeixinPush {
      * @param openId
      */
     @Async
-    public void payResultNotifySell(String amount,String arrivalType,Date arrivalTime,String prePayId,String openId) {
+    public void payResultNotifySell(String amount, String arrivalType, Date arrivalTime, String prePayId, String openId) {
         String weixinToken = null;
-        while (weixinToken == null){
+        while (weixinToken == null) {
             weixinToken = getRightAccessToken();
         }
         // 到账金额
@@ -144,19 +152,19 @@ public class WeixinPush {
 
         // 到账方式
         TemplateMessageItem keyword2 = new TemplateMessageItem();
-        keyword2.setValue(arrivalType+"元");
+        keyword2.setValue(arrivalType + "元");
         keyword2.setColor("#333333");
 
         // 到账时间
         TemplateMessageItem keyword3 = new TemplateMessageItem();
         keyword3.setValue(dateToString(arrivalTime));
         keyword3.setColor("#333333");
-        
+
         LinkedHashMap<String, TemplateMessageItem> linkedHashMap = new LinkedHashMap<String, TemplateMessageItem>();
         linkedHashMap.put("keyword1", keyword1);
         linkedHashMap.put("keyword2", keyword2);
         linkedHashMap.put("keyword3", keyword3);
-        
+
         WxopenTemplateMessage wxopenTemplateMessage = new WxopenTemplateMessage();
         wxopenTemplateMessage.setTouser(openId);
         wxopenTemplateMessage.setData(linkedHashMap);
@@ -167,9 +175,10 @@ public class WeixinPush {
         BaseResult baseResult = MessageAPI.messageWxopenTemplateSend(weixinToken, wxopenTemplateMessage);
 
     }
-    
+
     /**
      * 提货通知
+     *
      * @param prodName
      * @param userName
      * @param phoneNumber
@@ -178,9 +187,9 @@ public class WeixinPush {
      * @param openId
      */
     @Async
-    public void giftResultNotifyCarry(String prodName,String userName,String phoneNumber,String address,String prePayId,String openId) {
+    public void giftResultNotifyCarry(String prodName, String userName, String phoneNumber, String address, String prePayId, String openId) {
         String weixinToken = null;
-        while (weixinToken == null){
+        while (weixinToken == null) {
             weixinToken = getRightAccessToken();
         }
         // 物品名称
@@ -197,18 +206,18 @@ public class WeixinPush {
         TemplateMessageItem keyword3 = new TemplateMessageItem();
         keyword3.setValue(phoneNumber);
         keyword3.setColor("#333333");
-        
+
         //收货地址
         TemplateMessageItem keyword4 = new TemplateMessageItem();
         keyword3.setValue(address);
         keyword3.setColor("#333333");
-        
+
         LinkedHashMap<String, TemplateMessageItem> linkedHashMap = new LinkedHashMap<String, TemplateMessageItem>();
         linkedHashMap.put("keyword1", keyword1);
         linkedHashMap.put("keyword2", keyword2);
         linkedHashMap.put("keyword3", keyword3);
         linkedHashMap.put("keyword4", keyword4);
-        
+
         WxopenTemplateMessage wxopenTemplateMessage = new WxopenTemplateMessage();
         wxopenTemplateMessage.setTouser(openId);
         wxopenTemplateMessage.setData(linkedHashMap);
@@ -219,12 +228,12 @@ public class WeixinPush {
         BaseResult baseResult = MessageAPI.messageWxopenTemplateSend(weixinToken, wxopenTemplateMessage);
 
     }
-   
-   
+
+
     @Async
-    public void giftResultNotifyFail(String prodName,String number,Date receiveTime,String userName,String prePayId,String openId) {
+    public void giftResultNotifyFail(String prodName, String number, Date receiveTime, String userName, String prePayId, String openId) {
         String weixinToken = null;
-        while (weixinToken == null){
+        while (weixinToken == null) {
             weixinToken = getRightAccessToken();
         }
         // 物品名称
@@ -234,25 +243,25 @@ public class WeixinPush {
 
         // 礼品数量
         TemplateMessageItem keyword2 = new TemplateMessageItem();
-        keyword2.setValue(number+"份");
+        keyword2.setValue(number + "份");
         keyword2.setColor("#333333");
 
         // 领取时间
         TemplateMessageItem keyword3 = new TemplateMessageItem();
         keyword3.setValue(dateToString(receiveTime));
         keyword3.setColor("#333333");
-        
+
         //收礼人
         TemplateMessageItem keyword4 = new TemplateMessageItem();
         keyword3.setValue(userName);
         keyword3.setColor("#333333");
-        
+
         LinkedHashMap<String, TemplateMessageItem> linkedHashMap = new LinkedHashMap<String, TemplateMessageItem>();
         linkedHashMap.put("keyword1", keyword1);
         linkedHashMap.put("keyword2", keyword2);
         linkedHashMap.put("keyword3", keyword3);
         linkedHashMap.put("keyword4", keyword4);
-        
+
         WxopenTemplateMessage wxopenTemplateMessage = new WxopenTemplateMessage();
         wxopenTemplateMessage.setTouser(openId);
         wxopenTemplateMessage.setData(linkedHashMap);
@@ -263,21 +272,23 @@ public class WeixinPush {
         BaseResult baseResult = MessageAPI.messageWxopenTemplateSend(weixinToken, wxopenTemplateMessage);
 
     }
-    
-    private String  dateToString(Date date){
-    	SimpleDateFormat sdf=new SimpleDateFormat("yyyy年MM月dd日");  
-    	String str=sdf.format(date);
-    	return str;
+
+    private String dateToString(Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日");
+        String str = sdf.format(date);
+        return str;
     }
-    public void test(){
+
+    public void test() {
 
     }
 
     /**
      * 获取可用的AccessToken
+     *
      * @return
      */
-    private String getRightAccessToken(){
+    private String getRightAccessToken() {
         Date nowTime = new Date();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(nowTime);
@@ -305,7 +316,7 @@ public class WeixinPush {
             messageToken.setRemark("OK");
             messageToken.setTokenType(3); // 3 小程序 1 普通
             int insertLatestToken = messageTokenService.insertLatestToken(messageToken);
-            if(insertLatestToken>0){
+            if (insertLatestToken > 0) {
                 weixinToken = access_token;
             }
         }
