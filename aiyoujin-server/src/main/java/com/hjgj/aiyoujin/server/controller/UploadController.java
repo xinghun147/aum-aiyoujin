@@ -55,7 +55,7 @@ public class UploadController  {
 	public ResultModel upload(HttpServletRequest request,HttpServletResponse response) throws IOException {
 		FtpUtils ftpUtils = new FtpUtils();
 	    MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;  
-	    MultipartFile file = multipartRequest.getFile("fileName");  
+	    MultipartFile file = multipartRequest.getFile("file");  
 	    logger.info("上传文件开始,fileName:{}",file.getOriginalFilename());
 //		if(StringUtils.isEmpty(FileTypeUtil.getFileTypeByStream(file.getBytes()))){//校验图片是否合法
 //		return ResultModel.error(ResultStatus.UPLOAD_NOT_IMAGE);
@@ -75,61 +75,6 @@ public class UploadController  {
 		}finally {
 			ftpUtils.closeConnect();
 		}
-//		
-//		 request.setCharacterEncoding("utf-8");  //设置编码
-//		    //获得磁盘文件条目工厂
-//		    DiskFileItemFactory factory = new DiskFileItemFactory();
-//		    ServletFileUpload upload = new ServletFileUpload(factory);
-//		    String fileId = null;
-//		    String json = "{\"success\":false,\"fileName\":\"" + fileId + "\"}";
-//		    String pathUrl = FSDefaultMgr.E_DEFAULT.getDefaultUploadPathUrl();//获取图片服务器路径
-//		    InputStream inStream = null;
-//		    try {
-//		        //可以上传多个文件
-//		        List<FileItem> list = upload.parseRequest((RequestContext) request);
-//		        for(FileItem item : list){
-//		        	item.
-//		            //获取表单的属性名字
-//		            String name = item.getFieldName();
-//		            //如果获取的 表单信息是普通的 文本 信息
-//		            if(item.isFormField()){
-//		                //获取用户具体输入的字符串 ，名字起得挺好，因为表单提交过来的是 字符串类型的
-//		                String value = item.getString() ;
-//		                request.setAttribute(name, value);
-//		            }else {
-//		                //获取路径名
-//		                String filename = item.getName();
-//		                request.setAttribute(name, filename);
-//		                inStream = item.getInputStream() ;
-//		            }
-//		        }
-//		        String fileType = StringUtils.substringAfterLast(file.getOriginalFilename(), ".");
-//				String fullPath = "/aiyoujin/"+generateFileName(fileType);
-//				String fileName = StringUtils.substringAfterLast(fullPath, "/");
-//				String filePath= StringUtils.substringBeforeLast(fullPath, "/");
-//				
-//		        ftpUtils.connectServer(ftpIp, ftpPort, ftpUser, ftpPass, "");
-//				ftpUtils.createDir(filePath);
-//				ftpUtils.upload(file.getInputStream(), fileName);
-//		        ftpUtils.upload(inStream, remoteFile);
-//		        
-//		        ByteArrayOutputStream swapStream = new ByteArrayOutputStream();
-//		        byte[] buff = new byte[100];
-//		        int rc = 0;
-//		        while ((rc = inStream.read(buff, 0, 100)) > 0) {
-//		            swapStream.write(buff, 0, rc);
-//		        }
-//		        byte[] bytes = swapStream.toByteArray();
-//		        fileId = FastDFSClient.uploadFile(bytes, "20161545454.png", null);
-//		        if (fileId != null) {
-//		            json = "{\"success\":true,\"pathUrl\":\"" + pathUrl + "\",\"fileName\":\"" + fileId + "\"}";
-//		        }
-//		        response.getWriter().write(json);
-//		        response.getWriter().flush();
-//		        response.getWriter().close();
-//		    }catch (Exception e) {
-//		        e.printStackTrace();
-//		    }
 	}
 	
 	public String generateFileName(String fileType) {
