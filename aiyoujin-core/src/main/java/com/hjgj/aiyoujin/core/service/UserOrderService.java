@@ -140,6 +140,19 @@ public class UserOrderService {
             return null;
         }
     }
+    
+    public Order getOrderBySourceOrderId(String orderId,String userId) {
+        OrderExample example = new OrderExample();
+        OrderExample.Criteria criteria = example.createCriteria();
+        criteria.andSourceOrderIdEqualTo(orderId);
+        criteria.andUserIdEqualTo(userId);
+        List<Order> orders = userOrderMapper.selectByExample(example);
+        if (orders != null && orders.size() > 0) {
+            return orders.get(0);
+        } else {
+            return null;
+        }
+    }
 
     /**
      * 更新订单表,订单记录表
@@ -218,13 +231,14 @@ public class UserOrderService {
         ProductVo product = productService.queryGoodsDetail(order.getProductId());
         OrderWebVo orderVo = new OrderWebVo();
         String userId = "";
+        
         if (StringUtils.isNotBlank(order.getSourceOrderId())) {
             Order orderFrom = userOrderMapper.selectByPrimaryKey(order.getSourceOrderId());
             User userFrom = userService.getUserByUserId(orderFrom.getUserId());
-            orderVo.setFromNickName(userFrom.getNickname());
-            orderVo.setFromAvatar(userFrom.getAvatar());
             userId = userFrom.getId();
+            orderId = orderFrom.getId();
         }
+        
         orderVo.setSellAmount(order.getSellAmount());
         orderVo.setProductName(product.getName());
         orderVo.setProductId(order.getProductId());
@@ -237,7 +251,10 @@ public class UserOrderService {
         if(order.getStatus() == 3||order.getStatus() == 4||order.getStatus() == 5){//状态为：送出待收、送出成功、已退回的状态，查询使用订单userId查询留言
         	  userId = order.getUserId();
         }
-    	OrderMessage om = orderMessageService.queryMessage(order.getId(),userId);
+        User user = userService.getUserByUserId(userId);
+        orderVo.setFromNickName(user.getNickname());
+        orderVo.setFromAvatar(user.getAvatar());
+    	OrderMessage om = orderMessageService.queryMessage(orderId,userId);
         if (om != null) {
             orderVo.setMessage(om.getContent());
             orderVo.setVideoUrl(om.getVideoUrl());

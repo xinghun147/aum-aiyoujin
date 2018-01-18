@@ -155,8 +155,14 @@ public class OrderApiController {
     public ResultModel queryOrderDetail(@ApiParam(value = "订单ID", required = true) @RequestParam String orderId,
     									@ApiParam(value = "用户ID", required = true) @RequestParam String userId) {
         Assert.notNull(orderId, "orderId 不可为空");
-        Assert.notNull(orderId, "userId 不可为空");
+        Assert.notNull(userId, "userId 不可为空");
 		try {
+			
+		  	//查询订单是否已被送出
+			Order  o = userOrderService.getOrderBySourceOrderId(orderId,userId);
+			if(o != null){
+				orderId=o.getId();
+			}
 			OrderWebVo order = userOrderService.queryOrderDetail(orderId);
 			return ResultModel.ok(order);
 		} catch (Exception e) {
@@ -209,6 +215,24 @@ public class OrderApiController {
 			}
 			order.setAddress(address);
 			userOrderService.takeDelivery(order);
+			return ResultModel.ok();
+		} catch (Exception e) {
+			return ResultModel.error(ResultStatus.ORDER_TO_CASH_FAIL);
+		}
+    }
+    
+    
+    @ApiOperation(value = "确认收货")
+    @ResponseBody
+    @RequestMapping(value = "/confirmReceipt", method = RequestMethod.POST)
+    public ResultModel confirmReceipt(@ApiParam(value = "订单ID", required = true) @RequestParam String orderId) {
+        Assert.notNull(orderId, "orderId 不可为空");
+		try {
+			Order order = userOrderService.getOrderById(orderId);
+			if(order == null){
+				return ResultModel.error(ResultStatus.ORDER_NOT_EXIST);
+			}
+			userOrderService.updateOrderStauts(orderId,OrderStatusEnum.ORDER_STATUS_CONFIRM_RECEIPT.getCode());
 			return ResultModel.ok();
 		} catch (Exception e) {
 			return ResultModel.error(ResultStatus.ORDER_TO_CASH_FAIL);

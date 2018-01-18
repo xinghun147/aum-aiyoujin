@@ -29,7 +29,7 @@ public class OrderMessageController extends BaseController{
      * @return
      * @throws Exception
      */
-    @RequestMapping("orderMessage.html")
+    @RequestMapping("/orderMessage.html")
     public ModelAndView queryProduct(ModelMap modelMap , OrderMessage orderMessage, Integer pageNum , Integer pageSize) throws Exception{
         pageNum = pageNum == null ? super.pageNum:pageNum;
         pageSize = pageSize == null ? super.pageSize:pageSize;
@@ -42,7 +42,7 @@ public class OrderMessageController extends BaseController{
     }
 
     
-    @RequestMapping("orderMessageInfo.html")
+    @RequestMapping("/orderMessageInfo.html")
     public ModelAndView orderInfo(String id){
     	ModelAndView mav = getModelAndView();
         try {
