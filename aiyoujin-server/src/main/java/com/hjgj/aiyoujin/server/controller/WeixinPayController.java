@@ -99,7 +99,7 @@ public class WeixinPayController {
         Product product = productService.findProduct(weixin.getProductId());
         String name = product.getName();
 
-        User userByOpenId = userService.getUserByOpenId(weixin.getOpenId());
+        User userBy = userService.getUserByOpenId(weixin.getOpenId());
 
         Date nowDate = new Date();
         Order wxOrder = new Order();
@@ -110,7 +110,7 @@ public class WeixinPayController {
         wxOrder.setProductId(weixin.getProductId());
         wxOrder.setStatus(0);
         wxOrder.setCode(orderNo); // 订单号
-        wxOrder.setUserId(userByOpenId.getId());
+        wxOrder.setUserId(userBy.getId());
         wxOrder.setBuyAmount(product.getBuyPrice());
         wxOrder.setSellAmount(product.getSellPrice());
         // 订单状态：0待支付、1支付成功、2支付失败、3送出待收、4已退回、5送出成功、
@@ -144,6 +144,7 @@ public class WeixinPayController {
         orderMessage.setDeleted(0);
         orderMessage.setImageUrl(imageUrl);
         orderMessage.setVideoUrl(videoUrl);
+        orderMessage.setUserId(userBy.getId());
         if (unifiedOrderRespose != null) {
 
             String prepayId = unifiedOrderRespose.getPrepay_id();

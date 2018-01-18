@@ -21,6 +21,8 @@ public class OrderMessage {
 
     private String videoUrl;
 
+    private String userId;
+
     public String getId() {
         return id;
     }
@@ -91,5 +93,13 @@ public class OrderMessage {
 
     public void setVideoUrl(String videoUrl) {
         this.videoUrl = videoUrl == null ? null : videoUrl.trim();
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId == null ? null : userId.trim();
     }
 }

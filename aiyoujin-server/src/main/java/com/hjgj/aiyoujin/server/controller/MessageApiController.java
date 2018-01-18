@@ -13,6 +13,7 @@ import com.hjgj.aiyoujin.core.model.ProductMessage;
 import com.hjgj.aiyoujin.core.model.vo.Page;
 import com.hjgj.aiyoujin.core.service.OrderMessageService;
 import com.hjgj.aiyoujin.core.service.ProductMessageService;
+import com.hjgj.aiyoujin.core.service.UserOrderService;
 import com.hjgj.aiyoujin.core.vo.OrderMessageVo;
 import com.hjgj.aiyoujin.server.common.ResultModel;
 import com.hjgj.aiyoujin.server.common.ResultStatus;
@@ -36,6 +37,9 @@ public class MessageApiController{
     @Autowired
     private OrderMessageService orderMessageService;
     
+    @Autowired
+    private UserOrderService userOrderService;
+    
     @ApiOperation(value = "查询留言模板")
 	@RequestMapping(value = "queryProductMessage", method = RequestMethod.GET)
 	public ResultModel queryGoodsDetail(String id) {
@@ -56,7 +60,7 @@ public class MessageApiController{
    	@RequestMapping(value = "queryOrderMessage", method = RequestMethod.GET)
    	public ResultModel queryOrderMessage(String orderId) {
    		try {
-   			OrderMessage om=orderMessageService.queryMessage(orderId);
+   			OrderMessage om=userOrderService.queryOrderMessage(orderId);
    			OrderMessageVo omVo= new OrderMessageVo();
    			omVo.setTitle(om.getTitle());
    			omVo.setContent(om.getContent());

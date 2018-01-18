@@ -1,5 +1,20 @@
 package com.hjgj.aiyoujin.core.service;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.session.RowBounds;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.hjgj.aiyoujin.core.common.Constants;
 import com.hjgj.aiyoujin.core.common.OrderStatusEnum;
 import com.hjgj.aiyoujin.core.common.exception.BusinessException;
@@ -17,20 +32,6 @@ import com.hjgj.aiyoujin.core.model.User;
 import com.hjgj.aiyoujin.core.model.vo.OrderWebVo;
 import com.hjgj.aiyoujin.core.model.vo.Page;
 import com.hjgj.aiyoujin.core.model.vo.ProductVo;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.ibatis.session.RowBounds;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Service
 public class UserOrderService {
@@ -208,7 +209,7 @@ public class UserOrderService {
     }
 
     public Order getOrderById(String orderId) {
-        return userOrderMapper.selectByPrimaryKey(orderId);
+        return orderMapper.selectByPrimaryKey(orderId);
     }
 
 
@@ -216,11 +217,13 @@ public class UserOrderService {
         Order order = userOrderMapper.selectByPrimaryKey(orderId);
         ProductVo product = productService.queryGoodsDetail(order.getProductId());
         OrderWebVo orderVo = new OrderWebVo();
+        String userId = "";
         if (StringUtils.isNotBlank(order.getSourceOrderId())) {
             Order orderFrom = userOrderMapper.selectByPrimaryKey(order.getSourceOrderId());
             User userFrom = userService.getUserByUserId(orderFrom.getUserId());
             orderVo.setFromNickName(userFrom.getNickname());
             orderVo.setFromAvatar(userFrom.getAvatar());
+            userId = userFrom.getId();
         }
         orderVo.setSellAmount(order.getSellAmount());
         orderVo.setProductName(product.getName());
@@ -229,7 +232,11 @@ public class UserOrderService {
         orderVo.setOrderStatus(OrderStatusEnum.switchOrderStateName(order.getStatus()));
         orderVo.setOrderId(order.getId());
         orderVo.setUserId(order.getUserId());
-        OrderMessage om = orderMessageService.queryMessage(order.getId());
+        
+        if(order.getStatus() == 3||order.getStatus() == 4||order.getStatus() == 5){//状态为：送出待收、送出成功、已退回的状态，查询使用订单userId查询留言
+        	  userId = order.getUserId();
+        }
+    	OrderMessage om = orderMessageService.queryMessage(order.getId(),userId);
         if (om != null) {
             orderVo.setMessage(om.getContent());
             orderVo.setVideoUrl(om.getVideoUrl());
@@ -237,10 +244,37 @@ public class UserOrderService {
         }
         return orderVo;
     }
+    
+    public OrderMessage queryOrderMessage(String orderId) throws Exception {
+        Order order = userOrderMapper.selectByPrimaryKey(orderId);
+        String userId = "";
+        if (StringUtils.isNotBlank(order.getSourceOrderId())) {
+            Order orderFrom = userOrderMapper.selectByPrimaryKey(order.getSourceOrderId());
+            User userFrom = userService.getUserByUserId(orderFrom.getUserId());
+            userId = userFrom.getId();
+        }
+        if(order.getStatus() == 3||order.getStatus() == 4||order.getStatus() == 5){//状态为：送出待收、送出成功、已退回的状态，查询使用订单userId查询留言
+        	  userId = order.getUserId();
+        }
+    	OrderMessage om = orderMessageService.queryMessage(order.getId(),userId);
+        return om;
+    }
 
     public int insertOrder(Order order) {
         int fromOrderResult = userOrderMapper.insert(order);
         return fromOrderResult;
+    }
+    
+    @Transactional
+    public int sendGiftCard(Order order,OrderMessage msg) throws Exception {
+    	//添加留言
+    	msg.setCreateTime(new Date());
+    	msg.setOrderId(order.getId());
+    	msg.setUpdateTime(new Date());
+    	msg.setId(UUIDGenerator.generate());
+    	orderMessageService.insert(msg);
+    	//更新订单状态
+        return updateOrderStauts(order.getId(), OrderStatusEnum.ORDER_STATUS_UNRECEIVE.getCode());
     }
 
 

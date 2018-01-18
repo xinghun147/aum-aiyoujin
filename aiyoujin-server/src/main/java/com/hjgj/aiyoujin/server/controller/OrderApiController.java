@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hjgj.aiyoujin.core.common.OrderStatusEnum;
 import com.hjgj.aiyoujin.core.model.Order;
+import com.hjgj.aiyoujin.core.model.OrderMessage;
 import com.hjgj.aiyoujin.core.model.User;
 import com.hjgj.aiyoujin.core.model.vo.OrderWebVo;
 import com.hjgj.aiyoujin.core.model.vo.Page;
@@ -71,8 +72,13 @@ public class OrderApiController {
     @ApiOperation(value = "赠送礼物")
     @ResponseBody
     @RequestMapping(value = "/sendGift", method = RequestMethod.POST)
-    public ResultModel sendGiftCard(@ApiParam(value = "订单ID", required = true) @RequestParam String orderId) {
+    public ResultModel sendGiftCard(@ApiParam(value = "订单ID", required = true) @RequestParam String orderId,
+    								@ApiParam(value = "当前用户ID", required = true) @RequestParam String userId,
+						    		@ApiParam(value = "留言内容") @RequestParam(required=false) String content,
+									@ApiParam(value = "图片地址") @RequestParam(required=false) String imageUrl,
+									@ApiParam(value = "视频地址") @RequestParam(required=false) String videoUrl) {
         Assert.notNull(orderId, "orderId 不可为空");
+        Assert.notNull(userId, "userId 不可为空");
 //        String orderNo = CommonUtils.generateOrderNo("TF");
 //        Date nowDate = new Date();
 //        User byOpenId = userService.getUserByOpenId(openId);
@@ -88,12 +94,20 @@ public class OrderApiController {
 //        fromOrder.setCode(orderNo);
         // 3送出待收、4已退回、5送出成功、6领取成功
 //        fromOrder.setStatus(Integer.valueOf(3));
-        int insertFromOrder = userOrderService.updateOrderStauts(orderId, OrderStatusEnum.ORDER_STATUS_UNRECEIVE.getCode());
-        if (insertFromOrder > 0) {
-            return ResultModel.ok();
-        } else {
-            return ResultModel.error(ResultStatus.ORDER_NOT_EXIST);
-        }
+        Order order = new Order();
+        order.setId(orderId);
+        OrderMessage msg = new OrderMessage();
+        msg.setContent(content);
+        msg.setImageUrl(imageUrl);
+        msg.setUserId(userId);
+        msg.setVideoUrl(videoUrl);
+		try {
+			  userOrderService.sendGiftCard(order, msg);
+		      return ResultModel.ok();
+		} catch (Exception e) {
+			 return ResultModel.error(ResultStatus.SYSTEM_ERROR);
+		}
+       
 
     }
 
@@ -138,8 +152,10 @@ public class OrderApiController {
     @ApiOperation(value = "查看订单详情")
     @ResponseBody
     @RequestMapping(value = "/queryOrderDetail", method = RequestMethod.GET)
-    public ResultModel queryOrderDetail(@ApiParam(value = "订单ID", required = true) @RequestParam String orderId) {
+    public ResultModel queryOrderDetail(@ApiParam(value = "订单ID", required = true) @RequestParam String orderId,
+    									@ApiParam(value = "用户ID", required = true) @RequestParam String userId) {
         Assert.notNull(orderId, "orderId 不可为空");
+        Assert.notNull(orderId, "userId 不可为空");
 		try {
 			OrderWebVo order = userOrderService.queryOrderDetail(orderId);
 			return ResultModel.ok(order);
@@ -181,9 +197,9 @@ public class OrderApiController {
     
     @ApiOperation(value = "提货申请")
     @ResponseBody
-    @RequestMapping(value = "/takeDelivery ", method = RequestMethod.POST)
+    @RequestMapping(value = "/takeDelivery", method = RequestMethod.POST)
     public ResultModel takeDelivery(@ApiParam(value = "订单ID", required = true) @RequestParam String orderId,
-    							@ApiParam(value = "地址", required = true) @RequestParam String address) {
+    							@ApiParam(value = "地址ID", required = true) @RequestParam String address) {
         Assert.notNull(orderId, "orderId 不可为空");
         Assert.notNull(address, "地址不可为空");
 		try {

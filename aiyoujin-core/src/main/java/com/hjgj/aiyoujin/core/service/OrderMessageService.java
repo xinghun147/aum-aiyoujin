@@ -30,11 +30,14 @@ public class OrderMessageService extends BaseService {
     }
 
 
-    public OrderMessage queryMessage(String orderId) {
+    public OrderMessage queryMessage(String orderId,String userId) {
         OrderMessageExample example = new OrderMessageExample();
         Criteria criteria = example.createCriteria();
         if (StringUtils.isNotBlank(orderId)) {
             criteria.andOrderIdEqualTo(orderId);
+        }
+        if (StringUtils.isNotBlank(userId)) {
+        	criteria.andUserIdEqualTo(userId);
         }
         return orderMessageMapper.selectOneByExample(example);
     }
