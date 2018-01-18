@@ -357,10 +357,12 @@ public class WeixinPayController {
 
         DecimalFormat df = new DecimalFormat("#");
         if (state == 1) {
-            Map map = weixinPush.payResultNotify(productName, df.format(buyMoney), updateTime, prepayId, openId);
+//            Map map = weixinPush.payResultNotify(productName, df.format(buyMoney), updateTime, prepayId, openId);
+            Map map = weixinPush.payResultNotify(productName, buyMoney.setScale(2, BigDecimal.ROUND_HALF_UP).toString(), updateTime, prepayId, openId);
         }
         if (state == 2) {
-            Map failMap = weixinPush.payResultNotifyFail(productName, df.format(buyMoney), "订单异常", updateTime, prepayId, openId);
+//            Map failMap = weixinPush.payResultNotifyFail(productName, df.format(buyMoney), "订单异常", updateTime, prepayId, openId);
+            Map failMap = weixinPush.payResultNotifyFail(productName, buyMoney.setScale(2, BigDecimal.ROUND_HALF_UP).toString(), "订单异常", updateTime, prepayId, openId);
         }
 
     }
