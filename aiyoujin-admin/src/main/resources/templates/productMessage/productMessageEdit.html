@@ -1,0 +1,85 @@
+<form id="editForm" name="editForm" class="layui-form editFixed"  action="/productMessage/productMessageEdit.html">
+	<input type="hidden" name="id"  th:value="${prod}?${prod.id}"/>
+	<div class="layui-form-item">
+		<div class="layui-inline">		
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-inline">		
+			<label class="layui-form-label">模板标题</label>
+			<div class="layui-input-inline">
+				<input type="text" id="title" name="title" th:value="${prod}?${prod.title}:''" class="layui-input" lay-verify="required" placeholder="请输入模板标题"/>
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-inline">
+			<label class="layui-form-label">模板内容</label>
+			<div class="layui-input-inline">
+				<textarea placeholder="请输入产品描叙" class="layui-textarea" id="content" name="content" th:text="${prod}?${prod.content}:''" style="width: 513px;"></textarea>
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-form-item">
+			<div class="layui-input-block" >
+				<button class="layui-btn" lay-submit="" lay-filter="addForm">保存</button>
+		    </div>
+		</div>
+	</div>
+</form>
+<style>
+	.editFixed .layui-form-label{width:140px;text-align: right;}
+</style>
+<script>
+      layui.use(['jquery','form', 'laydate'], function(){
+   	   var form = layui.form
+   	   ,layer = layui.layer
+   	   ,laydate = layui.laydate;
+   	   //日期
+   	   laydate.render({
+   	     elem: '#publishTime',
+		 type: 'datetime'
+   	   });
+          laydate.render({
+              elem: '#sellBeginTime',
+              type: 'datetime'
+          });
+          laydate.render({
+              elem: '#sellEndTime',
+              type: 'datetime'
+          });
+          laydate.render({
+              elem: '#removeTime',
+              type: 'datetime'
+          });
+    		//验证
+     		form.verify({
+     			productCode:function(value,item){  //value：表单的值、item：表单的DOM对象
+     				var codeRegex = /^PP{1}[a-zA-Z0-9]+$/;
+     				if(!codeRegex.test(value)){     //验证输入的产品编号是否合法
+     					return '产品编号必须以PP前缀开头';
+     				}
+     			},
+     			productWeight:function(value,item){   //验证输入的克重
+     				if(!/^(0|[1-9][0-9]{0,9})(\.[0-9]{1,4})?$/.test(value)){
+     					return '输入的克重不正确（例：999、1888.8934）';
+     				}
+     			},
+     			price:function(value,item){   //验证价格
+     				if(!/^(0|[1-9][0-9]{0,9})(\.[0-9]{1,2})?$/.test(value)){
+     					return '输入的价格不正确（例：100、99.99）';
+     				}
+     			},
+     			productQuantity:function(value,item){ // 验证库存
+     				if(!/^[0-9]*[1-9][0-9]*$/.test(value)){
+     					return '库存必须为正整数';
+     				}
+     			}
+     		});
+   	   //监听提交
+   	   form.on('submit(editForm)', function(data){
+   	     return true;
+   	   });
+   	});
+</script>

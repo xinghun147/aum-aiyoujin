@@ -90,6 +90,9 @@
                     <th:block th:switch="${item.orderStatus}">
                         <a th:case="10" class="layui-btn layui-btn-mini add_express"> <i class="layui-icon">&#xe642;</i>填写物流信息</a>
                     </th:block>
+                    <th:block th:switch="${item.orderStatus}">
+ 						<a  th:case="11" th:data="${item.expressNo}"  class="layui-btn layui-btn-mini product_info">查看物流</a>
+                     </th:block>
                 </td>
             </tr>
         </th:block>
@@ -155,7 +158,23 @@
             }
         });
     });
-
+    //查询物流
+            $(".product_info").bind("click",function() {
+                var expressNo = $(this).attr("data");
+                //Ajax获取
+            	$.post('/order/expressView.html', {expressNo:expressNo}, function(data){
+            	  	layer.open({
+            	  	  type: 1,
+              		  title: '查看物流信息'
+              		  ,area: ['1000px', '460px']
+              		  ,shade: 0
+              		  ,content: data
+           			  ,yes: function(index, layero){
+           				  layer.close(index);
+           				}
+              		}); 
+            	}); 
+            });
     layui.use('laydate', function () {
         var laydate = layui.laydate;
         //执行一个laydate实例

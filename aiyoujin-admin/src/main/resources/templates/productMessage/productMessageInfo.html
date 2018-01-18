@@ -1,0 +1,29 @@
+<form id="editForm" name="editForm" class="layui-form infoFixed"  action="/productMessage/productMessageEdit.html">
+	<input type="hidden" name="id"  th:value="${prod}?${prod.id}"/>
+	<div class="layui-form-item">
+		<div class="layui-inline">		
+		</div>
+	</div>
+    <div class="layui-form-item">
+		<div class="layui-inline">		
+			<label class="layui-form-label">模板标题</label>
+			<div class="layui-input-inline">
+				<input type="text" id="title" name="title" th:value="${prod}?${prod.title}:''" class="layui-input" lay-verify="required"  readonly="" placeholder="请输入模板标题"/>
+			</div>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-inline">
+			<label class="layui-form-label">模板内容</label>
+			<div class="layui-input-inline">
+				<textarea placeholder="请输入产品描叙" class="layui-textarea" id="content" name="content" th:text="${prod}?${prod.content}:''"  readonly="" style="width: 513px;"></textarea>
+			</div>
+		</div>
+	</div>
+
+
+</form>
+<style>
+	.infoFixed .layui-form-label{width:140px;text-align: right;}
+	.infoFixed .layui-input,.layui-textarea{border:none;background-color: #eee;}
+</style>
