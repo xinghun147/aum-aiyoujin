@@ -3,6 +3,8 @@ package com.hjgj.aiyoujin.core.model.vo;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class ProductVo implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -58,7 +60,7 @@ public class ProductVo implements Serializable {
 	}
 
 	public void setMiddlePictures(String middlePictures) {
-		this.middlePictures = middlePictures.split(",");
+		this.middlePictures = StringUtils.isNotBlank(middlePictures)?middlePictures.split(","):null;
 	}
 
 	public String[] getLargePictures() {
@@ -66,7 +68,7 @@ public class ProductVo implements Serializable {
 	}
 
 	public void setLargePictures(String largePictures) {
-		this.largePictures = largePictures.split(",");
+		this.largePictures = StringUtils.isNotBlank(largePictures)?largePictures.split(","):null;
 	}
 
 	public Integer getQuantity() {
