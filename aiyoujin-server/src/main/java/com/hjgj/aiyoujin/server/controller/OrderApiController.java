@@ -129,8 +129,8 @@ public class OrderApiController {
         // 3送出待收、4已退回、5送出成功、6领取成功
         fromOrder.setStatus(OrderStatusEnum.ORDER_STATUS_RECEIVED.getCode());
         try {
-           userOrderService.receiveOrder(fromOrder);
-          return ResultModel.ok();
+           String oid = userOrderService.receiveOrder(fromOrder);
+          return ResultModel.ok(oid);
         } catch (Exception e) {
         	e.printStackTrace();
             return ResultModel.error(ResultStatus.ORDER_RECEIVE_FAIL);

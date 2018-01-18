@@ -279,7 +279,7 @@ public class UserOrderService {
 
 
     @Transactional
-    public int receiveOrder(Order order) throws Exception {
+    public String receiveOrder(Order order) throws Exception {
         String orderNo = CommonUtils.generateOrderNo("TF");
         order.setId(UUIDGenerator.generate());
         order.setCreateTime(new Date());
@@ -291,7 +291,7 @@ public class UserOrderService {
             //更新订单状态为  领取成功
             this.updateOrderStauts(order.getSourceOrderId(), OrderStatusEnum.ORDER_STATUS_SEND_SUCCESS.getCode());
         }
-        return count;
+        return order.getId();
     }
 
     /**
