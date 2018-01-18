@@ -14,6 +14,8 @@ public class OrderWebVo {
      * 订单状态
      */
     private String orderStatus;
+    
+    private Integer statusCode;
 
     /**
      * 用户主键
@@ -96,7 +98,15 @@ public class OrderWebVo {
     private String videoUrl;
     
 
-    public String getOrderId() {
+	public Integer getStatusCode() {
+		return statusCode;
+	}
+
+	public void setStatusCode(Integer statusCode) {
+		this.statusCode = statusCode;
+	}
+
+	public String getOrderId() {
         return orderId;
     }
 
