@@ -93,6 +93,16 @@ public class OrderApiController {
  			logger.error("频繁调用赠送礼物接口,"+orderId+"_"+userId+"_sendGiftCard");
  			return ResultModel.error(ResultStatus.ERROR_OPERATION_FREQUENT);
      	}
+        
+        //校验状态是否可赠送
+        Order tempOrder = userOrderService.getOrderById(orderId);
+        if(!(tempOrder.getStatus() == OrderStatusEnum.ORDER_STATUS_PAY_PAID.getCode()
+        		||tempOrder.getStatus() == OrderStatusEnum.ORDER_STATUS_RETURN.getCode()
+        		||tempOrder.getStatus() == OrderStatusEnum.ORDER_STATUS_RECEIVED.getCode()
+        		)){
+        	return ResultModel.error(ResultStatus.ORDER_NOT_TO_RECEIVE);
+        }
+        
 //        String orderNo = CommonUtils.generateOrderNo("TF");
 //        Date nowDate = new Date();
 //        User byOpenId = userService.getUserByOpenId(openId);
@@ -138,8 +148,9 @@ public class OrderApiController {
 //			return ResultModel.error(ResultStatus.ERROR_OPERATION_FREQUENT);
 //    	}
 //        
+        //校验状态是否可领取
         Order order = userOrderService.getOrderById(orderId);
-        if(order.getStatus() == OrderStatusEnum.ORDER_STATUS_SEND_SUCCESS.getCode()){
+        if(order.getStatus() != OrderStatusEnum.ORDER_STATUS_UNRECEIVE.getCode()){
         	return ResultModel.error(ResultStatus.ORDER_TO_RECEIVE_RECEIVED);
         }
         try {
@@ -212,6 +223,17 @@ public class OrderApiController {
 			logger.error("频繁调用礼品变现方法,"+orderId+"_"+formId+"_giftToCash");
 			return ResultModel.error(ResultStatus.ERROR_OPERATION_FREQUENT);
 		}
+        
+        //校验状态是否可赠送
+        Order tempOrder = userOrderService.getOrderById(orderId);
+        if(!(tempOrder.getStatus() == OrderStatusEnum.ORDER_STATUS_PAY_PAID.getCode()
+        		||tempOrder.getStatus() == OrderStatusEnum.ORDER_STATUS_RETURN.getCode()
+        		||tempOrder.getStatus() == OrderStatusEnum.ORDER_STATUS_RECEIVED.getCode()
+        		||tempOrder.getStatus() == OrderStatusEnum.ORDER_STATUS_CASH_FAIL.getCode()
+        		)){
+        	return ResultModel.error(ResultStatus.ORDER_NOT_TO_CASH);
+        }
+        
 		try {
 			Order order = userOrderService.getOrderById(orderId);
 			if(order == null){
@@ -243,6 +265,17 @@ public class OrderApiController {
     							@ApiParam(value = "地址ID", required = true) @RequestParam String address) {
         Assert.notNull(orderId, "orderId 不可为空");
         Assert.notNull(address, "地址不可为空");
+        
+        //校验状态是否可赠送
+        Order tempOrder = userOrderService.getOrderById(orderId);
+        if(!(tempOrder.getStatus() == OrderStatusEnum.ORDER_STATUS_PAY_PAID.getCode()
+        		||tempOrder.getStatus() == OrderStatusEnum.ORDER_STATUS_RETURN.getCode()
+        		||tempOrder.getStatus() == OrderStatusEnum.ORDER_STATUS_RECEIVED.getCode()
+        		||tempOrder.getStatus() == OrderStatusEnum.ORDER_STATUS_CASH_FAIL.getCode()
+        		)){
+        	return ResultModel.error(ResultStatus.ORDER_NOT_PICKPROCESSING);
+        }
+        
 		try {
 			Order order = userOrderService.getOrderById(orderId);
 			if(order == null){

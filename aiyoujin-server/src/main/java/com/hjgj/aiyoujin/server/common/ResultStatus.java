@@ -27,6 +27,9 @@ public enum ResultStatus {
     ORDER_PAY_UNPAID(-3007, "订单未支付"),
     ORDER_TO_CASH_FAIL(-3008, "变现失败"),
     ORDER_TO_RECEIVE_RECEIVED(-3009, "已被领取"),
+    ORDER_NOT_TO_RECEIVE(-3010, "礼物不能被赠送"),
+    ORDER_NOT_PICKPROCESSING(-3011, "礼物不允许提货"),
+    ORDER_NOT_TO_CASH(-3012, "礼物不允许变现"),
     
     
     
