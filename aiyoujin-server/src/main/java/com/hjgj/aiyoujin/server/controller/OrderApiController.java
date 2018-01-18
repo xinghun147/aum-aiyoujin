@@ -220,5 +220,23 @@ public class OrderApiController {
 			return ResultModel.error(ResultStatus.ORDER_TO_CASH_FAIL);
 		}
     }
+    
+    
+    @ApiOperation(value = "确认收货")
+    @ResponseBody
+    @RequestMapping(value = "/confirmReceipt", method = RequestMethod.POST)
+    public ResultModel confirmReceipt(@ApiParam(value = "订单ID", required = true) @RequestParam String orderId) {
+        Assert.notNull(orderId, "orderId 不可为空");
+		try {
+			Order order = userOrderService.getOrderById(orderId);
+			if(order == null){
+				return ResultModel.error(ResultStatus.ORDER_NOT_EXIST);
+			}
+			userOrderService.updateOrderStauts(orderId,OrderStatusEnum.ORDER_STATUS_CONFIRM_RECEIPT.getCode());
+			return ResultModel.ok();
+		} catch (Exception e) {
+			return ResultModel.error(ResultStatus.ORDER_TO_CASH_FAIL);
+		}
+    }
 
 }
