@@ -65,7 +65,7 @@
 		<div class="layui-inline">
 			<label class="layui-form-label">排序位置</label>
 			<div class="layui-input-inline">
-				<input type="text"  name="sortNo" th:value="${prod}?${prod.sortNo}:''" class="layui-input" lay-verify="required|productQuantity" placeholder="请输入排序位置"/>
+				<input type="text"  name="sortNo" th:value="${prod}?${prod.sortNo}:''" class="layui-input" lay-verify="required|sortNoQuantity" placeholder="请输入排序位置"/>
 			</div>
 		</div>
 		<div class="layui-inline">
@@ -135,6 +135,11 @@
      			productQuantity:function(value,item){ // 验证库存
      				if(!/^[0-9]*[1-9][0-9]*$/.test(value)){
      					return '库存必须为正整数';
+     				}
+     			}
+     			sortNoQuantity:function(value,item){ // 验证排序位置
+     				if(!/^[0-9]*[1-9][0-9]*$/.test(value)){
+     					return '排序位置必须为正整数';
      				}
      			}
      		});
