@@ -45,7 +45,8 @@
 <!-- 		<table tableName="t_user_address" domainObjectName="UserAddress"></table>  -->
 <!-- 		<table tableName="t_user" domainObjectName="User"></table>  -->
 <!-- 		<table tableName="t_express" domainObjectName="Express"></table>  -->
-		<table tableName="t_order" domainObjectName="Order"></table> 
+<!-- 		<table tableName="t_order" domainObjectName="Order"></table>  -->
+		<table tableName="t_order_message" domainObjectName="OrderMessage"></table>
 
 
 	</context>
