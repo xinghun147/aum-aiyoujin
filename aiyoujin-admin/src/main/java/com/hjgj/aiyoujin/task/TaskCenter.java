@@ -40,10 +40,10 @@ public class TaskCenter {
     /**
      *  TODO 处理订单状态为 失败,待支付的订单
      */
-    @Scheduled(cron = "0 0/30 * * * ?")
+    //@Scheduled(cron = "0 0/30 * * * ?")
     private void selectWXPayOrder() {
         logger.info("selectWXPayOrder方法执行");
-        List<Integer> integers = Arrays.asList(0);
+        List<Integer> integers = Arrays.asList(0,2);
         Date nowDate = new Date();
         Date beforeDate = DateUtil.addDaysToDate(nowDate, -1);
         List<Order> unresolvedOrder = adminOrderService.getUnresolvedOrder(integers, beforeDate, nowDate);
@@ -111,7 +111,7 @@ public class TaskCenter {
      * TODO 处理订单状态为 3送出待收
      * TODO 并设置为 已退回
      */
-    @Scheduled(fixedRate  = 1000*1800,initialDelay = -10)
+   // @Scheduled(fixedRate  = 1000*1800,initialDelay = -10)
     public void selectTransferOrder() {
         logger.info("selectTransferOrder方法执行");
         List<Integer> integers = Arrays.asList(3);
