@@ -21,6 +21,7 @@ import weixin.popular.bean.paymch.MchOrderquery;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -45,8 +46,12 @@ public class TaskCenter {
         logger.info("selectWXPayOrder方法执行");
         List<Integer> integers = Arrays.asList(0,2);
         Date nowDate = new Date();
-        Date beforeDate = DateUtil.addDaysToDate(nowDate, -1);
-        List<Order> unresolvedOrder = adminOrderService.getUnresolvedOrder(integers, beforeDate, nowDate);
+        //Date beforeDate = DateUtil.addDaysToDate(nowDate, -1);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(Calendar.MINUTE, -30);
+        Date calendarTime = calendar.getTime();
+        List<Order> unresolvedOrder = adminOrderService.getUnresolvedOrder(integers, calendarTime, null);
         System.out.println(unresolvedOrder);
         if (unresolvedOrder == null || (unresolvedOrder != null && unresolvedOrder.size() <= 0)) {
             return;
