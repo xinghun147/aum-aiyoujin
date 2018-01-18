@@ -139,7 +139,7 @@ public class OrderApiController {
 //    	}
 //        
         Order order = userOrderService.getOrderById(orderId);
-        if(order.getStatus() == OrderStatusEnum.ORDER_STATUS_RECEIVED.getCode()){
+        if(order.getStatus() == OrderStatusEnum.ORDER_STATUS_SEND_SUCCESS.getCode()){
         	return ResultModel.error(ResultStatus.ORDER_TO_RECEIVE_RECEIVED);
         }
         try {
