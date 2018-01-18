@@ -22,6 +22,15 @@ public class Constants {
 	public static final String TRADE_TO_ACCOUNT_QUEUE = "trade.to.account.queue";
 	
 	
+    /**
+     * 存储当前登录用户id的字段名
+     */
+    public static final String CURRENT_USER_ID = "CURRENT_USER_ID";
+    
+    
+    public static final String CURRENT_ORDER_ID = "CURRENT_ORDER_ID";
+	
+	
 	
 	public enum DelFlag{
 		NO,//否

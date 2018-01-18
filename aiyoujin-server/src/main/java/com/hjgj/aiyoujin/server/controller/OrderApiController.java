@@ -5,6 +5,8 @@ import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
@@ -23,6 +25,7 @@ import com.hjgj.aiyoujin.core.service.UserOrderService;
 import com.hjgj.aiyoujin.core.service.UserService;
 import com.hjgj.aiyoujin.server.common.ResultModel;
 import com.hjgj.aiyoujin.server.common.ResultStatus;
+import com.hjgj.aiyoujin.server.common.redis.RedisLockUtil;
 import com.hjgj.aiyoujin.server.webBiz.WeixinPush;
 
 import io.swagger.annotations.ApiOperation;
@@ -31,6 +34,8 @@ import io.swagger.annotations.ApiParam;
 @Controller
 @RequestMapping(value = "/order")
 public class OrderApiController {
+	
+	private  Logger logger = LoggerFactory.getLogger(OrderApiController.class);
 
     @Autowired
     private UserOrderService userOrderService;
@@ -40,6 +45,11 @@ public class OrderApiController {
     
     @Autowired
     private WeixinPush weixinPush;
+	
+	@Autowired
+	public RedisLockUtil redisLockUtil;
+	
+	
     
 
     /**
@@ -79,6 +89,10 @@ public class OrderApiController {
 									@ApiParam(value = "视频地址") @RequestParam(required=false) String videoUrl) {
         Assert.notNull(orderId, "orderId 不可为空");
         Assert.notNull(userId, "userId 不可为空");
+        if(!redisLockUtil.acquireLock(orderId+"_"+userId+"_sendGiftCard", 3 * 1000)){
+ 			logger.error("频繁调用赠送礼物接口,"+orderId+"_"+userId+"_sendGiftCard");
+ 			return ResultModel.error(ResultStatus.ERROR_OPERATION_FREQUENT);
+     	}
 //        String orderNo = CommonUtils.generateOrderNo("TF");
 //        Date nowDate = new Date();
 //        User byOpenId = userService.getUserByOpenId(openId);
@@ -118,23 +132,39 @@ public class OrderApiController {
                                        @ApiParam(value = "订单ID", required = true) @RequestParam String orderId) {
         Assert.notNull(openId, "openId不可为空");
         Assert.notNull(orderId, "orderId 不可为空");
-        User byUser = userService.getUserByOpenId(openId);
-        Order orderBy = userOrderService.getOrderById(orderId);
-        Order fromOrder = new Order();
-        fromOrder.setUserId(byUser.getId());
-        fromOrder.setBuyAmount(orderBy.getBuyAmount());
-        fromOrder.setProductId(orderBy.getProductId());
-        fromOrder.setFromOrderId(orderId);
-        fromOrder.setSourceOrderId(orderId);
-        // 3送出待收、4已退回、5送出成功、6领取成功
-        fromOrder.setStatus(OrderStatusEnum.ORDER_STATUS_RECEIVED.getCode());
+        
+//        if(!redisLockUtil.acquireLock(orderId+"_"+openId+"receiveGift", 3 * 1000)){
+//        	logger.error("频繁调用领取礼物接口,"+orderId+"_"+openId+"receiveGift");
+//			return ResultModel.error(ResultStatus.ERROR_OPERATION_FREQUENT);
+//    	}
+//        
+        Order order = userOrderService.getOrderById(orderId);
+        if(order.getStatus() == OrderStatusEnum.ORDER_STATUS_RECEIVED.getCode()){
+        	return ResultModel.error(ResultStatus.ORDER_TO_RECEIVE_RECEIVED);
+        }
         try {
-           String oid = userOrderService.receiveOrder(fromOrder);
-          return ResultModel.ok(oid);
+        	  if(redisLockUtil.acquireLock(orderId+"_"+"receiveGift", 300 * 1000)){
+	        	User byUser = userService.getUserByOpenId(openId);
+	        	Order orderBy = userOrderService.getOrderById(orderId);
+	        	Order fromOrder = new Order();
+	        	fromOrder.setUserId(byUser.getId());
+	        	fromOrder.setBuyAmount(orderBy.getBuyAmount());
+	        	fromOrder.setProductId(orderBy.getProductId());
+	        	fromOrder.setFromOrderId(orderId);
+	        	fromOrder.setSourceOrderId(orderId);
+	        	// 3送出待收、4已退回、5送出成功、6领取成功
+	        	fromOrder.setStatus(OrderStatusEnum.ORDER_STATUS_RECEIVED.getCode());
+	            String oid = userOrderService.receiveOrder(fromOrder);
+           		return ResultModel.ok(oid);
+        	  }else{
+        		  return ResultModel.error(ResultStatus.ORDER_TO_RECEIVE_RECEIVED);
+        	  }
         } catch (Exception e) {
         	e.printStackTrace();
             return ResultModel.error(ResultStatus.ORDER_RECEIVE_FAIL);
-        }
+        }finally {
+        	redisLockUtil.releaseLock(orderId+"_"+"receiveGift");
+		}
     }
 
     @ApiOperation(value = "查看订单支付状态")
@@ -177,6 +207,11 @@ public class OrderApiController {
     public ResultModel giftToCash(@ApiParam(value = "订单ID", required = true) @RequestParam String orderId,
     							@ApiParam(value = "微信提交formId", required = true) @RequestParam String formId) {
         Assert.notNull(orderId, "orderId 不可为空");
+        Assert.notNull(formId, "formId 不可为空");
+        if(!redisLockUtil.acquireLock(orderId+"_"+formId+"_giftToCash", 3 * 1000)){
+			logger.error("频繁调用礼品变现方法,"+orderId+"_"+formId+"_giftToCash");
+			return ResultModel.error(ResultStatus.ERROR_OPERATION_FREQUENT);
+		}
 		try {
 			Order order = userOrderService.getOrderById(orderId);
 			if(order == null){

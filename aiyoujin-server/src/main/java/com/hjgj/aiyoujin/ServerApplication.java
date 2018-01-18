@@ -12,7 +12,6 @@ import org.springframework.context.annotation.PropertySources;
 @PropertySources({@PropertySource(value = "classpath:config/config.properties"),
 	@PropertySource(value = "file:/etc/hjgjconf/aiyoujin-server/config.properties", ignoreResourceNotFound = true)
 })
-//@ImportResource({"classpath:spring/dubbo-api.xml"})//"classpath:spring/schedule.xml",
 public class ServerApplication extends SpringBootServletInitializer {
 	@Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {

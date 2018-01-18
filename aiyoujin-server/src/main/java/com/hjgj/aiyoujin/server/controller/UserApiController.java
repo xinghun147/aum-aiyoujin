@@ -1,4 +1,6 @@
 package com.hjgj.aiyoujin.server.controller;
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hjgj.aiyoujin.core.common.Constants;
 import com.hjgj.aiyoujin.core.model.User;
 import com.hjgj.aiyoujin.core.service.UserService;
 import com.hjgj.aiyoujin.server.common.ResultModel;

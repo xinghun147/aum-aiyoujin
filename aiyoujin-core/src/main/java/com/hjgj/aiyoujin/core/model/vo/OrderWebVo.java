@@ -97,6 +97,11 @@ public class OrderWebVo {
      */
     private String videoUrl;
     
+    /**
+     * 是否留言  1是0否
+     */
+    private Integer isMsg;
+    
 
 	public Integer getStatusCode() {
 		return statusCode;
@@ -256,5 +261,13 @@ public class OrderWebVo {
 
 	public void setFromAvatar(String fromAvatar) {
 		this.fromAvatar = fromAvatar;
+	}
+
+	public Integer getIsMsg() {
+		return isMsg;
+	}
+
+	public void setIsMsg(Integer isMsg) {
+		this.isMsg = isMsg;
 	}
 }
