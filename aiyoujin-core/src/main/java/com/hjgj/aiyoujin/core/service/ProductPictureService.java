@@ -5,6 +5,8 @@ import com.hjgj.aiyoujin.core.dao.ProductPictureMapper;
 import com.hjgj.aiyoujin.core.model.ProductPicture;
 import com.hjgj.aiyoujin.core.model.ProductPictureExample;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,8 @@ import java.util.List;
  */
 @Service
 public class ProductPictureService extends BaseService {
+
+    protected final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private ProductPictureMapper productPictureMapper;

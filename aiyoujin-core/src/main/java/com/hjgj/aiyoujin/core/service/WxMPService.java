@@ -22,7 +22,7 @@ import java.util.Map;
 @Service
 public class WxMPService {
 
-    protected final Logger logger = LoggerFactory.getLogger(WxMPService.class);
+    protected final Logger logger = LoggerFactory.getLogger(getClass());
 
     /**
      * TODO 付款金额单位是分,必须由元转换为分(且为整数)

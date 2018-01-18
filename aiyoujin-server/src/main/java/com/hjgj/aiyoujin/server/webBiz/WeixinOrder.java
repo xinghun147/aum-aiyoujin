@@ -47,77 +47,6 @@ public class WeixinOrder {
         return weiXinProperty;
     }
 
-    public String generateXmlRequest(String nonce, String openId, BigDecimal payMoney, String orderNo) {
-        String appid = weiXinProperty.getAppid();
-        String merchantId = weiXinProperty.getMerchantId();
-        String invokeUrl = weiXinProperty.getInvokeUrl();
-        String clientIP = weiXinProperty.getClientIP();
-        String apiKey = weiXinProperty.getApiKey();
-
-        UnifiedOrderRequest orderRequest = new UnifiedOrderRequest();
-
-        DecimalFormat df = new DecimalFormat("#");
-        String money = df.format(payMoney.multiply(new BigDecimal(100)));
-        orderRequest.setAppid(appid);
-        orderRequest.setBody("爱有金,微信支付:" + payMoney + "元");
-        orderRequest.setMch_id(merchantId);
-        orderRequest.setNonce_str(nonce);
-        orderRequest.setNotify_url(invokeUrl);
-        orderRequest.setOut_trade_no(orderNo);
-        orderRequest.setSpbill_create_ip(clientIP);
-        orderRequest.setTrade_type("JSAPI"); //JSAPI--公众号支付、NATIVE--原生扫码支付、APP--app支付
-        orderRequest.setTotal_fee(money); // 单位是:分
-        orderRequest.setOpenid(openId);
-        orderRequest.setSign(WxSignUtil.createSign(orderRequest, apiKey));//签名
-
-        XStream xStream = new XStream(new XppDriver(new XmlFriendlyNameCoder("_-", "_")));
-        xStream.alias("xml", UnifiedOrderRequest.class);//根元素名需要是xml
-        String xmlRequest = xStream.toXML(orderRequest);
-        return xmlRequest;
-    }
-
-
-    public UnifiedOrderRespose wxPrePay(String xmlRequestStr) {
-
-        HttpUriRequest httpUriRequest = RequestBuilder.post()
-                .setHeader(xmlHeader)
-                .setUri(MCH_URI + "/pay/unifiedorder")
-                .setCharset(Charset.forName("utf-8"))
-                .setEntity(new StringEntity(xmlRequestStr, Charset.forName("utf-8")))
-                .build();
-        CloseableHttpResponse response = LocalHttpClient.execute(httpUriRequest);
-        StatusLine statusLine = response.getStatusLine();
-        int statusCode = statusLine.getStatusCode();
-
-
-        try {
-            if (statusCode >= 200 && statusCode < 300) {
-                HttpEntity entity = response.getEntity();
-                String str = EntityUtils.toString(entity);
-                Header contentType = response.getEntity().getContentType();
-
-                if (contentType != null && !contentType.toString().matches(".*[uU][tT][fF]-8$")) {
-                    str = new String(str.getBytes("iso-8859-1"), "utf-8");
-                }
-
-                System.out.println("xml原文是:" + str);
-                XStream xStream = new XStream(new XppDriver(new XmlFriendlyNameCoder("_-", "_")));//说明3(见文末)
-                //将请求返回的内容通过xStream转换为UnifiedOrderRespose对象
-                xStream.alias("xml", UnifiedOrderRespose.class);
-                UnifiedOrderRespose unifiedOrderRespose = (UnifiedOrderRespose) xStream.fromXML(str);
-
-                if (null != unifiedOrderRespose && "SUCCESS".equals(unifiedOrderRespose.getReturn_code()) && "SUCCESS".equals(unifiedOrderRespose.getResult_code())) {
-                    return unifiedOrderRespose;
-                }
-            } else {
-                return null;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
     public Map wxPrePayXML(String xmlRequestStr) {
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("xmlStr", null);
@@ -178,7 +107,7 @@ public class WeixinOrder {
         orderRequest.setBody(productName);
         orderRequest.setMch_id(merchantId);
         orderRequest.setNonce_str(nonce);
-        orderRequest.setNotify_url(invokeUrl);
+        orderRequest.setNotify_url(invokeUrl+"/"+orderNo);
         orderRequest.setOut_trade_no(orderNo);
         orderRequest.setSpbill_create_ip(clientIP);
         orderRequest.setTrade_type("JSAPI"); //JSAPI--公众号支付、NATIVE--原生扫码支付、APP--app支付

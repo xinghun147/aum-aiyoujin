@@ -1,282 +1,308 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.hjgj.aiyoujin.core.dao.OrderNotifyMapper" >
-  <resultMap id="BaseResultMap" type="com.hjgj.aiyoujin.core.model.OrderNotify" >
-    <id column="id" property="id" jdbcType="VARCHAR" />
-    <result column="order_id" property="orderId" jdbcType="VARCHAR" />
-    <result column="order_type" property="orderType" jdbcType="INTEGER" />
-    <result column="notify_msg" property="notifyMsg" jdbcType="VARCHAR" />
-    <result column="notifys" property="notifys" jdbcType="INTEGER" />
-    <result column="notify_time" property="notifyTime" jdbcType="TIMESTAMP" />
-    <result column="notify_call_time" property="notifyCallTime" jdbcType="TIMESTAMP" />
-    <result column="notify_state" property="notifyState" jdbcType="INTEGER" />
-    <result column="notify_by" property="notifyBy" jdbcType="VARCHAR" />
-  </resultMap>
-  <sql id="Example_Where_Clause" >
-    <where >
-      <foreach collection="oredCriteria" item="criteria" separator="or" >
-        <if test="criteria.valid" >
-          <trim prefix="(" suffix=")" prefixOverrides="and" >
-            <foreach collection="criteria.criteria" item="criterion" >
-              <choose >
-                <when test="criterion.noValue" >
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue" >
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue" >
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue" >
-                  and ${criterion.condition}
-                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
-            </foreach>
-          </trim>
-        </if>
-      </foreach>
-    </where>
-  </sql>
-  <sql id="Update_By_Example_Where_Clause" >
-    <where >
-      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
-        <if test="criteria.valid" >
-          <trim prefix="(" suffix=")" prefixOverrides="and" >
-            <foreach collection="criteria.criteria" item="criterion" >
-              <choose >
-                <when test="criterion.noValue" >
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue" >
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue" >
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue" >
-                  and ${criterion.condition}
-                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
-            </foreach>
-          </trim>
-        </if>
-      </foreach>
-    </where>
-  </sql>
-  <sql id="Base_Column_List" >
-    id, order_id, order_type, notify_msg, notifys, notify_time, notify_call_time, notify_state, 
-    notify_by
-  </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.hjgj.aiyoujin.core.model.OrderNotifyExample" >
-    select
-    <if test="distinct" >
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    from t_order_notify
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null" >
-      order by ${orderByClause}
-    </if>
-    <if test="limitRows != null and limitRows>0" >
-      limit #{limitOffset} , #{limitRows}
-    </if>
-  </select>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
-    select 
-    <include refid="Base_Column_List" />
-    from t_order_notify
-    where id = #{id,jdbcType=VARCHAR}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
-    delete from t_order_notify
-    where id = #{id,jdbcType=VARCHAR}
-  </delete>
-  <delete id="deleteByExample" parameterType="com.hjgj.aiyoujin.core.model.OrderNotifyExample" >
-    delete from t_order_notify
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-  </delete>
-  <insert id="insert" parameterType="com.hjgj.aiyoujin.core.model.OrderNotify" >
-    insert into t_order_notify (id, order_id, order_type, 
-      notify_msg, notifys, notify_time, 
-      notify_call_time, notify_state, notify_by
-      )
-    values (#{id,jdbcType=VARCHAR}, #{orderId,jdbcType=VARCHAR}, #{orderType,jdbcType=INTEGER}, 
-      #{notifyMsg,jdbcType=VARCHAR}, #{notifys,jdbcType=INTEGER}, #{notifyTime,jdbcType=TIMESTAMP}, 
-      #{notifyCallTime,jdbcType=TIMESTAMP}, #{notifyState,jdbcType=INTEGER}, #{notifyBy,jdbcType=VARCHAR}
-      )
-  </insert>
-  <insert id="insertSelective" parameterType="com.hjgj.aiyoujin.core.model.OrderNotify" >
-    insert into t_order_notify
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
-      <if test="orderId != null" >
-        order_id,
-      </if>
-      <if test="orderType != null" >
-        order_type,
-      </if>
-      <if test="notifyMsg != null" >
-        notify_msg,
-      </if>
-      <if test="notifys != null" >
-        notifys,
-      </if>
-      <if test="notifyTime != null" >
-        notify_time,
-      </if>
-      <if test="notifyCallTime != null" >
-        notify_call_time,
-      </if>
-      <if test="notifyState != null" >
-        notify_state,
-      </if>
-      <if test="notifyBy != null" >
-        notify_by,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=VARCHAR},
-      </if>
-      <if test="orderId != null" >
-        #{orderId,jdbcType=VARCHAR},
-      </if>
-      <if test="orderType != null" >
-        #{orderType,jdbcType=INTEGER},
-      </if>
-      <if test="notifyMsg != null" >
-        #{notifyMsg,jdbcType=VARCHAR},
-      </if>
-      <if test="notifys != null" >
-        #{notifys,jdbcType=INTEGER},
-      </if>
-      <if test="notifyTime != null" >
-        #{notifyTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="notifyCallTime != null" >
-        #{notifyCallTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="notifyState != null" >
-        #{notifyState,jdbcType=INTEGER},
-      </if>
-      <if test="notifyBy != null" >
-        #{notifyBy,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
-  <select id="countByExample" parameterType="com.hjgj.aiyoujin.core.model.OrderNotifyExample" resultType="java.lang.Integer" >
-    select count(*) from t_order_notify
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-  </select>
-  <update id="updateByExampleSelective" parameterType="map" >
-    update t_order_notify
-    <set >
-      <if test="record.id != null" >
-        id = #{record.id,jdbcType=VARCHAR},
-      </if>
-      <if test="record.orderId != null" >
-        order_id = #{record.orderId,jdbcType=VARCHAR},
-      </if>
-      <if test="record.orderType != null" >
-        order_type = #{record.orderType,jdbcType=INTEGER},
-      </if>
-      <if test="record.notifyMsg != null" >
-        notify_msg = #{record.notifyMsg,jdbcType=VARCHAR},
-      </if>
-      <if test="record.notifys != null" >
-        notifys = #{record.notifys,jdbcType=INTEGER},
-      </if>
-      <if test="record.notifyTime != null" >
-        notify_time = #{record.notifyTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.notifyCallTime != null" >
-        notify_call_time = #{record.notifyCallTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.notifyState != null" >
-        notify_state = #{record.notifyState,jdbcType=INTEGER},
-      </if>
-      <if test="record.notifyBy != null" >
-        notify_by = #{record.notifyBy,jdbcType=VARCHAR},
-      </if>
-    </set>
-    <if test="_parameter != null" >
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByExample" parameterType="map" >
-    update t_order_notify
-    set id = #{record.id,jdbcType=VARCHAR},
-      order_id = #{record.orderId,jdbcType=VARCHAR},
-      order_type = #{record.orderType,jdbcType=INTEGER},
-      notify_msg = #{record.notifyMsg,jdbcType=VARCHAR},
-      notifys = #{record.notifys,jdbcType=INTEGER},
-      notify_time = #{record.notifyTime,jdbcType=TIMESTAMP},
-      notify_call_time = #{record.notifyCallTime,jdbcType=TIMESTAMP},
-      notify_state = #{record.notifyState,jdbcType=INTEGER},
-      notify_by = #{record.notifyBy,jdbcType=VARCHAR}
-    <if test="_parameter != null" >
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.hjgj.aiyoujin.core.model.OrderNotify" >
-    update t_order_notify
-    <set >
-      <if test="orderId != null" >
-        order_id = #{orderId,jdbcType=VARCHAR},
-      </if>
-      <if test="orderType != null" >
-        order_type = #{orderType,jdbcType=INTEGER},
-      </if>
-      <if test="notifyMsg != null" >
-        notify_msg = #{notifyMsg,jdbcType=VARCHAR},
-      </if>
-      <if test="notifys != null" >
-        notifys = #{notifys,jdbcType=INTEGER},
-      </if>
-      <if test="notifyTime != null" >
-        notify_time = #{notifyTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="notifyCallTime != null" >
-        notify_call_time = #{notifyCallTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="notifyState != null" >
-        notify_state = #{notifyState,jdbcType=INTEGER},
-      </if>
-      <if test="notifyBy != null" >
-        notify_by = #{notifyBy,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where id = #{id,jdbcType=VARCHAR}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.hjgj.aiyoujin.core.model.OrderNotify" >
-    update t_order_notify
-    set order_id = #{orderId,jdbcType=VARCHAR},
-      order_type = #{orderType,jdbcType=INTEGER},
-      notify_msg = #{notifyMsg,jdbcType=VARCHAR},
-      notifys = #{notifys,jdbcType=INTEGER},
-      notify_time = #{notifyTime,jdbcType=TIMESTAMP},
-      notify_call_time = #{notifyCallTime,jdbcType=TIMESTAMP},
-      notify_state = #{notifyState,jdbcType=INTEGER},
-      notify_by = #{notifyBy,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=VARCHAR}
-  </update>
-  <select id="selectOneByExample" resultMap="BaseResultMap" parameterType="com.hjgj.aiyoujin.core.model.OrderNotifyExample" >
-    select <include refid="Base_Column_List" /> from t_order_notify <if test="_parameter != null" >  <include refid="Example_Where_Clause" /> </if> <if test="orderByClause != null" >  order by ${orderByClause} </if>  limit 1
-  </select>
+<mapper namespace="com.hjgj.aiyoujin.core.dao.OrderNotifyMapper">
+	<resultMap id="BaseResultMap" type="com.hjgj.aiyoujin.core.model.OrderNotify">
+		<id column="id" property="id" jdbcType="VARCHAR"/>
+		<result column="order_id" property="orderId" jdbcType="VARCHAR"/>
+		<result column="order_code" property="orderCode" jdbcType="VARCHAR"/>
+		<result column="order_type" property="orderType" jdbcType="INTEGER"/>
+		<result column="notify_msg" property="notifyMsg" jdbcType="VARCHAR"/>
+		<result column="notifys" property="notifys" jdbcType="INTEGER"/>
+		<result column="notify_time" property="notifyTime" jdbcType="TIMESTAMP"/>
+		<result column="notify_call_time" property="notifyCallTime" jdbcType="TIMESTAMP"/>
+		<result column="notify_state" property="notifyState" jdbcType="INTEGER"/>
+		<result column="notify_by" property="notifyBy" jdbcType="VARCHAR"/>
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem" open="(" close=")"
+											 separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem" open="(" close=")"
+											 separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, order_id, order_code, order_type, notify_msg, notifys, notify_time, notify_call_time,
+		notify_state, notify_by
+	</sql>
+	<select id="selectByExample" resultMap="BaseResultMap"
+			parameterType="com.hjgj.aiyoujin.core.model.OrderNotifyExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List"/>
+		from t_order_notify
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause"/>
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+		<if test="limitRows != null and limitRows>0">
+			limit #{limitOffset} , #{limitRows}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List"/>
+		from t_order_notify
+		where id = #{id,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		DELETE FROM t_order_notify
+		WHERE id = #{id,jdbcType=VARCHAR}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.hjgj.aiyoujin.core.model.OrderNotifyExample">
+		delete from t_order_notify
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause"/>
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.hjgj.aiyoujin.core.model.OrderNotify">
+		INSERT INTO t_order_notify (id, order_id, order_code,
+									order_type, notify_msg, notifys,
+									notify_time, notify_call_time, notify_state,
+									notify_by)
+		VALUES (#{id,jdbcType=VARCHAR}, #{orderId,jdbcType=VARCHAR}, #{orderCode,jdbcType=VARCHAR},
+				#{orderType,jdbcType=INTEGER}, #{notifyMsg,jdbcType=VARCHAR}, #{notifys,jdbcType=INTEGER},
+				#{notifyTime,jdbcType=TIMESTAMP}, #{notifyCallTime,jdbcType=TIMESTAMP}, #{notifyState,jdbcType=INTEGER},
+				#{notifyBy,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.hjgj.aiyoujin.core.model.OrderNotify">
+		insert into t_order_notify
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="orderId != null">
+				order_id,
+			</if>
+			<if test="orderCode != null">
+				order_code,
+			</if>
+			<if test="orderType != null">
+				order_type,
+			</if>
+			<if test="notifyMsg != null">
+				notify_msg,
+			</if>
+			<if test="notifys != null">
+				notifys,
+			</if>
+			<if test="notifyTime != null">
+				notify_time,
+			</if>
+			<if test="notifyCallTime != null">
+				notify_call_time,
+			</if>
+			<if test="notifyState != null">
+				notify_state,
+			</if>
+			<if test="notifyBy != null">
+				notify_by,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=VARCHAR},
+			</if>
+			<if test="orderId != null">
+				#{orderId,jdbcType=VARCHAR},
+			</if>
+			<if test="orderCode != null">
+				#{orderCode,jdbcType=VARCHAR},
+			</if>
+			<if test="orderType != null">
+				#{orderType,jdbcType=INTEGER},
+			</if>
+			<if test="notifyMsg != null">
+				#{notifyMsg,jdbcType=VARCHAR},
+			</if>
+			<if test="notifys != null">
+				#{notifys,jdbcType=INTEGER},
+			</if>
+			<if test="notifyTime != null">
+				#{notifyTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="notifyCallTime != null">
+				#{notifyCallTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="notifyState != null">
+				#{notifyState,jdbcType=INTEGER},
+			</if>
+			<if test="notifyBy != null">
+				#{notifyBy,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.hjgj.aiyoujin.core.model.OrderNotifyExample"
+			resultType="java.lang.Integer">
+		select count(*) from t_order_notify
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause"/>
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update t_order_notify
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=VARCHAR},
+			</if>
+			<if test="record.orderId != null">
+				order_id = #{record.orderId,jdbcType=VARCHAR},
+			</if>
+			<if test="record.orderCode != null">
+				order_code = #{record.orderCode,jdbcType=VARCHAR},
+			</if>
+			<if test="record.orderType != null">
+				order_type = #{record.orderType,jdbcType=INTEGER},
+			</if>
+			<if test="record.notifyMsg != null">
+				notify_msg = #{record.notifyMsg,jdbcType=VARCHAR},
+			</if>
+			<if test="record.notifys != null">
+				notifys = #{record.notifys,jdbcType=INTEGER},
+			</if>
+			<if test="record.notifyTime != null">
+				notify_time = #{record.notifyTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.notifyCallTime != null">
+				notify_call_time = #{record.notifyCallTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.notifyState != null">
+				notify_state = #{record.notifyState,jdbcType=INTEGER},
+			</if>
+			<if test="record.notifyBy != null">
+				notify_by = #{record.notifyBy,jdbcType=VARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause"/>
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update t_order_notify
+		set id = #{record.id,jdbcType=VARCHAR},
+		order_id = #{record.orderId,jdbcType=VARCHAR},
+		order_code = #{record.orderCode,jdbcType=VARCHAR},
+		order_type = #{record.orderType,jdbcType=INTEGER},
+		notify_msg = #{record.notifyMsg,jdbcType=VARCHAR},
+		notifys = #{record.notifys,jdbcType=INTEGER},
+		notify_time = #{record.notifyTime,jdbcType=TIMESTAMP},
+		notify_call_time = #{record.notifyCallTime,jdbcType=TIMESTAMP},
+		notify_state = #{record.notifyState,jdbcType=INTEGER},
+		notify_by = #{record.notifyBy,jdbcType=VARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause"/>
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.hjgj.aiyoujin.core.model.OrderNotify">
+		update t_order_notify
+		<set>
+			<if test="orderId != null">
+				order_id = #{orderId,jdbcType=VARCHAR},
+			</if>
+			<if test="orderCode != null">
+				order_code = #{orderCode,jdbcType=VARCHAR},
+			</if>
+			<if test="orderType != null">
+				order_type = #{orderType,jdbcType=INTEGER},
+			</if>
+			<if test="notifyMsg != null">
+				notify_msg = #{notifyMsg,jdbcType=VARCHAR},
+			</if>
+			<if test="notifys != null">
+				notifys = #{notifys,jdbcType=INTEGER},
+			</if>
+			<if test="notifyTime != null">
+				notify_time = #{notifyTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="notifyCallTime != null">
+				notify_call_time = #{notifyCallTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="notifyState != null">
+				notify_state = #{notifyState,jdbcType=INTEGER},
+			</if>
+			<if test="notifyBy != null">
+				notify_by = #{notifyBy,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.hjgj.aiyoujin.core.model.OrderNotify">
+		UPDATE t_order_notify
+		SET order_id         = #{orderId,jdbcType=VARCHAR},
+			order_code       = #{orderCode,jdbcType=VARCHAR},
+			order_type       = #{orderType,jdbcType=INTEGER},
+			notify_msg       = #{notifyMsg,jdbcType=VARCHAR},
+			notifys          = #{notifys,jdbcType=INTEGER},
+			notify_time      = #{notifyTime,jdbcType=TIMESTAMP},
+			notify_call_time = #{notifyCallTime,jdbcType=TIMESTAMP},
+			notify_state     = #{notifyState,jdbcType=INTEGER},
+			notify_by        = #{notifyBy,jdbcType=VARCHAR}
+		WHERE id = #{id,jdbcType=VARCHAR}
+	</update>
+	<select id="selectOneByExample" resultMap="BaseResultMap"
+			parameterType="com.hjgj.aiyoujin.core.model.OrderNotifyExample">
+		select
+		<include refid="Base_Column_List"/>
+		from t_order_notify
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause"/>
+		</if>
+		<if test="orderByClause != null">order by ${orderByClause}</if>  limit 1
+	</select>
 </mapper>

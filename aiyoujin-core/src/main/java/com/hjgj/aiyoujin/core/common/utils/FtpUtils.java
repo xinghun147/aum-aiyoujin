@@ -315,7 +315,7 @@ public class FtpUtils {
     		in.close();
     	}
     }
-	public static void main(String agrs[]) {
+	public void main(String agrs[]) {
 
 		FtpUtils ftpUtil = new FtpUtils();
 		ftpUtil.connectServer("172.20.1.72", 21, "root", "123456", "");

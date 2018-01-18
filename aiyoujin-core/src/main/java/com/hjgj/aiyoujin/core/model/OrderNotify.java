@@ -7,6 +7,8 @@ public class OrderNotify {
 
     private String orderId;
 
+    private String orderCode;
+
     private Integer orderType;
 
     private String notifyMsg;
@@ -35,6 +37,14 @@ public class OrderNotify {
 
     public void setOrderId(String orderId) {
         this.orderId = orderId == null ? null : orderId.trim();
+    }
+
+    public String getOrderCode() {
+        return orderCode;
+    }
+
+    public void setOrderCode(String orderCode) {
+        this.orderCode = orderCode == null ? null : orderCode.trim();
     }
 
     public Integer getOrderType() {

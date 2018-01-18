@@ -36,7 +36,7 @@ import com.hjgj.aiyoujin.core.model.vo.ProductVo;
 @Service
 public class UserOrderService {
 
-    protected final Logger logger = LoggerFactory.getLogger(UserOrderService.class);
+    protected final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private UserOrderMapper userOrderMapper;
@@ -152,24 +152,6 @@ public class UserOrderService {
         } else {
             return null;
         }
-    }
-
-    /**
-     * 更新订单表,订单记录表
-     *
-     * @param orderNo
-     * @param orderState
-     * @return
-     */
-    public int updateOrderByCodeState(String orderNo, Integer orderState) {
-        logger.info("updateOrderByCodeState执行,参数为{" + orderNo + "},{" + orderState + "}");
-        HashMap<String, Object> hashMap = new HashMap<>();
-        hashMap.put("orderNo", orderNo);
-        hashMap.put("orderStatus", orderState);
-        hashMap.put("updateTime", new Date());
-        int updateResult = userOrderMapper.updateOrderByMap(hashMap);
-        logger.info("updateOrderByCodeState执行,参数为{" + orderNo + "},{" + orderState + "},更新结果为" + updateResult);
-        return updateResult;
     }
 
     /**
