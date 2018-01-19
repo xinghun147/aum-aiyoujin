@@ -1,6 +1,7 @@
 package com.hjgj.aiyoujin.server.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
@@ -14,7 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
 import com.hjgj.aiyoujin.core.model.Express;
+import com.hjgj.aiyoujin.core.model.Order;
+import com.hjgj.aiyoujin.core.model.ProductPicture;
 import com.hjgj.aiyoujin.core.service.ExpressService;
+import com.hjgj.aiyoujin.core.service.ProductPictureService;
+import com.hjgj.aiyoujin.core.service.UserOrderService;
 import com.hjgj.aiyoujin.core.vo.ExpressVo;
 import com.hjgj.aiyoujin.server.util.HttpUtil;
 
@@ -36,14 +41,25 @@ public class ExpressApiController {
   	private String expressAddress;
     @Autowired
     private ExpressService expressService;
+    @Autowired
+    private UserOrderService userOrderService;
+    @Autowired
+    private ProductPictureService productPictureService ;
     @ApiOperation(value = "快递接口")
     @RequestMapping(value = "getExpressDetail", method = RequestMethod.POST)
-    public JSONObject getExpressDetail(String expressNo, String expressCode) {
-    	  Map<String, String> headers = new HashMap<String, String>();
+    public JSONObject getExpressDetail(String orderId) {
+    	Order order =userOrderService.getOrderById(orderId);
+    	if(order==null){
+    		JSONObject obj = new JSONObject();
+    		obj.put("mes", "该订单不存在");
+    		return obj;
+    	}
+    	Map<String, String> headers = new HashMap<String, String>();
   	    //最后在header中的格式(中间是英文空格)为Authorization:APPCODE 83359fd73fe94948385f570e3c139105
   	    headers.put("Authorization", "APPCODE " + appcode);
   	    Map<String, String> querys = new HashMap<String, String>();
-  	    querys.put("no",expressNo.trim());
+  	    querys.put("no",order.getExpressNo().trim());
+  	    String expressCode="";
   	    querys.put("type",StringUtils.isNotBlank(expressCode) ? expressCode : "auto");
 	  	  try {
 	  		/*  状态码       说明
@@ -53,10 +69,19 @@ public class ExpressApiController {
 					204		快递公司识别失败
 					205		没有信息；单号错误 (正确单号应是扫描入库的正规单号)
 					207		该单号被限制，错误单号；一个单号对应多个快递公司，请求须指定快递公司	*/
-	  	logger.info("调用第三方接口【快递查询】请求参数,expressNo:{},type:{}",expressNo,expressCode);
+	  	logger.info("调用第三方接口【快递查询】请求参数,expressNo:{},type:{}",order.getExpressNo(),order.getExpressCompany());
+	  	expressCode=order.getExpressCompany();
 	  	String res =  HttpUtil.getRequest(expressAddress, querys, headers);
 	  	logger.info("调用第三方接口【快递查询】返回数据 {}",res);
 	  	JSONObject obj = JSONObject.parseObject(res);
+	  	List<ProductPicture> list =productPictureService.queryProductPicture(order.getProductId());
+    	for(int i=0;i<list.size();i++){
+    		ProductPicture p=list.get(i);
+    		if(p.getType()==0){
+    			obj.put("path",p.getPath());
+    			break;
+    		}
+    	}
 	  	String status = obj.getString("status");
 			if (("0").equals(status)) {//请求成功
 	  			JSONObject result = obj.getJSONObject("result");
