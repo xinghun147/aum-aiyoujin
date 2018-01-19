@@ -102,6 +102,17 @@ public class OrderWebVo {
      */
     private Integer isMsg;
     
+    /**
+     * 物流公司
+     */
+    private String expressCompany;
+    
+    /**
+     * 物流编号
+     */
+    private String expressNo;
+    
+    
 
 	public Integer getStatusCode() {
 		return statusCode;
@@ -269,5 +280,21 @@ public class OrderWebVo {
 
 	public void setIsMsg(Integer isMsg) {
 		this.isMsg = isMsg;
+	}
+
+	public String getExpressCompany() {
+		return expressCompany;
+	}
+
+	public void setExpressCompany(String expressCompany) {
+		this.expressCompany = expressCompany;
+	}
+
+	public String getExpressNo() {
+		return expressNo;
+	}
+
+	public void setExpressNo(String expressNo) {
+		this.expressNo = expressNo;
 	}
 }

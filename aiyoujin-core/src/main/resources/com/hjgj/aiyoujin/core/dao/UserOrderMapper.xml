@@ -150,6 +150,8 @@
 		oneOrder.reason      AS reason,
 		oneOrder.create_time AS createTime,
 		oneOrder.sell_amount AS sellAmount,
+		oneOrder.express_company AS expressCompany,
+		oneOrder.express_no    AS expressNo,
 		oneProdPic.path      AS productImgUrl
 		FROM
 		t_order AS oneOrder
