@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8"/>
@@ -6,7 +7,7 @@
     <link rel="stylesheet" type="text/css" th:href="@{/layui/css/layui.css}" media="all"/>
     <link rel="stylesheet" type="text/css" th:href="@{/css/news.css}" media="all"/>
 </head>
-<body class="childrenBody">
+<body class="childrenBody" >
 <blockquote class="layui-elem-quote news_search" style="min-width: 1680px;">
     <form id="searchForm" name="searchForm" class="layui-form" action="sendOrderEntry.html">
         <input type="hidden" id="pageNum" name="pageNum" th:value="${page.pageNum}"/>

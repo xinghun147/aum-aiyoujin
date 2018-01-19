@@ -7,7 +7,7 @@
     <link rel="stylesheet" type="text/css" th:href="@{/css/news.css}" media="all"/>
 </head>
 <body class="childrenBody">
-<blockquote class="layui-elem-quote news_search">
+<blockquote class="layui-elem-quote news_search"  style="min-width: 1680px;">
     <form id="searchForm" name="searchForm" class="layui-form" action="sellOrderEntry.html">
         <input type="hidden" id="pageNum" name="pageNum" th:value="${page.pageNum}"/>
         <div class="layui-form-item" style="margin-left: -30px;margin-bottom: 2px;">
@@ -80,15 +80,15 @@
                     <td th:case="9" style="color: #e47214">变现失败</td>
                 </th:block>
                 <td th:text="${item.createTime}?${#dates.format(item.createTime,'yyyy-MM-dd HH:mm:ss')}"></td>
-                <td>
+                <!--<td>
                     <a th:data="${item.orderId}" class="layui-btn layui-btn-mini message_edit"> <i class="layui-icon">&#xe642;</i>编辑</a>
-                    <!--<th:block th:if="${item.status == 0}">-->
-                    <!--<a th:data="${item.id}" class="layui-btn layui-btn-danger layui-btn-mini message_push"> <i-->
-                    <!--class="layui-icon">&#xe642;</i>推送</a>-->
-                    <!--<a th:data="${item.id}" class="layui-btn layui-btn-danger layui-btn-mini message_del"><i-->
-                    <!--class="layui-icon">&#xe640;</i> 删除</a>-->
-                    <!--</th:block>-->
-                </td>
+                    &lt;!&ndash;<th:block th:if="${item.status == 0}">&ndash;&gt;
+                    &lt;!&ndash;<a th:data="${item.id}" class="layui-btn layui-btn-danger layui-btn-mini message_push"> <i&ndash;&gt;
+                    &lt;!&ndash;class="layui-icon">&#xe642;</i>推送</a>&ndash;&gt;
+                    &lt;!&ndash;<a th:data="${item.id}" class="layui-btn layui-btn-danger layui-btn-mini message_del"><i&ndash;&gt;
+                    &lt;!&ndash;class="layui-icon">&#xe640;</i> 删除</a>&ndash;&gt;
+                    &lt;!&ndash;</th:block>&ndash;&gt;
+                </td>-->
             </tr>
         </th:block>
         </tbody>
