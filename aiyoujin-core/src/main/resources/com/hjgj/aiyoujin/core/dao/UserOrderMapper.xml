@@ -124,13 +124,13 @@
 			AND oneOrder.status in (1,4,6,9)
 		</if>
 		<if test="types == 2">
-			AND oneOrder.status in (3,5)
+			AND oneOrder.status = (3,5)
 		</if>
 		<if test="types == 3">
-			AND oneOrder.status in (7,8)
+			AND oneOrder.status = (7,8)
 		</if>
 		<if test="types == 4">
-			AND oneOrder.status in (10,11,12)
+			AND oneOrder.status = (10,11,12)
 		</if>
 	</select>
 
@@ -150,8 +150,6 @@
 		oneOrder.reason      AS reason,
 		oneOrder.create_time AS createTime,
 		oneOrder.sell_amount AS sellAmount,
-		oneOrder.express_company AS expressCompany,
-		oneOrder.express_no    AS expressNo,
 		oneProdPic.path      AS productImgUrl
 		FROM
 		t_order AS oneOrder
