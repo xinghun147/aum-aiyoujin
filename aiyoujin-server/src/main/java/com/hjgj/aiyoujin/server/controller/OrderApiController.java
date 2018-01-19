@@ -204,7 +204,7 @@ public class OrderApiController {
 			if(o != null){
 				orderId=o.getId();
 			}
-			OrderWebVo order = userOrderService.queryOrderDetail(orderId);
+			OrderWebVo order = userOrderService.queryOrderDetail(orderId,userId);
 			return ResultModel.ok(order);
 		} catch (Exception e) {
 			return ResultModel.error(ResultStatus.ORDER_NOT_EXIST);

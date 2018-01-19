@@ -219,11 +219,10 @@ public class UserOrderService {
     }
 
 
-    public OrderWebVo queryOrderDetail(String orderId) throws Exception {
+    public OrderWebVo queryOrderDetail(String orderId,String userId) throws Exception {
         Order order = userOrderMapper.selectByPrimaryKey(orderId);
         ProductVo product = productService.queryGoodsDetail(order.getProductId());
         OrderWebVo orderVo = new OrderWebVo();
-        String userId = "";
         
         if (StringUtils.isNotBlank(order.getSourceOrderId())) {
             Order orderFrom = userOrderMapper.selectByPrimaryKey(order.getSourceOrderId());
