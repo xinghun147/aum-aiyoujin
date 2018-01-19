@@ -131,7 +131,6 @@
 		<if test="types == 4">
 			AND selfOrder.status in (10,11,12)
 		</if>
-		GROUP BY selfOrder.id
 	</select>
 
 
