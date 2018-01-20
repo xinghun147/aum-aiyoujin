@@ -171,7 +171,7 @@ public class WeixinPush {
         }
         // 到账金额
         TemplateMessageItem keyword1 = new TemplateMessageItem();
-        keyword1.setValue("￥"+amount);
+        keyword1.setValue("¥"+amount);
         keyword1.setColor("#333333");
 
         // 到账方式
