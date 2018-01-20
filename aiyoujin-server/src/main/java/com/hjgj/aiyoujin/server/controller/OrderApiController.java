@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSON;
 import com.hjgj.aiyoujin.core.common.OrderStatusEnum;
 import com.hjgj.aiyoujin.core.model.Order;
 import com.hjgj.aiyoujin.core.model.OrderMessage;
@@ -240,7 +241,8 @@ public class OrderApiController {
 				return ResultModel.error(ResultStatus.ORDER_NOT_EXIST);
 			}
 			User user = userService.getUserByUserId(order.getUserId());
-			Map map = userOrderService.giftToCash(order,user.getId());
+			Map map = userOrderService.giftToCash(order,user.getOpenId());
+			logger.info("调用变现接口返回，请求参数openId:{},Map:{}",user.getOpenId(),JSON.toJSONString(map));
 			if(map.get("code").equals("0")){
 				//变现单位为：分
 	    		DecimalFormat df = new DecimalFormat("#");
@@ -253,6 +255,7 @@ public class OrderApiController {
 				return  ResultModel.error(ResultStatus.ORDER_TO_CASH_FAIL);
 			}
 		} catch (Exception e) {
+			logger.error("调用变现接口异常", e);
 			return ResultModel.error(ResultStatus.ORDER_TO_CASH_FAIL);
 		}
     }
