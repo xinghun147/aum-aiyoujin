@@ -34,7 +34,7 @@ public class ProductApiController{
     
     
     @ApiOperation(value = "查询商品列表")
-	@RequestMapping(value = "queryGoodsDetail", method = RequestMethod.GET)
+	@RequestMapping(value = "queryPageGoods", method = RequestMethod.GET)
 	public ResultModel queryGoodsDetail(@ApiParam(value = "第多少页", required = true)  @RequestParam Integer pageNum,
 										@ApiParam(value = "每页多少", required = true) @RequestParam Integer pageSize) {
     	Assert.notNull(pageNum, "页码 can not be empty");
@@ -50,7 +50,7 @@ public class ProductApiController{
 	
     
     @ApiOperation(value = "查询商品详情")
-	@RequestMapping(value = "queryPageGoods", method = RequestMethod.GET)
+	@RequestMapping(value = "queryGoodsDetail", method = RequestMethod.GET)
 	public ResultModel queryAddress(@ApiParam(value = "商品id", required = true) @RequestParam String id) {
 		try {
 			ProductVo data = productService.queryGoodsDetail(id);

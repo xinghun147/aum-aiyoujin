@@ -3,7 +3,6 @@ package com.hjgj.aiyoujin.core.service;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -234,7 +233,7 @@ public class UserOrderService {
         orderVo.setSellAmount(order.getSellAmount());
         orderVo.setProductName(product.getName());
         orderVo.setProductId(order.getProductId());
-        orderVo.setLargePictures(product.getLargePictures());
+        orderVo.setMiddlePictures(product.getMiddlePictures());
         orderVo.setOrderStatus(OrderStatusEnum.switchOrderStateName(order.getStatus()));
         orderVo.setOrderId(order.getId());
         orderVo.setUserId(order.getUserId());

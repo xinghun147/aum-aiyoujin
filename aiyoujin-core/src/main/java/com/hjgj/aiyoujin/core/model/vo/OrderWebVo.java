@@ -82,7 +82,7 @@ public class OrderWebVo {
      */
     private String productImgUrl;
     
-    private String [] largePictures;//订单详情图片
+    private String [] middlePictures;//订单详情图片(带文字、和不带文字)
     
     /**
      * 留言
@@ -234,12 +234,12 @@ public class OrderWebVo {
         this.productImgUrl = productImgUrl;
     }
 
-	public String[] getLargePictures() {
-		return largePictures;
+	public String[] getMiddlePictures() {
+		return middlePictures;
 	}
 
-	public void setLargePictures(String[] largePictures) {
-		this.largePictures = largePictures;
+	public void setMiddlePictures(String[] middlePictures) {
+		this.middlePictures = middlePictures;
 	}
 
 	public String getMessage() {
