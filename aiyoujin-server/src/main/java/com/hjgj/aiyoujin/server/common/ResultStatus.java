@@ -10,6 +10,7 @@ public enum ResultStatus {
     USER_NOT_PASSWORD(-1005, "用户未设置登录密码"),
     USER_PHONE_ERROR(-1006, "手机号码格式错误"),
     UPLOAD_FILE_ERROE(-1007, "非法文件格式"),
+    USER_NOT_OPENID(-1008, "openId不能为空"),
 
 
     

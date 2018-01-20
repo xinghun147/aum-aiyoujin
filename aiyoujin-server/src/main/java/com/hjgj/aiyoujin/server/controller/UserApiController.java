@@ -1,6 +1,7 @@
 package com.hjgj.aiyoujin.server.controller;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,9 @@ public class UserApiController{
 										@ApiParam(value = "昵称") @RequestParam(required = false) String nickname,
 										@ApiParam(value = "头像地址") @RequestParam(required = false) String avatar) {
     	Assert.notNull(openId, "微信openId can not be empty");
+    	if(StringUtils.isBlank(openId)){
+    		return ResultModel.error(ResultStatus.USER_NOT_OPENID);
+    	}
     	try {
 			User user = new User();
 			user.setAvatar(avatar);
