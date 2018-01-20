@@ -245,11 +245,8 @@ public class OrderApiController {
 			Map map = userOrderService.giftToCash(order,user.getOpenId());
 			logger.info("调用变现接口返回，请求参数openId:{},Map:{}",user.getOpenId(),JSON.toJSONString(map));
 			if(map.get("code").equals("0")){
-				//变现单位为：分
-	    		DecimalFormat df = new DecimalFormat("#");
-	            String money = df.format(order.getSellAmount().multiply(new BigDecimal(100)));
 	            //给用户推送通知 
-				weixinPush.payResultNotifySell(money,"微信零钱",new Date(), formId, user.getOpenId());
+				weixinPush.payResultNotifySell(order.getSellAmount().setScale(2).toString(),"微信零钱",new Date(), formId, user.getOpenId());
 				return ResultModel.ok();
 			}else{
 				userOrderService.updateOrderStauts(order.getId(), OrderStatusEnum.ORDER_STATUS_CASH_FAIL.getCode());
