@@ -201,9 +201,12 @@ public class OrderApiController {
         Assert.notNull(userId, "userId 不可为空");
 		try {
 			
-		  	//查询订单是否已被送出
+		  	//查询订单是否已被领取
 			Order  o = userOrderService.getOrderBySourceOrderId(orderId,userId);
 			if(o != null){
+				if(!o.getUserId().equals(userId)){//查看用户非领取用户
+					return ResultModel.error(ResultStatus.ORDER_TO_RECEIVE_RECEIVED);
+				}
 				orderId=o.getId();
 			}
 			OrderWebVo order = userOrderService.queryOrderDetail(orderId,userId);
