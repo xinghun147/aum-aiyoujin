@@ -161,6 +161,7 @@ public class OrderApiController {
 	        	Order fromOrder = new Order();
 	        	fromOrder.setUserId(byUser.getId());
 	        	fromOrder.setBuyAmount(orderBy.getBuyAmount());
+	        	fromOrder.setSellAmount(orderBy.getSellAmount());
 	        	fromOrder.setProductId(orderBy.getProductId());
 	        	fromOrder.setFromOrderId(orderId);
 	        	fromOrder.setSourceOrderId(orderId);
