@@ -1,28 +1,20 @@
 package com.hjgj.aiyoujin.server.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.hjgj.aiyoujin.core.common.utils.CommonUtils;
-import com.hjgj.aiyoujin.core.common.utils.UUIDGenerator;
-import com.hjgj.aiyoujin.core.model.Order;
-import com.hjgj.aiyoujin.core.model.OrderLog;
-import com.hjgj.aiyoujin.core.model.OrderMessage;
-import com.hjgj.aiyoujin.core.model.Product;
-import com.hjgj.aiyoujin.core.model.User;
-import com.hjgj.aiyoujin.core.service.OrderNotifyService;
-import com.hjgj.aiyoujin.core.service.ProductService;
-import com.hjgj.aiyoujin.core.service.UserOrderService;
-import com.hjgj.aiyoujin.core.service.UserService;
-import com.hjgj.aiyoujin.core.vo.UnifiedOrderRespose;
-import com.hjgj.aiyoujin.server.util.MD5Util;
-import com.hjgj.aiyoujin.server.vo.WeiXinPayResultVo;
-import com.hjgj.aiyoujin.server.vo.WeiXinPrePayVo;
-import com.hjgj.aiyoujin.server.webBiz.WeixinOrder;
-import com.hjgj.aiyoujin.server.webBiz.WeixinPush;
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.xml.XmlFriendlyNameCoder;
-import com.thoughtworks.xstream.io.xml.XppDriver;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import java.io.InputStream;
+import java.io.PrintWriter;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,19 +27,32 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.InputStream;
-import java.io.PrintWriter;
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import com.alibaba.fastjson.JSON;
+import com.hjgj.aiyoujin.core.common.exception.BusinessException;
+import com.hjgj.aiyoujin.core.common.utils.CommonUtils;
+import com.hjgj.aiyoujin.core.common.utils.UUIDGenerator;
+import com.hjgj.aiyoujin.core.model.Order;
+import com.hjgj.aiyoujin.core.model.OrderLog;
+import com.hjgj.aiyoujin.core.model.OrderMessage;
+import com.hjgj.aiyoujin.core.model.Product;
+import com.hjgj.aiyoujin.core.model.User;
+import com.hjgj.aiyoujin.core.service.OrderNotifyService;
+import com.hjgj.aiyoujin.core.service.ProductService;
+import com.hjgj.aiyoujin.core.service.UserOrderService;
+import com.hjgj.aiyoujin.core.service.UserService;
+import com.hjgj.aiyoujin.core.vo.UnifiedOrderRespose;
+import com.hjgj.aiyoujin.server.common.ResultStatus;
+import com.hjgj.aiyoujin.server.util.MD5Util;
+import com.hjgj.aiyoujin.server.vo.WeiXinPayResultVo;
+import com.hjgj.aiyoujin.server.vo.WeiXinPrePayVo;
+import com.hjgj.aiyoujin.server.webBiz.WeixinOrder;
+import com.hjgj.aiyoujin.server.webBiz.WeixinPush;
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.XmlFriendlyNameCoder;
+import com.thoughtworks.xstream.io.xml.XppDriver;
+
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 
 @Controller
 @RequestMapping(value = "/weixin")
@@ -87,7 +92,17 @@ public class WeixinPayController {
         Assert.notNull(nonceStr, "随机串 can not be empty");
         Assert.notNull(openId, "openId can not be empty");
         Assert.notNull(productId, "产品Id can not be empty");
-
+        HashMap<String, Object> map = new HashMap<>();
+        //校验库存
+        Product product = productService.findProduct(productId);
+        if(product == null){
+            map.put("code", "1");
+            map.put("msg", ResultStatus.PRODUCT_NO_EXIST.getMsg());
+        }
+        if(product.getQuantity() < 1){
+    	   map.put("code", "1");
+           map.put("msg", ResultStatus.PRODUCT_NO_STOCK.getMsg());
+        }
         WeiXinPrePayVo weixin = new WeiXinPrePayVo();
         weixin.setContent(content);
         weixin.setNonceStr(nonceStr);
@@ -98,17 +113,13 @@ public class WeixinPayController {
         String responseMsg = null;
         String orderNo = CommonUtils.generateOrderNo("CZ");
 
-        Product product = productService.findProduct(weixin.getProductId());
-        String name = product.getName();
-
         User userBy = userService.getUserByOpenId(weixin.getOpenId());
 
-        Date nowDate = new Date();
         Order wxOrder = new Order();
         wxOrder.setBuyAmount(product.getBuyPrice());
         wxOrder.setId(UUIDGenerator.generate());
         wxOrder.setDeleted(0);
-        wxOrder.setCreateTime(nowDate);
+        wxOrder.setCreateTime(new Date());
         wxOrder.setProductId(weixin.getProductId());
         wxOrder.setStatus(0);
         wxOrder.setCode(orderNo); // 订单号
@@ -118,9 +129,7 @@ public class WeixinPayController {
         // 订单状态：0待支付、1支付成功、2支付失败、3送出待收、4已退回、5送出成功、
         //	  6领取成功、7变现待处理、8变现成功、9变现失败、10提货待处理、11物流中、12已收货
 
-
-        HashMap<String, Object> map = new HashMap<>();
-        String xmlRequest = weixinOrder.getXmlRequest(weixin.getNonceStr(), weixin.getOpenId(), product.getBuyPrice(), orderNo, name);
+        String xmlRequest = weixinOrder.getXmlRequest(weixin.getNonceStr(), weixin.getOpenId(), product.getBuyPrice(), orderNo, product.getName());
         Map<String, Object> prePayXML = weixinOrder.wxPrePayXML(xmlRequest);
         String xmlStr = (String) prePayXML.get("xmlStr");
         UnifiedOrderRespose unifiedOrderRespose = (UnifiedOrderRespose) prePayXML.get("unifiedOrderRespose");
@@ -134,7 +143,7 @@ public class WeixinPayController {
         orderLog.setPayResp(xmlStr);
         orderLog.setStatus(Integer.valueOf(0)); // 支付状态: 0-处理中 1-成功 2-失败
         orderLog.setPayType(Integer.valueOf(1)); //支付类型（0-付款 1-收款）
-        orderLog.setCreateTime(nowDate);
+        orderLog.setCreateTime(new Date());
         orderLog.setCreateBy("System");
         orderLog.setReqTime(createTime);
         orderLog.setRespTime(updateTime);
@@ -142,7 +151,7 @@ public class WeixinPayController {
         OrderMessage orderMessage = new OrderMessage();
         orderMessage.setId(UUIDGenerator.generate());
         orderMessage.setContent(weixin.getContent());
-        orderMessage.setCreateTime(nowDate);
+        orderMessage.setCreateTime(new Date());
         orderMessage.setDeleted(0);
         orderMessage.setImageUrl(imageUrl);
         orderMessage.setVideoUrl(videoUrl);
@@ -180,19 +189,26 @@ public class WeixinPayController {
             orderLog.setPayResultMsg(unifiedOrderRespose.getReturn_msg());
             orderLog.setUpdateTime(orderLog.getCreateTime());
             orderLog.setPrepayId(unifiedOrderRespose.getPrepay_id());
-            int insertThree = userOrderService.createOrder(wxOrder, orderLog, orderMessage);
-            if (insertThree > 0) {
-                map.put("code", "0");
-                map.put("msg", "恭喜,微信预支付成功!");
-                map.put("timeStamp", weixin.getTimeStamp());
-                map.put("nonceStr", weixin.getNonceStr());
-                map.put("package", "prepay_id=" + prepayId);
-                map.put("signType", "MD5");
-                map.put("paySign", paySign);
-                map.put("orderId", wxOrder.getId());
-            } else {
-                map.put("code", "1");
-            }
+            int insertThree;
+			try {
+				insertThree = userOrderService.createOrder(wxOrder, orderLog, orderMessage);
+				   if (insertThree > 0) {
+		                map.put("code", "0");
+		                map.put("msg", "恭喜,微信预支付成功!");
+		                map.put("timeStamp", weixin.getTimeStamp());
+		                map.put("nonceStr", weixin.getNonceStr());
+		                map.put("package", "prepay_id=" + prepayId);
+		                map.put("signType", "MD5");
+		                map.put("paySign", paySign);
+		                map.put("orderId", wxOrder.getId());
+		            } else {
+		                map.put("code", "1");
+		            }
+			} catch (BusinessException e) {
+				logger.error("创建订单接口异常,e:{}", e);
+			    map.put("code", "1");
+	            map.put("msg", "创建订单失败!");
+			}
         } else {
             map.put("code", "1");
             map.put("msg", "您的参数不合法,请校验后重试!");

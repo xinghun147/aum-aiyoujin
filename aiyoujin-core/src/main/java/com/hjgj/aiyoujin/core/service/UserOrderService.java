@@ -63,17 +63,13 @@ public class UserOrderService {
 
 
     @Transactional
-    public int createOrder(Order order, OrderLog orderLog, OrderMessage orderMessage) {
+    public int createOrder(Order order, OrderLog orderLog, OrderMessage orderMessage) throws BusinessException{
         int count = userOrderMapper.insert(order);
         if (count > 0) {
             orderLogMapper.insert(orderLog);
             orderMessageMapper.insert(orderMessage);
             //扣减库存
-            try {
-                productService.updateQuantity(order.getProductId(), -1);
-            } catch (BusinessException e) {
-                logger.error("创建订单扣减库存异常", e.getMsg());
-            }
+             productService.updateQuantity(order.getProductId(), -1);
         }
         return count;
     }
