@@ -207,7 +207,7 @@ public class OrderApiController {
 				orderId=o.getId();
 			}else{
 				Order order = userOrderService.getOrderById(orderId);
-				if(!order.getUserId().equals(userId)){//查看用户非领取用户或发送用户
+				if(!order.getUserId().equals(userId) && order.getStatus() != OrderStatusEnum.ORDER_STATUS_UNRECEIVE.getCode()){//查看用户为非领取用户或发送用户
 					return ResultModel.error(ResultStatus.ORDER_TO_RECEIVE_RECEIVED);
 				}
 			}
