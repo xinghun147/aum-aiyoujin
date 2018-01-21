@@ -5,6 +5,7 @@ import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,6 +75,23 @@ public class OrderApiController {
         pageNum = pageNum == null ? 1 : pageNum;
         pageSize = pageSize == null ? 50 : pageSize;
         Page<OrderWebVo> allOrders = userOrderService.getUserAllOrders(userId, types, pageNum, pageSize);
+        if(allOrders != null && allOrders.getTotal() > 0){
+        	for (OrderWebVo orderWebVo : allOrders.getList()) {
+				//判断是否有留言
+        		OrderWebVo vo;
+				try {
+					vo = userOrderService.queryOrderDetail(orderWebVo.getOrderId(), userId);
+					if(StringUtils.isNotBlank(vo.getMessage()) || StringUtils.isNotBlank(vo.getImageUrl()) || StringUtils.isNotBlank(vo.getVideoUrl())){
+						orderWebVo.setIsMsg(1);
+					}else{
+						orderWebVo.setIsMsg(0);
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+        }
+        
         if (allOrders != null) {
             return ResultModel.ok(allOrders);
         } else {

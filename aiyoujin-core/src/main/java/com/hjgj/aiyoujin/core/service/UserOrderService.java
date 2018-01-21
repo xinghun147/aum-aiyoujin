@@ -112,17 +112,6 @@ public class UserOrderService {
         int count = userOrderMapper.countUserAllOrdersByUserId(userId, types, rowBounds);
         if (count > 0) {
             List<OrderWebVo> orderVOList = userOrderMapper.getUserAllOrdersByUserId(userId, types, rowBounds);
-            if(orderVOList != null && orderVOList.size() > 0){
-            	for (OrderWebVo orderWebVo : orderVOList) {
-					//判断是否有留言
-            		OrderMessage om = orderMessageService.queryMessage(orderWebVo.getOrderId(), null);
-            		if(om != null){
-            			orderWebVo.setIsMsg(1);
-            		}else{
-            			orderWebVo.setIsMsg(0);
-            		}
-				}
-            }
             page.setList(orderVOList);
             page.setTotal(count);
         }
