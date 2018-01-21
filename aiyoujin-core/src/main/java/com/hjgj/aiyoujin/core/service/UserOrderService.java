@@ -237,6 +237,7 @@ public class UserOrderService {
         
         if(order.getStatus() == 1 || order.getStatus() == 3 ||order.getStatus() == 4 ||order.getStatus() == 5){//状态为：送出待收、送出成功、已退回的状态，查询使用订单userId查询留言
         	  userId = order.getUserId();
+        	  orderId=order.getId();
         }
         
         User user = userService.getUserByUserId(userId);
