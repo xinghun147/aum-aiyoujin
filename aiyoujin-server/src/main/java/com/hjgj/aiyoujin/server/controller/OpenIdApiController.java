@@ -36,19 +36,22 @@ public class OpenIdApiController {
     @ResponseBody
     @RequestMapping(value = "getOpenId",method = RequestMethod.GET)
     public OpenIdResult getOpenId(String jsCode) {
-        logger.info("用户获取OpenId=========>jsCode为:"+jsCode);
-        HttpUriRequest httpUriRequest = RequestBuilder.post()
-                .setHeader(jsonHeader)
-                .setUri(BASE_URI+"/sns/jscode2session")
-                .addParameter("appid", "wxbad011f34af54919")
-                .addParameter("secret", "8c998dd4511ad0c2b23e40a0cfebe1a1")
-                .addParameter("js_code",jsCode)
-                .addParameter("grant_type","authorization_code")
-                .build();
-
-        OpenIdResult openIdResult = LocalHttpClient.executeJsonResult(httpUriRequest, OpenIdResult.class);
-        logger.info("获取OpenIdResult==========>"+openIdResult);
-        return openIdResult;
+    	OpenIdResult openIdResult =null;
+    	try {
+    		HttpUriRequest httpUriRequest = RequestBuilder.post()
+    				.setHeader(jsonHeader)
+    				.setUri(BASE_URI+"/sns/jscode2session")
+    				.addParameter("appid", "wxbad011f34af54919")
+    				.addParameter("secret", "8c998dd4511ad0c2b23e40a0cfebe1a1")
+    				.addParameter("js_code",jsCode)
+    				.addParameter("grant_type","authorization_code")
+    				.build();
+    		
+    		 openIdResult = LocalHttpClient.executeJsonResult(httpUriRequest, OpenIdResult.class);
+		} catch (Exception e) {
+			logger.error("获取OpenId异常，e:{},",e);
+		}
+    	return openIdResult;
     }
 
 
