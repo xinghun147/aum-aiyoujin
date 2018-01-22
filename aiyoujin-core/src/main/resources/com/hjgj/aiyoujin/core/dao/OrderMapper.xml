@@ -479,28 +479,17 @@
 		</set>
 		where code = #{orderNo,jdbcType=VARCHAR}
 	</update>
-
-	<select id="countAllOrderVoMap" parameterType="map" resultType="java.lang.Integer">
-
-	</select>
-
-	<select id="selectAllOrderVoMap" parameterType="map" resultType="com.hjgj.aiyoujin.core.model.vo.OrderVO">
-
-
-	</select>
-
 	<!-- TODO 统计买入订单数目 -->
 	<select id="countBuyOrderVo" parameterType="com.hjgj.aiyoujin.core.model.vo.OrderRequestVo"
 			resultType="java.lang.Integer">
 		SELECT
-		count(torder.id)
+		count(DISTINCT(torder.id))
 		FROM
-		t_order AS torder
+		t_order_log AS ordLog
+		LEFT JOIN t_order AS torder ON torder.id = ordLog.order_id
 		LEFT JOIN t_product AS tprod ON torder.product_id = tprod.id
 		LEFT JOIN t_user AS tuser ON tuser.id = torder.user_id
-		WHERE
-		torder.deleted = 0
-		AND torder.`status` IN (0, 1, 2)
+		WHERE torder.deleted = 0 AND ordLog.pay_type = 1
 		<if test="startTime != null and endTime != null">
 			AND torder.create_time BETWEEN #{startTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
 		</if>
@@ -525,15 +514,15 @@
 		tprod.`code` AS productCode,
 		tprod.`name` AS productName,
 		torder.buy_amount AS buyAmount,
-		torder.`status` AS orderStatus,
+		ordLog.`status` AS orderStatus,
+		torder.id AS orderId,
 		torder.create_time AS createTime
 		FROM
-		t_order AS torder
+		t_order_log AS ordLog
+		LEFT JOIN t_order AS torder ON torder.id = ordLog.order_id
 		LEFT JOIN t_product AS tprod ON torder.product_id = tprod.id
 		LEFT JOIN t_user AS tuser ON tuser.id = torder.user_id
-		WHERE
-		torder.deleted = 0
-		AND torder.`status` IN (0, 1, 2)
+		WHERE torder.deleted = 0 AND ordLog.pay_type = 1
 		<if test="startTime != null and endTime != null">
 			AND torder.create_time BETWEEN #{startTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
 		</if>
@@ -546,6 +535,7 @@
 		<if test="productName != null and productName != ''">
 			AND tprod.`name` = #{productName,jdbcType=VARCHAR}
 		</if>
+		group by torder.id
 		ORDER BY torder.create_time desc
 	</select>
 

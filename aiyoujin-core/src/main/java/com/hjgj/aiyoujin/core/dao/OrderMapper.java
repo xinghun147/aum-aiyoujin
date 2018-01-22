@@ -1,16 +1,15 @@
 package com.hjgj.aiyoujin.core.dao;
 
-import java.util.List;
-import java.util.Map;
-
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.session.RowBounds;
-
 import com.hjgj.aiyoujin.core.model.Order;
 import com.hjgj.aiyoujin.core.model.OrderExample;
 import com.hjgj.aiyoujin.core.model.vo.OrderRequestVo;
 import com.hjgj.aiyoujin.core.model.vo.OrderVO;
 import com.hjgj.aiyoujin.core.model.vo.OrderWebVo;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.session.RowBounds;
+
+import java.util.List;
+import java.util.Map;
 
 public interface OrderMapper {
     int countByExample(OrderExample example);
@@ -37,13 +36,9 @@ public interface OrderMapper {
 
     int updateByPrimaryKey(Order record);
 
-    int countAllOrderVoMap(Map map, RowBounds rowBounds);
-
     int updateOrderByCodeState(@Param("orderNo") String orderNo,@Param("orderState") Integer orderState);
 
     int updateOrderByMap(Map param);
-
-    List<OrderVO> selectAllOrderVoMap(Map map, RowBounds rowBounds);
 
     /**
      * TODO 统计买入订单数目
