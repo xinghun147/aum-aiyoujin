@@ -40,7 +40,7 @@ public class WeixinPush {
      * @param openId
      */
     @Async
-    public Map payResultNotify(String prodName, String payMoney, Date payTime, String prePayId, String openId) {
+    public Map payResultNotify(String prodName, String payMoney, Date payTime, String prePayId, String openId,String orderId) {
         Map<String,Object> resultMap = new HashMap<>();
         String weixinToken = null;
         while (weixinToken == null) {
@@ -76,6 +76,7 @@ public class WeixinPush {
 //        wxopenTemplateMessage.setEmphasis_keyword("keyword1.DATA");
         wxopenTemplateMessage.setForm_id(prePayId);
         wxopenTemplateMessage.setTemplate_id("xeZ-PIsudhp2uxzIng9iD6rIzBCwq7zg093tlpJ3Ev4");
+        wxopenTemplateMessage.setPage("/index");
         resultMap.put("tempId","xeZ-PIsudhp2uxzIng9iD6rIzBCwq7zg093tlpJ3Ev4");
 
         BaseResult baseResult = MessageAPI.messageWxopenTemplateSend(weixinToken, wxopenTemplateMessage);
