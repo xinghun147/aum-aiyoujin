@@ -30,6 +30,15 @@ public class ProductPictureService extends BaseService {
         List<ProductPicture> data = productPictureMapper.selectByExample(example);
         return data;
     }
+    
+    public List<ProductPicture> queryProductPicture(String productId,Integer type) {
+    	ProductPictureExample example = new ProductPictureExample();
+    	ProductPictureExample.Criteria criteria = example.createCriteria();
+    	criteria.andProductIdEqualTo(productId);
+    	criteria.andTypeEqualTo(type);
+    	List<ProductPicture> data = productPictureMapper.selectByExample(example);
+    	return data;
+    }
 
     public ProductPicture queryProductPictureById(String id) {
         return productPictureMapper.selectByPrimaryKey(id);

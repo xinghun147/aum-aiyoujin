@@ -1,5 +1,4 @@
 package com.hjgj.aiyoujin.core.service;
-
 import com.hjgj.aiyoujin.core.common.Constants;
 import com.hjgj.aiyoujin.core.common.exception.BusinessException;
 import com.hjgj.aiyoujin.core.common.exception.EnumError;
@@ -9,6 +8,7 @@ import com.hjgj.aiyoujin.core.dao.ProductMapper;
 import com.hjgj.aiyoujin.core.model.Product;
 import com.hjgj.aiyoujin.core.model.ProductExample;
 import com.hjgj.aiyoujin.core.model.ProductExample.Criteria;
+import com.hjgj.aiyoujin.core.model.ProductPicture;
 import com.hjgj.aiyoujin.core.model.vo.Page;
 import com.hjgj.aiyoujin.core.model.vo.ProductVo;
 import org.apache.commons.lang3.StringUtils;
@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -34,6 +35,9 @@ public class ProductService extends BaseService {
 
     @Autowired
     private ProductCustomMapper productCustomMapper;
+    
+    @Autowired
+    private ProductPictureService productPictureService;
 
 
     @Transactional
@@ -125,7 +129,34 @@ public class ProductService extends BaseService {
             logger.error("查询产品详细信息id为null");
             return null;
         }
-        return productCustomMapper.queryGoodsDetail(id);
+        Product product = productMapper.selectByPrimaryKey(id);
+        ProductVo productVo = new ProductVo();
+        if(product != null){
+        	productVo.setId(product.getId());
+        	productVo.setBuyPrice(product.getBuyPrice());
+        	productVo.setName(product.getName());
+        	productVo.setQuantity(product.getQuantity());
+        	List<ProductPicture> pics = productPictureService.queryProductPicture(id);
+        	if(pics != null){
+        		List<ProductPicture> middlePictures = new ArrayList<>();//订单详情图片(带文字、和不带文字)
+        		List<ProductPicture> largePictures  = new ArrayList<>(); //产品详情图片
+        		for (ProductPicture productPicture : pics) {
+        			if(productPicture.getType() == Constants.prodPicType.middle.ordinal()){
+        				middlePictures.add(productPicture);
+        			}
+        			if(productPicture.getType() == Constants.prodPicType.large.ordinal()){
+        				largePictures.add(productPicture);
+        			}
+        			if(productPicture.getType() == Constants.prodPicType.thumb.ordinal()){
+        				productVo.setThumbPictures(productPicture.getPath());
+        			}
+				}
+        		productVo.setLargePictures(largePictures);
+        		productVo.setMiddlePictures(middlePictures);
+        	}
+        }
+        //产品图片
+        return productVo;
     }
 
     /**

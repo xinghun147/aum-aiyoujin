@@ -1,7 +1,5 @@
 package com.hjgj.aiyoujin.server.controller;
 
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.Map;
 
@@ -77,10 +75,11 @@ public class OrderApiController {
         Page<OrderWebVo> allOrders = userOrderService.getUserAllOrders(userId, types, pageNum, pageSize);
         if(allOrders != null && allOrders.getTotal() > 0){
         	for (OrderWebVo orderWebVo : allOrders.getList()) {
-				//判断是否有留言
-        		OrderWebVo vo;
 				try {
-					vo = userOrderService.queryOrderDetail(orderWebVo.getOrderId(), userId);
+					OrderWebVo vo = userOrderService.queryOrderDetail(orderWebVo.getOrderId(), userId);
+					//设置图片
+					orderWebVo.setMiddlePictures(vo.getMiddlePictures());
+					//判断您是否有留言
 					if(StringUtils.isNotBlank(vo.getMessage()) || StringUtils.isNotBlank(vo.getImageUrl()) || StringUtils.isNotBlank(vo.getVideoUrl())){
 						orderWebVo.setIsMsg(1);
 					}else{

@@ -2,6 +2,9 @@ package com.hjgj.aiyoujin.core.model.vo;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
+
+import com.hjgj.aiyoujin.core.model.ProductPicture;
 
 public class OrderWebVo {
 
@@ -82,7 +85,7 @@ public class OrderWebVo {
      */
     private String productImgUrl;
     
-    private String [] middlePictures;//订单详情图片(带文字、和不带文字)
+    private List<ProductPicture> middlePictures;//订单详情图片(带文字、和不带文字)
     
     /**
      * 留言
@@ -234,14 +237,6 @@ public class OrderWebVo {
         this.productImgUrl = productImgUrl;
     }
 
-	public String[] getMiddlePictures() {
-		return middlePictures;
-	}
-
-	public void setMiddlePictures(String[] middlePictures) {
-		this.middlePictures = middlePictures;
-	}
-
 	public String getMessage() {
 		return message;
 	}
@@ -296,5 +291,13 @@ public class OrderWebVo {
 
 	public void setExpressNo(String expressNo) {
 		this.expressNo = expressNo;
+	}
+
+	public List<ProductPicture> getMiddlePictures() {
+		return middlePictures;
+	}
+
+	public void setMiddlePictures(List<ProductPicture> middlePictures) {
+		this.middlePictures = middlePictures;
 	}
 }

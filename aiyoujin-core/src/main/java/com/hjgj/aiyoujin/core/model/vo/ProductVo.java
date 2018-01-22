@@ -2,8 +2,9 @@ package com.hjgj.aiyoujin.core.model.vo;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
+import com.hjgj.aiyoujin.core.model.ProductPicture;
 
 public class ProductVo implements Serializable {
 	
@@ -17,9 +18,9 @@ public class ProductVo implements Serializable {
 
     private BigDecimal buyPrice;
     
-    private String [] middlePictures;//订单详情图片(带文字、和不带文字)
+    private List<ProductPicture> middlePictures;//订单详情图片(带文字、和不带文字)
     
-    private String [] largePictures; //产品详情图片
+    private List<ProductPicture> largePictures; //产品详情图片
     
     private Integer quantity;//库存数量
 
@@ -55,20 +56,20 @@ public class ProductVo implements Serializable {
 		this.thumbPictures = thumbPictures;
 	}
 
-	public String[] getMiddlePictures() {
+	public List<ProductPicture> getMiddlePictures() {
 		return middlePictures;
 	}
 
-	public void setMiddlePictures(String middlePictures) {
-		this.middlePictures = StringUtils.isNotBlank(middlePictures)?middlePictures.split(","):null;
+	public void setMiddlePictures(List<ProductPicture> middlePictures) {
+		this.middlePictures = middlePictures;
 	}
 
-	public String[] getLargePictures() {
+	public List<ProductPicture> getLargePictures() {
 		return largePictures;
 	}
 
-	public void setLargePictures(String largePictures) {
-		this.largePictures = StringUtils.isNotBlank(largePictures)?largePictures.split(","):null;
+	public void setLargePictures(List<ProductPicture> largePictures) {
+		this.largePictures = largePictures;
 	}
 
 	public Integer getQuantity() {
