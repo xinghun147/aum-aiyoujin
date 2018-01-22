@@ -5,6 +5,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import weixin.popular.api.PayMchAPI;
+import weixin.popular.bean.paymch.SecapiPayRefund;
+import weixin.popular.bean.paymch.SecapiPayRefundResult;
 import weixin.popular.bean.paymch.Transfers;
 import weixin.popular.bean.paymch.TransfersResult;
 import weixin.popular.client.LocalHttpClient;
@@ -68,6 +70,25 @@ public class WxMPService {
         }
         //responseStr = JSON.toJSONString(hashMap);
         return hashMap;
+    }
+
+    public void payRefundToWXUser(String nonceStr, String sourceOrderNo, String refundOrderNo,String sourceMoney,String refundMoney,String refundDesc) {
+        //String responseStr = "";
+        HashMap<String, Object> hashMap = new HashMap<>();
+        SecapiPayRefund secapiPayRefund = new SecapiPayRefund();
+
+        secapiPayRefund.setAppid(WXProperties.WeiXinAppid);
+        secapiPayRefund.setMch_id(WXProperties.WeiXinMchId);
+        secapiPayRefund.setNonce_str(nonceStr);
+        secapiPayRefund.setOut_trade_no(sourceOrderNo);
+        secapiPayRefund.setOut_refund_no(refundOrderNo);
+        secapiPayRefund.setTotal_fee(Integer.valueOf(sourceMoney));
+        secapiPayRefund.setRefund_fee(Integer.valueOf(refundMoney));
+
+        InputStream resource = getClass().getClassLoader().getResourceAsStream("config/apiclient_cert.p12");
+        LocalHttpClient.initMchKeyStore(WXProperties.WeiXinMchId, resource);
+
+        SecapiPayRefundResult secapiPayRefundResult = PayMchAPI.secapiPayRefund(secapiPayRefund, WXProperties.weixinApiKey);
     }
 
 }

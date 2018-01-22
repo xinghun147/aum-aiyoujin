@@ -9,7 +9,7 @@ public class OrderVO {
 
     private String orderNo;
 
-    private String orderStatus;
+    private Integer orderStatus;
 
     private String userId;
 
@@ -49,6 +49,8 @@ public class OrderVO {
 
     private String fromUserNickName;
 
+    private Date receiveTime;
+
     public String getOrderId() {
         return orderId;
     }
@@ -65,11 +67,11 @@ public class OrderVO {
         this.orderNo = orderNo;
     }
 
-    public String getOrderStatus() {
+    public Integer getOrderStatus() {
         return orderStatus;
     }
 
-    public void setOrderStatus(String orderStatus) {
+    public void setOrderStatus(Integer orderStatus) {
         this.orderStatus = orderStatus;
     }
 
@@ -223,5 +225,13 @@ public class OrderVO {
 
     public void setFromUserNickName(String fromUserNickName) {
         this.fromUserNickName = fromUserNickName;
+    }
+
+    public Date getReceiveTime() {
+        return receiveTime;
+    }
+
+    public void setReceiveTime(Date receiveTime) {
+        this.receiveTime = receiveTime;
     }
 }

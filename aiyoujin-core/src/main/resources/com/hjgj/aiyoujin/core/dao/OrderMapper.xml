@@ -80,8 +80,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, code, user_id, product_id, buy_amount, status, deleted, reason, create_time, 
-    update_time, sell_amount, express_company, express_no, source_order_id, from_order_id, 
+    id, code, user_id, product_id, buy_amount, status, deleted, reason, create_time,
+    update_time, sell_amount, express_company, express_no, source_order_id, from_order_id,
     to_order_id, express_fee, address
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.hjgj.aiyoujin.core.model.OrderExample" >
@@ -102,7 +102,7 @@
     </if>
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
-    select 
+    select
     <include refid="Base_Column_List" />
     from t_order
     where id = #{id,jdbcType=VARCHAR}
@@ -118,18 +118,18 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.hjgj.aiyoujin.core.model.Order" >
-    insert into t_order (id, code, user_id, 
-      product_id, buy_amount, status, 
-      deleted, reason, create_time, 
-      update_time, sell_amount, express_company, 
-      express_no, source_order_id, from_order_id, 
+    insert into t_order (id, code, user_id,
+      product_id, buy_amount, status,
+      deleted, reason, create_time,
+      update_time, sell_amount, express_company,
+      express_no, source_order_id, from_order_id,
       to_order_id, express_fee, address
       )
-    values (#{id,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, 
-      #{productId,jdbcType=VARCHAR}, #{buyAmount,jdbcType=DECIMAL}, #{status,jdbcType=INTEGER}, 
-      #{deleted,jdbcType=INTEGER}, #{reason,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{sellAmount,jdbcType=DECIMAL}, #{expressCompany,jdbcType=VARCHAR}, 
-      #{expressNo,jdbcType=VARCHAR}, #{sourceOrderId,jdbcType=VARCHAR}, #{fromOrderId,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR},
+      #{productId,jdbcType=VARCHAR}, #{buyAmount,jdbcType=DECIMAL}, #{status,jdbcType=INTEGER},
+      #{deleted,jdbcType=INTEGER}, #{reason,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+      #{updateTime,jdbcType=TIMESTAMP}, #{sellAmount,jdbcType=DECIMAL}, #{expressCompany,jdbcType=VARCHAR},
+      #{expressNo,jdbcType=VARCHAR}, #{sourceOrderId,jdbcType=VARCHAR}, #{fromOrderId,jdbcType=VARCHAR},
       #{toOrderId,jdbcType=VARCHAR}, #{expressFee,jdbcType=DECIMAL}, #{address,jdbcType=VARCHAR}
       )
   </insert>
@@ -421,8 +421,8 @@
   <select id="selectOneByExample" resultMap="BaseResultMap" parameterType="com.hjgj.aiyoujin.core.model.OrderExample" >
     select <include refid="Base_Column_List" /> from t_order <if test="_parameter != null" >  <include refid="Example_Where_Clause" /> </if> <if test="orderByClause != null" >  order by ${orderByClause} </if>  limit 1
   </select>
-  
-  
+
+
 	<!-- TODO 支付后更新订单状态 -->
 	<update id="updateOrderByCodeState">
 		UPDATE t_order SET `status` = #{orderState,jdbcType=INTEGER} where code = #{orderNo,jdbcType=VARCHAR}
@@ -692,71 +692,72 @@
 	<!-- TODO 统计转送订单数目 -->
 	<select id="countSendOrderVo" resultType="java.lang.Integer">
 		SELECT
-			count(torder.id)
+			count(selfOrder.id)
 		FROM
-		t_order AS torder
-		LEFT JOIN t_product AS tprod ON torder.product_id = tprod.id
-		LEFT JOIN t_order AS fromOrder ON torder.from_order_id = fromOrder.id
-		LEFT JOIN t_user AS fromUser ON fromUser.id = fromOrder.user_id
-		LEFT JOIN t_user AS tuser ON tuser.id = torder.user_id
+		t_order AS selfOrder
+		LEFT JOIN t_user AS selfUser ON selfOrder.user_id = selfUser.id
+		LEFT JOIN t_order AS toOrder ON toOrder.source_order_id = selfOrder.id
+		LEFT JOIN t_user AS toUser ON toOrder.user_id = toUser.id
+		LEFT JOIN t_product AS selfProd ON selfOrder.product_id = selfProd.id
 		WHERE
-		torder.deleted = 0
-		AND torder.`status` IN (3, 4, 5, 6)
+		selfOrder.deleted = 0
+		AND selfOrder.`status` IN (3, 4, 5, 6)
 		<if test="startTime != null and endTime != null">
-			AND torder.create_time BETWEEN #{startTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
+			AND selfOrder.create_time BETWEEN #{startTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
 		</if>
 		<if test="orderNo != null and orderNo != ''">
-			AND torder.`code` = #{orderNo,jdbcType=VARCHAR}
+			AND selfOrder.`code` = #{orderNo,jdbcType=VARCHAR}
 		</if>
 		<if test="userName != null and userName != ''">
-			AND tuser.nickname = #{userName,jdbcType=VARCHAR}
+			AND selfOrder.nickname = #{userName,jdbcType=VARCHAR}
 		</if>
 		<if test="productName != null and productName != ''">
-			AND tprod.`name` = #{productName,jdbcType=VARCHAR}
+			AND selfOrder.`name` = #{productName,jdbcType=VARCHAR}
 		</if>
 		<if test="orderState != null and orderState != ''">
-			AND torder.`status` = #{orderState,jdbcType=VARCHAR}
+			AND selfOrder.`status` = #{orderState,jdbcType=VARCHAR}
 		</if>
 	</select>
 
 	<!-- TODO 查询转送订单 -->
 	<select id="selectSendOrderVo" resultType="com.hjgj.aiyoujin.core.model.vo.OrderVO">
 		SELECT
-			tuser.nickname AS userNickName,
-			tuser.open_id AS openId,
-			torder.`code` AS orderNo,
-			tprod.`code` AS productCode,
-			tprod.`name` AS productName,
-			torder.buy_amount AS buyAmount,
-			torder.`status` AS orderStatus,
-			torder.create_time AS createTime,
-			fromOrder.create_time AS updateTime,
-			fromUser.nickname AS fromUserNickName
+			selfOrder.id AS orderId,
+			selfUser.nickname AS fromUserNickName,
+			selfUser.open_id AS openId,
+			selfOrder.`code` AS orderNo,
+			selfOrder.buy_amount AS buyAmount,
+			selfOrder.`status` AS orderStatus,
+			selfOrder.create_time AS createTime,
+			toOrder.create_time AS receiveTime,
+			selfProd.`code` AS productCode,
+			selfProd.`name` AS productName,
+			toUser.nickname AS toUserNickName
 		FROM
-			t_order AS torder
-			LEFT JOIN t_product AS tprod ON torder.product_id = tprod.id
-			LEFT JOIN t_order AS fromOrder ON torder.from_order_id = fromOrder.id
-			LEFT JOIN t_user AS fromUser ON fromUser.id = fromOrder.user_id
-			LEFT JOIN t_user AS tuser ON tuser.id = torder.user_id
+			t_order AS selfOrder
+		LEFT JOIN t_user AS selfUser ON selfOrder.user_id = selfUser.id
+		LEFT JOIN t_order AS toOrder ON toOrder.source_order_id = selfOrder.id
+		LEFT JOIN t_user AS toUser ON toOrder.user_id = toUser.id
+		LEFT JOIN t_product AS selfProd ON selfOrder.product_id = selfProd.id
 		WHERE
-			torder.deleted = 0
-			AND torder.`status` IN (3, 4, 5, 6)
+			selfOrder.deleted = 0
+			AND selfOrder.`status` IN (3, 4, 5, 6)
 		<if test="startTime != null and endTime != null">
-			AND torder.create_time BETWEEN #{startTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
+			AND selfOrder.create_time BETWEEN #{startTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
 		</if>
 		<if test="orderNo != null and orderNo != ''">
-			AND torder.`code` = #{orderNo,jdbcType=VARCHAR}
+			AND selfOrder.`code` = #{orderNo,jdbcType=VARCHAR}
 		</if>
 		<if test="userName != null and userName != ''">
-			AND tuser.nickname = #{userName,jdbcType=VARCHAR}
+			AND selfOrder.nickname = #{userName,jdbcType=VARCHAR}
 		</if>
 		<if test="productName != null and productName != ''">
-			AND tprod.`name` = #{productName,jdbcType=VARCHAR}
+			AND selfOrder.`name` = #{productName,jdbcType=VARCHAR}
 		</if>
 		<if test="orderState != null and orderState != ''">
-			AND torder.`status` = #{orderState,jdbcType=VARCHAR}
+			AND selfOrder.`status` = #{orderState,jdbcType=VARCHAR}
 		</if>
-		ORDER BY torder.create_time desc
+		ORDER BY selfOrder.create_time desc
 	</select>
 
 	<!-- TODO 统计提货订单数目 -->
@@ -825,7 +826,7 @@
 		</if>
 		ORDER BY torder.create_time desc
 	</select>
-	
+
 	<insert id="addExpressToOrder" parameterType="com.hjgj.aiyoujin.core.model.vo.OrderVO">
 	    update t_order
 		<trim prefix="set" suffixOverrides=",">

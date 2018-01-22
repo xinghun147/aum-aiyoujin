@@ -42,9 +42,10 @@ public class ProductMessageService extends BaseService {
         if (StringUtils.isNotBlank(productMessage.getTitle())) {
             criteria.andTitleEqualTo(productMessage.getTitle());
         }
-        if (productMessage.getDeleted() != null) {
+        /*if (productMessage.getDeleted() != null) {
             criteria.andDeletedEqualTo(productMessage.getDeleted());
-        }
+        }*/
+        criteria.andDeletedEqualTo(0);
         example.setOrderByClause("create_time desc");
         int total = productMessageMapper.countByExample(example);
         if (total > 0) {

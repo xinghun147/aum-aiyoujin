@@ -100,7 +100,7 @@ public class UserOrderService {
     /**
      * 查询用户所有的订单
      *
-     * @param openId
+     * @param userId
      * @param types
      * @param pageNum
      * @param pageSize
@@ -180,22 +180,6 @@ public class UserOrderService {
         } else {
             return null;
         }
-    }
-
-    public void insertTwoOrder(Order fromOrder, Order toOrder) {
-        int fromOrderResult = userOrderMapper.insert(fromOrder);
-        int toOrderResult = userOrderMapper.insert(toOrder);
-    }
-
-    public int insertFromOrder(Order order) {
-        int fromOrderResult = userOrderMapper.insert(order);
-        return fromOrderResult;
-    }
-
-    public int batchInsertOrder(List<Order> orderList) {
-
-
-        return 0;
     }
 
     public Order getOrderById(String orderId) {
@@ -304,7 +288,6 @@ public class UserOrderService {
     @Transactional
     public Map giftToCash(Order order, String openId) throws Exception {
         Map map = null;
-        ;
         OrderLog log = new OrderLog();
         try {
             //变现单位为：分
