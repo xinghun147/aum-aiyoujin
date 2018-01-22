@@ -143,9 +143,9 @@ public class AdminOrderService {
     public List<Order> getUnresolvedOrder(List<Integer> statusList, Date startTime, Date endTime) {
         OrderExample example = new OrderExample();
         OrderExample.Criteria criteria = example.createCriteria();
-        OrderExample.Criteria criteria1 = criteria.andStatusIn(statusList).andDeletedEqualTo(0).andCreateTimeGreaterThanOrEqualTo(startTime);
+        OrderExample.Criteria criteria1 = criteria.andStatusIn(statusList).andDeletedEqualTo(0).andCreateTimeLessThanOrEqualTo(startTime);
         if(endTime != null){
-            criteria1.andCreateTimeLessThanOrEqualTo(endTime);
+            criteria1.andCreateTimeGreaterThanOrEqualTo(endTime);
         }
         List<Order> ordersList = orderMapper.selectByExample(example);
         return ordersList;
@@ -160,7 +160,7 @@ public class AdminOrderService {
         OrderExample example = new OrderExample();
         OrderExample.Criteria criteria = example.createCriteria();
         criteria.andStatusIn(statusList).andDeletedEqualTo(0);
-        criteria.andUpdateTimeGreaterThanOrEqualTo(updateTime);
+        criteria.andCreateTimeGreaterThanOrEqualTo(updateTime);
         List<Order> ordersList = orderMapper.selectByExample(example);
         return ordersList;
     }
