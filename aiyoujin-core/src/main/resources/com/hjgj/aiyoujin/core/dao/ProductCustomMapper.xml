@@ -1,34 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hjgj.aiyoujin.core.dao.ProductCustomMapper">
-  <select id="queryPageGoods" parameterType="java.lang.String" resultType="com.hjgj.aiyoujin.core.model.vo.ProductVo">
-	 SELECT t.id id,t.`name` name,t.buy_price price,pic.path thumbPictures
-	FROM t_product t 
-	LEFT JOIN t_product_picture  pic on t.id=pic.product_id AND  pic.type=0
-	where t.status=2
-   </select>
-   
-     
-  <select id="queryPageGoodsCount" parameterType="java.lang.String" resultType="java.lang.Integer">
-	 SELECT count(t.id)
-	FROM t_product t 
-	LEFT JOIN t_product_picture  pic on t.id=pic.product_id AND  pic.type=0
-	where t.status=2
-   </select>
-   
-   <select id="queryGoodsDetail" parameterType="java.lang.String" resultType="com.hjgj.aiyoujin.core.model.vo.ProductVo">
-   SELECT t.id id,t.`name` name,t.buy_price buyPrice,p.imageUrls middlePictures,p1.imageUrls largePictures,t.quantity quantity
-	FROM t_product t 
-	LEFT JOIN 
-   (SELECT GROUP_CONCAT(path ORDER BY sort_no ASC) imageUrls,
-    product_id
-    FROM t_product_picture 
-    WHERE  type = 2 GROUP BY product_id) p ON p.product_id= t.id
-    LEFT JOIN 
-   (SELECT GROUP_CONCAT(path ORDER BY sort_no ASC) imageUrls,
-    product_id
-    FROM t_product_picture 
-    WHERE  type = 1 GROUP BY product_id) p1 ON p1.product_id= t.id
-    where t.id=#{id,jdbcType=VARCHAR}
-   </select>
+	<select id="queryPageGoods" parameterType="java.lang.String" resultType="com.hjgj.aiyoujin.core.model.vo.ProductVo">
+		SELECT
+			t.id        id,
+			t.`name`    name,
+			t.buy_price price,
+			pic.path    thumbPictures
+		FROM t_product t
+			LEFT JOIN t_product_picture pic ON t.id = pic.product_id AND pic.type = 0
+		WHERE t.status = 2
+		GROUP BY t.id
+		ORDER BY t.sort_no ASC, t.create_time DESC
+	</select>
+
+
+	<select id="queryPageGoodsCount" parameterType="java.lang.String" resultType="java.lang.Integer">
+		SELECT count(t.id)
+		FROM t_product t
+			LEFT JOIN t_product_picture pic ON t.id = pic.product_id AND pic.type = 0
+		WHERE t.status = 2
+	</select>
+
+	<select id="queryGoodsDetail" parameterType="java.lang.String"
+			resultType="com.hjgj.aiyoujin.core.model.vo.ProductVo">
+		SELECT
+			t.id         id,
+			t.`name`     name,
+			t.buy_price  buyPrice,
+			p.imageUrls  middlePictures,
+			p1.imageUrls largePictures,
+			t.quantity   quantity
+		FROM t_product t
+			LEFT JOIN
+			(SELECT
+				 GROUP_CONCAT(path ORDER BY sort_no ASC) imageUrls,
+				 product_id
+			 FROM t_product_picture
+			 WHERE type = 2
+			 GROUP BY product_id) p ON p.product_id = t.id
+			LEFT JOIN
+			(SELECT
+				 GROUP_CONCAT(path ORDER BY sort_no ASC) imageUrls,
+				 product_id
+			 FROM t_product_picture
+			 WHERE type = 1
+			 GROUP BY product_id) p1 ON p1.product_id = t.id
+		WHERE t.id = #{id,jdbcType=VARCHAR}
+	</select>
 </mapper>
