@@ -216,6 +216,7 @@ public class OrderApiController {
     									@ApiParam(value = "用户ID", required = true) @RequestParam String userId) {
         Assert.notNull(orderId, "orderId 不可为空");
         Assert.notNull(userId, "userId 不可为空");
+        logger.info("调用查看订单详情接口,orderId:{},userId:{}", orderId,userId);
 		try {
 			
 		  	//接收者订单
