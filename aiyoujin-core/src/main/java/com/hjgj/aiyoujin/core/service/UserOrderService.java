@@ -255,12 +255,14 @@ public class UserOrderService {
     
     @Transactional
     public int sendGiftCard(Order order,OrderMessage msg) throws Exception {
-    	//添加留言
     	msg.setCreateTime(new Date());
     	msg.setOrderId(order.getId());
     	msg.setUpdateTime(new Date());
     	msg.setId(UUIDGenerator.generate());
-    	orderMessageService.insert(msg);
+    	OrderMessage om = orderMessageService.queryMessage(msg.getOrderId(), msg.getUserId());
+    	if(om == null){
+    		orderMessageService.insert(msg);
+    	}
     	//更新订单状态
         return updateOrderStauts(order.getId(), OrderStatusEnum.ORDER_STATUS_UNRECEIVE.getCode());
     }
