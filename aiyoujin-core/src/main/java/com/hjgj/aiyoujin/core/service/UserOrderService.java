@@ -1,5 +1,6 @@
 package com.hjgj.aiyoujin.core.service;
 
+
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.Date;
@@ -27,6 +28,7 @@ import com.hjgj.aiyoujin.core.model.Order;
 import com.hjgj.aiyoujin.core.model.OrderExample;
 import com.hjgj.aiyoujin.core.model.OrderLog;
 import com.hjgj.aiyoujin.core.model.OrderMessage;
+import com.hjgj.aiyoujin.core.model.ProductPicture;
 import com.hjgj.aiyoujin.core.model.User;
 import com.hjgj.aiyoujin.core.model.vo.OrderWebVo;
 import com.hjgj.aiyoujin.core.model.vo.Page;
@@ -57,6 +59,10 @@ public class UserOrderService {
 
     @Autowired
     private OrderMessageService orderMessageService;
+    
+    @Autowired
+    private ProductPictureService productPictureService;
+
 
     @Autowired
     private WxMPService wxMPService;
@@ -190,6 +196,7 @@ public class UserOrderService {
     public OrderWebVo queryOrderDetail(String orderId,String userId) throws Exception {
         Order order = userOrderMapper.selectByPrimaryKey(orderId);
         ProductVo product = productService.queryGoodsDetail(order.getProductId());
+        
         OrderWebVo orderVo = new OrderWebVo();
         
         if (StringUtils.isNotBlank(order.getSourceOrderId())) {
@@ -199,10 +206,11 @@ public class UserOrderService {
             orderId = orderFrom.getId();
         }
         
+        List<ProductPicture> pics = productPictureService.queryProductPicture(order.getProductId(),Constants.prodPicType.middle.ordinal());
         orderVo.setSellAmount(order.getSellAmount());
         orderVo.setProductName(product.getName());
         orderVo.setProductId(order.getProductId());
-        orderVo.setMiddlePictures(product.getMiddlePictures());
+        orderVo.setMiddlePictures(pics);
         orderVo.setOrderStatus(OrderStatusEnum.switchOrderStateName(order.getStatus()));
         orderVo.setOrderId(order.getId());
         orderVo.setUserId(order.getUserId());
