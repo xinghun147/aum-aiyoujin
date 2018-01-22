@@ -138,7 +138,7 @@ public class AdminOrderService {
         OrderExample example = new OrderExample();
         OrderExample.Criteria criteria = example.createCriteria();
         criteria.andStatusIn(statusList).andDeletedEqualTo(0);
-        criteria.andCreateTimeGreaterThanOrEqualTo(updateTime);
+        criteria.andCreateTimeLessThanOrEqualTo(updateTime);
         List<Order> ordersList = orderMapper.selectByExample(example);
         return ordersList;
     }
