@@ -22,28 +22,6 @@ public class AdminOrderService {
     @Autowired
     private OrderMapper orderMapper;
 
-    public int insertOneOrder(Order order) {
-        int insert = orderMapper.insert(order);
-        return insert;
-    }
-
-    public int updateOneOrder(Order order) {
-        int i = orderMapper.updateByPrimaryKeySelective(order);
-        return i;
-    }
-
-    public Page<OrderVO> getAllOrderVOMap(Map param, Integer pageNum, Integer pageSize) {
-        Page<OrderVO> page = new Page<>(pageNum, pageSize, true);
-        RowBounds rowBounds = new RowBounds(page.getStartRow(), pageSize);
-        int count = orderMapper.countAllOrderVoMap(param, rowBounds);
-        if (count > 0) {
-            List<OrderVO> orderVOList = orderMapper.selectAllOrderVoMap(param, rowBounds);
-            page.setList(orderVOList);
-            page.setTotal(count);
-        }
-        return page;
-    }
-
     /**
      * TODO 后台系统 买入订单主页
      *
