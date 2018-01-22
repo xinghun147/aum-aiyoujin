@@ -46,10 +46,10 @@ public class MessageApiController{
 		try {
 			Page<ProductMessage> data = productMessageService.queryPageProductMessage(new ProductMessage(),1, 100);
 			List<ProductMessage> list =data.getList();
-			int index=(int)(Math.random()*(list.size()-1));
+			int index=(int)(Math.random()*(list.size()-0.5));
 			ProductMessage p=list.get(index);
 			while(p.getId().equals(id)&&list.size()>1)
-				p=list.get((int)(Math.random()*(list.size()-1)));
+				p=list.get((int)(Math.random()*(list.size()-0.5)));
 			return ResultModel.ok(p);
 		} catch (Exception e) {
 			logger.error("查询商品列表接口异常,e:{}", e);
