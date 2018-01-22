@@ -42,6 +42,7 @@ import com.hjgj.aiyoujin.core.service.UserOrderService;
 import com.hjgj.aiyoujin.core.service.UserService;
 import com.hjgj.aiyoujin.core.vo.UnifiedOrderRespose;
 import com.hjgj.aiyoujin.server.common.ResultStatus;
+import com.hjgj.aiyoujin.server.common.redis.RedisLockUtil;
 import com.hjgj.aiyoujin.server.util.MD5Util;
 import com.hjgj.aiyoujin.server.vo.WeiXinPayResultVo;
 import com.hjgj.aiyoujin.server.vo.WeiXinPrePayVo;
@@ -77,6 +78,9 @@ public class WeixinPayController {
 
     @Autowired
     private OrderNotifyService orderNotifyService;
+    
+    @Autowired
+	public RedisLockUtil redisLockUtil;
 
     @ApiOperation(value = "微信预下单")
     @ResponseBody
@@ -93,15 +97,23 @@ public class WeixinPayController {
         Assert.notNull(openId, "openId can not be empty");
         Assert.notNull(productId, "产品Id can not be empty");
         HashMap<String, Object> map = new HashMap<>();
+        if(!redisLockUtil.acquireLock(productId+"_"+openId+"prePayOrder2", 3 * 1000)){
+   			logger.error("频繁调用微信预下单接口,"+productId+"_"+openId+"_sendGiftCard");
+   			map.put("code", "1");
+   			map.put("msg", ResultStatus.ERROR_OPERATION_FREQUENT.getMsg());
+   			return JSON.toJSONString(map);
+       	}
         //校验库存
         Product product = productService.findProduct(productId);
         if(product == null){
             map.put("code", "1");
             map.put("msg", ResultStatus.PRODUCT_NO_EXIST.getMsg());
+            return JSON.toJSONString(map);
         }
         if(product.getQuantity() < 1){
     	   map.put("code", "1");
            map.put("msg", ResultStatus.PRODUCT_NO_STOCK.getMsg());
+           return JSON.toJSONString(map);
         }
         WeiXinPrePayVo weixin = new WeiXinPrePayVo();
         weixin.setContent(content);
