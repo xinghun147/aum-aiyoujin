@@ -49,6 +49,9 @@ public class OrderMessageService extends BaseService {
 		if(StringUtils.isNotBlank(orderMessage.getOrderId())){
 			criteria.andOrderIdEqualTo(orderMessage.getOrderId());
 		}
+		if(StringUtils.isNotBlank(orderMessage.getOrderNo())){
+			criteria.andOrderNoEqualTo(orderMessage.getOrderNo());
+		}
 		example.setOrderByClause("create_time desc");
 		int total = orderMessageMapper.countByExample(example);
 		if(total > 0){
