@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.scheduling.annotation.Schedules;
 import org.springframework.stereotype.Component;
 import weixin.popular.api.PayMchAPI;
 import weixin.popular.bean.paymch.MchOrderInfoResult;
@@ -41,7 +40,7 @@ public class TaskCenter {
     /**
      *  TODO 处理订单状态为 失败,待支付的订单
      */
-    //@Scheduled(cron = "0 0/30 * * * ?")
+    @Scheduled(cron = "0 0/10 * * * ?")
     private void selectWXPayOrder() {
         logger.info("selectWXPayOrder方法执行");
         List<Integer> integers = Arrays.asList(0,2);
@@ -49,7 +48,7 @@ public class TaskCenter {
         //Date beforeDate = DateUtil.addDaysToDate(nowDate, -1);
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
-        calendar.add(Calendar.MINUTE, -30);
+        calendar.add(Calendar.MINUTE, -10);
         Date calendarTime = calendar.getTime();
         List<Order> unresolvedOrder = adminOrderService.getUnresolvedOrder(integers, calendarTime, null);
         System.out.println(unresolvedOrder);
