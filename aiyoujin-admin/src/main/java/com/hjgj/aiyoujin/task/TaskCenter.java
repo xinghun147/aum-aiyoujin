@@ -99,9 +99,9 @@ public class TaskCenter {
                     orderLog.setUpdateBy("schedule task");
 
                     int updateOrderAndLog = orderLogService.updateProdOrderLog(orderLog, order, order.getProductId(), 1);
-                    while (updateOrderAndLog < 0) {
-                        updateOrderAndLog = orderLogService.updateProdOrderLog(orderLog, order, order.getProductId(), 1);
-                    }
+//                    while (updateOrderAndLog < 0) {
+//                        updateOrderAndLog = orderLogService.updateProdOrderLog(orderLog, order, order.getProductId(), 1);
+//                    }
                     logger.info("更新订单表主键为:" + order.getId() + "----->订单号为:" + order.getStatus());
                 }
             } else {
@@ -122,14 +122,17 @@ public class TaskCenter {
         Date nowDate = new Date();
         Date beforeDate = DateUtil.addDaysToDate(nowDate, -1);
         List<Order> orderList = adminOrderService.getUntransferOrder(integers, beforeDate);
+        if (orderList == null) {
+            return;
+        }
         for (Order order : orderList) {
             order.setUpdateTime(nowDate);
             order.setStatus(OrderStatusEnum.ORDER_STATUS_RETURN.getCode());
             order.setUpdateTime(nowDate);
             int updateOrderAndLog = adminOrderService.updateOrderbyCondition(order);
-            while (updateOrderAndLog < 0) {
-                updateOrderAndLog = adminOrderService.updateOrderbyCondition(order);
-            }
+//            while (updateOrderAndLog < 0) {
+//                updateOrderAndLog = adminOrderService.updateOrderbyCondition(order);
+//            }
             logger.info("更新订单表主键为:" + order.getId() + "----->订单号为:" + order.getStatus());
         }
 
