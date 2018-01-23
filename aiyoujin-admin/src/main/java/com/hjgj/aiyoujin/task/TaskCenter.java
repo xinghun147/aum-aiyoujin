@@ -43,7 +43,7 @@ public class TaskCenter {
     @Scheduled(cron = "0 0/10 * * * ?")
     private void selectWXPayOrder() {
         logger.info("selectWXPayOrder方法执行");
-        List<Integer> integers = Arrays.asList(0,2);
+        List<Integer> integers = Arrays.asList(0);
         Date nowDate = new Date();
         //Date beforeDate = DateUtil.addDaysToDate(nowDate, -1);
         Calendar calendar = Calendar.getInstance();
