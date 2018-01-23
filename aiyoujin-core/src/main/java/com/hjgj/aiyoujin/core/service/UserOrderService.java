@@ -1,20 +1,6 @@
 package com.hjgj.aiyoujin.core.service;
 
 
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.lang3.StringUtils;
-import org.apache.ibatis.session.RowBounds;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.hjgj.aiyoujin.core.common.Constants;
 import com.hjgj.aiyoujin.core.common.OrderStatusEnum;
 import com.hjgj.aiyoujin.core.common.exception.BusinessException;
@@ -33,6 +19,19 @@ import com.hjgj.aiyoujin.core.model.User;
 import com.hjgj.aiyoujin.core.model.vo.OrderWebVo;
 import com.hjgj.aiyoujin.core.model.vo.Page;
 import com.hjgj.aiyoujin.core.model.vo.ProductVo;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.session.RowBounds;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class UserOrderService {
@@ -318,7 +317,9 @@ public class UserOrderService {
                 log.setCreateTime(new Date());
                 log.setId(UUIDGenerator.generate());
                 log.setOrderId(order.getId());
-                log.setPayId(map.get("wxpayOrderNo").toString());
+                if (map.get("code").equals("0")) {
+                    log.setPayId(map.get("wxpayOrderNo").toString());
+                }
                 log.setPayResultMsg(map.get("msg").toString());
                 log.setPayType(0);
                 log.setReqTime(new Date());
