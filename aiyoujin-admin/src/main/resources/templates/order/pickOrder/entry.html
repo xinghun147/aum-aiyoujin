@@ -86,9 +86,8 @@
                 <td th:text="${item.expressFee}"></td>
                 <td th:text="${item.updateTime}?${#dates.format(item.updateTime,'yyyy-MM-dd HH:mm:ss')}"></td>
                 <td>
-                    <input type="hidden" id="orderNo" name="orderNo" th:value="${item.orderNo}"/>
                     <th:block th:switch="${item.orderStatus}">
-                        <a th:case="10" class="layui-btn layui-btn-mini add_express"> <i class="layui-icon">&#xe642;</i>填写物流信息</a>
+                        <a  th:data="${item.orderNo}" th:case="10" class="layui-btn layui-btn-mini add_express order_no"> <i class="layui-icon">&#xe642;</i>填写物流信息</a>
                     </th:block>
                     <th:block th:switch="${item.orderStatus}">
  						<a  th:case="11" th:data="${item.expressNo}"  class="layui-btn layui-btn-mini product_info">查看物流</a>
@@ -198,9 +197,8 @@
         var form = layui.form;
         //填写物流信息
         $(".add_express").bind("click", function () {
-
-            var id = $("#orderNo").val();
-            $("#orderId").val(id);
+            var orderNo = $(this).attr("data");
+            $("#orderId").val(orderNo);
             layer.open({
                 type: 1,
                 title: "物流信息",
