@@ -263,6 +263,10 @@ public class UserOrderService {
     	OrderMessage om = orderMessageService.queryMessage(msg.getOrderId(), msg.getUserId());
     	if(om == null){
     		orderMessageService.insert(msg);
+    	}else{
+    		om.setContent(msg.getContent());
+    		om.setImageUrl(msg.getImageUrl());
+    		om.setVideoUrl(msg.getVideoUrl());
     	}
     	//更新订单状态
         return updateOrderStauts(order.getId(), OrderStatusEnum.ORDER_STATUS_UNRECEIVE.getCode());
