@@ -7,9 +7,11 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.hjgj.aiyoujin.core.model.Order;
 import com.hjgj.aiyoujin.core.model.OrderMessage;
 import com.hjgj.aiyoujin.core.model.vo.Page;
 import com.hjgj.aiyoujin.core.service.OrderMessageService;
+import com.hjgj.aiyoujin.core.service.UserOrderService;
 
 /**
  * Created by Lin on 2017/9/5.
@@ -20,6 +22,9 @@ public class OrderMessageController extends BaseController{
 
     @Autowired
     private OrderMessageService orderMessageService;
+    
+    @Autowired
+    private UserOrderService userOrderService;
 
     /**
      * 活期产品列表
@@ -30,13 +35,17 @@ public class OrderMessageController extends BaseController{
      * @throws Exception
      */
     @RequestMapping("/orderMessage.html")
-    public ModelAndView queryProduct(ModelMap modelMap , OrderMessage orderMessage, Integer pageNum , Integer pageSize) throws Exception{
+    public ModelAndView queryProduct(ModelMap modelMap ,String orderNo, Integer pageNum , Integer pageSize) throws Exception{
         pageNum = pageNum == null ? super.pageNum:pageNum;
         pageSize = pageSize == null ? super.pageSize:pageSize;
+        OrderMessage orderMessage = new OrderMessage();
+        if(StringUtils.isNotBlank(orderNo)){
+        	orderMessage.setOrderNo(orderNo);
+        }
         Page<OrderMessage> page  = orderMessageService.queryPageProductMessage(orderMessage,pageNum, pageSize);
         ModelAndView mav = getModelAndView();
         mav.addObject("page", page);
-        mav.addObject("product",orderMessage);
+        mav.addObject("orderNo",orderNo);
         mav.setViewName("orderMessage/orderMessage");
         return mav;
     }

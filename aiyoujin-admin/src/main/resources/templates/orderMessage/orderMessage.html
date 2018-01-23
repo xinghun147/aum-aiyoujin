@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="utf-8"/>
-	<title>产品留言列表</title>
+	<title>订单留言列表</title>
 	<link rel="stylesheet" type="text/css" th:href="@{/layui/css/layui.css}" media="all" />
 	<link rel="stylesheet" type="text/css" th:href="@{/css/news.css}" media="all" />
 </head>
@@ -11,9 +11,9 @@
 	<form id="searchForm" name="searchForm" class="layui-form" action="/orderMessage/orderMessage.html">
  		<input type="hidden" id="pageNum" name="pageNum" th:value="${page}?${page.pageNum}"/>
 		  <div class="layui-form-item">
-			<label class="layui-form-label">产品ID:</label>
+			<label class="layui-form-label">订单号:</label>
 		    <div class="layui-input-inline">
-		    	 <input  type="text" class="layui-input" name="orderId" id="orderId"  th:value="${product}?${product.orderId}"/>
+		    	 <input  type="text" class="layui-input" name="orderNo" id="orderId"  th:value="${orderNo}?${orderNo}"/>
 		    </div>
 		    <button class="layui-btn search_btn"><i class="layui-icon">&#xe615;</i>查询</button>
 <!--             <a class="layui-btn layui-btn-normal newsAdd_btn" id="add"><i class="layui-icon">&#xe608;</i>添加</a> -->
@@ -24,7 +24,7 @@
 	  	<table class="layui-table">
 		    <thead>
 				<tr>
-					<th>产品ID</th>
+					<th>订单号</th>
 					<th>留言内容</th>
 					<th>留言视频</th>
 					<th>留言图片</th>
@@ -35,7 +35,7 @@
 		    <tbody class="news_content">
 		  	  <th:block th:if="${not #lists.isEmpty(page.list)}">
 			    	<tr th:each="item:${page.list}">
-				    	<td  th:text="${item.orderId}"></td>
+				    	<td  th:text="${item.orderNo}"></td>
 				    	<td  th:text="${item.content}"></td>
 				    	<td  th:text="${item.videoUrl}"></td>
 				    	<td  th:text="${item.imageUrl}"></td>

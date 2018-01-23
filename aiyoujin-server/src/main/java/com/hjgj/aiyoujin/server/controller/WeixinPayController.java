@@ -160,6 +160,7 @@ public class WeixinPayController {
         orderLog.setReqTime(createTime);
         orderLog.setRespTime(updateTime);
 
+        
         OrderMessage orderMessage = new OrderMessage();
         orderMessage.setId(UUIDGenerator.generate());
         orderMessage.setContent(weixin.getContent());
@@ -168,6 +169,8 @@ public class WeixinPayController {
         orderMessage.setImageUrl(imageUrl);
         orderMessage.setVideoUrl(videoUrl);
         orderMessage.setUserId(userBy.getId());
+        orderMessage.setOrderId(wxOrder.getId());
+        orderMessage.setOrderNo(orderNo);
         if (unifiedOrderRespose != null) {
 
             String prepayId = unifiedOrderRespose.getPrepay_id();

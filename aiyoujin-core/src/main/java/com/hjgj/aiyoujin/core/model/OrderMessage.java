@@ -23,6 +23,8 @@ public class OrderMessage {
 
     private String userId;
 
+    private String orderNo;
+
     public String getId() {
         return id;
     }
@@ -101,5 +103,13 @@ public class OrderMessage {
 
     public void setUserId(String userId) {
         this.userId = userId == null ? null : userId.trim();
+    }
+
+    public String getOrderNo() {
+        return orderNo;
+    }
+
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo == null ? null : orderNo.trim();
     }
 }
