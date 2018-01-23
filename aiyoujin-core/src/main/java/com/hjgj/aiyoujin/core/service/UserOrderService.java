@@ -266,6 +266,7 @@ public class UserOrderService {
     		om.setContent(msg.getContent());
     		om.setImageUrl(msg.getImageUrl());
     		om.setVideoUrl(msg.getVideoUrl());
+    		orderMessageService.update(om);
     	}
     	//更新订单状态
         return updateOrderStauts(order.getId(), OrderStatusEnum.ORDER_STATUS_UNRECEIVE.getCode());

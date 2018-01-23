@@ -28,6 +28,11 @@ public class OrderMessageService extends BaseService {
         orderMessage.setUpdateTime(new Date());
         return orderMessageMapper.insertSelective(orderMessage);
     }
+    
+    
+    public int update(OrderMessage orderMessage) {
+    	return orderMessageMapper.insertSelective(orderMessage);
+    }
 
 
     public OrderMessage queryMessage(String orderId,String userId) {
