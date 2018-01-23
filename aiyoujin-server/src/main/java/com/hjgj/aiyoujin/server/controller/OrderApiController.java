@@ -168,6 +168,9 @@ public class OrderApiController {
 //        
         //校验状态是否可领取
         Order order = userOrderService.getOrderById(orderId);
+        if(order == null){
+        	return ResultModel.error(ResultStatus.ORDER_NOT_EXIST);
+        }
         if(order.getStatus() != OrderStatusEnum.ORDER_STATUS_UNRECEIVE.getCode()){
         	return ResultModel.error(ResultStatus.ORDER_TO_RECEIVE_RECEIVED);
         }
