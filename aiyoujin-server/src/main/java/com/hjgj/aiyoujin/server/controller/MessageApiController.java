@@ -46,6 +46,9 @@ public class MessageApiController{
 		try {
 			Page<ProductMessage> data = productMessageService.queryPageProductMessage(new ProductMessage(),1, 100);
 			List<ProductMessage> list =data.getList();
+			if(list==null||list.size()==0){
+				return ResultModel.ok();
+			}
 			int index=(int)(Math.random()*(list.size()-0.5));
 			ProductMessage p=list.get(index);
 			while(p.getId().equals(id)&&list.size()>1)

@@ -76,7 +76,7 @@ public class WeixinPush {
 //        wxopenTemplateMessage.setEmphasis_keyword("keyword1.DATA");
         wxopenTemplateMessage.setForm_id(prePayId);
         wxopenTemplateMessage.setTemplate_id("xeZ-PIsudhp2uxzIng9iD6rIzBCwq7zg093tlpJ3Ev4");
-        wxopenTemplateMessage.setPage("/index");
+        wxopenTemplateMessage.setPage("pages/index/index");
         resultMap.put("tempId","xeZ-PIsudhp2uxzIng9iD6rIzBCwq7zg093tlpJ3Ev4");
 
         BaseResult baseResult = MessageAPI.messageWxopenTemplateSend(weixinToken, wxopenTemplateMessage);
@@ -141,6 +141,7 @@ public class WeixinPush {
         wxopenTemplateMessage.setEmphasis_keyword("keyword1.DATA");
         wxopenTemplateMessage.setForm_id(prePayId);
         wxopenTemplateMessage.setTemplate_id("okd7M98Q7ZoqLGAVDwaxB9co9SxKLthkDg7kQ76XAVI");
+        wxopenTemplateMessage.setPage("pages/index/index");
 
         resultMap.put("tempId","okd7M98Q7ZoqLGAVDwaxB9co9SxKLthkDg7kQ76XAVI");
 
@@ -196,7 +197,7 @@ public class WeixinPush {
         wxopenTemplateMessage.setEmphasis_keyword("keyword1.DATA");
         wxopenTemplateMessage.setForm_id(prePayId);
         wxopenTemplateMessage.setTemplate_id("fAdgHURICCzNoYz8HbTA_fbLW-JUhjbicPSqofWNqwc");
-
+        wxopenTemplateMessage.setPage("pages/index/index");
         resultMap.put("tempId","fAdgHURICCzNoYz8HbTA_fbLW-JUhjbicPSqofWNqwc");
 
         BaseResult baseResult = MessageAPI.messageWxopenTemplateSend(weixinToken, wxopenTemplateMessage);
@@ -258,7 +259,7 @@ public class WeixinPush {
         wxopenTemplateMessage.setEmphasis_keyword("keyword1.DATA");
         wxopenTemplateMessage.setForm_id(prePayId);
         wxopenTemplateMessage.setTemplate_id("0P9JoND8UHherQDUJKPXjXR5s_xUTYxXYdlDCRbwPTk");
-
+        wxopenTemplateMessage.setPage("pages/index/index");
         resultMap.put("tempId","0P9JoND8UHherQDUJKPXjXR5s_xUTYxXYdlDCRbwPTk");
         BaseResult baseResult = MessageAPI.messageWxopenTemplateSend(weixinToken, wxopenTemplateMessage);
         String errcode = baseResult.getErrcode();
@@ -310,7 +311,7 @@ public class WeixinPush {
         wxopenTemplateMessage.setEmphasis_keyword("keyword1.DATA");
         wxopenTemplateMessage.setForm_id(prePayId);
         wxopenTemplateMessage.setTemplate_id("iibwNplUljRfoYjSJ6SLxg1KhPCqMMlDiJNETBoA2_k");
-
+        wxopenTemplateMessage.setPage("pages/index/index");
         BaseResult baseResult = MessageAPI.messageWxopenTemplateSend(weixinToken, wxopenTemplateMessage);
         String errcode = baseResult.getErrcode();
         if (errcode != null && "0".equals(errcode)) {

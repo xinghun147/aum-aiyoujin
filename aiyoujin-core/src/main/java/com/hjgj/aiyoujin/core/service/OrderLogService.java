@@ -1,5 +1,6 @@
 package com.hjgj.aiyoujin.core.service;
 
+import com.hjgj.aiyoujin.core.common.exception.BusinessException;
 import com.hjgj.aiyoujin.core.dao.OrderLogMapper;
 import com.hjgj.aiyoujin.core.dao.OrderMapper;
 import com.hjgj.aiyoujin.core.model.Order;
@@ -17,6 +18,9 @@ public class OrderLogService {
     @Autowired
     private OrderMapper orderMapper;
 
+    @Autowired
+    private ProductService productService;
+
     /**
      * 新增订单日志
      *
@@ -32,6 +36,21 @@ public class OrderLogService {
     public int updateOrderAndLog(OrderLog orderLog, Order order) {
         int updateOrder = orderMapper.updateByPrimaryKeySelective(order);
         int updateLog = orderLogMapper.updateByPrimaryKeySelective(orderLog);
+        if (updateLog > 0 && updateOrder > 0) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    public int updateProdOrderLog(OrderLog orderLog, Order order, String prodId, int quantity) {
+        int updateOrder = orderMapper.updateByPrimaryKeySelective(order);
+        int updateLog = orderLogMapper.updateByPrimaryKeySelective(orderLog);
+        try {
+            productService.updateQuantity(prodId, quantity);
+        } catch (BusinessException e) {
+            e.printStackTrace();
+        }
         if (updateLog > 0 && updateOrder > 0) {
             return 1;
         } else {
