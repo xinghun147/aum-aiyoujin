@@ -257,6 +257,7 @@ public class UserOrderService {
     public int sendGiftCard(Order order,OrderMessage msg) throws Exception {
     	msg.setCreateTime(new Date());
     	msg.setOrderId(order.getId());
+    	msg.setOrderNo(order.getCode());
     	msg.setUpdateTime(new Date());
     	msg.setId(UUIDGenerator.generate());
     	OrderMessage om = orderMessageService.queryMessage(msg.getOrderId(), msg.getUserId());
