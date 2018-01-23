@@ -31,7 +31,7 @@ public class OrderMessageService extends BaseService {
     
     
     public int update(OrderMessage orderMessage) {
-    	return orderMessageMapper.insertSelective(orderMessage);
+    	return orderMessageMapper.updateByPrimaryKeySelective(orderMessage);
     }
 
 

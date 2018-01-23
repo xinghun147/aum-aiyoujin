@@ -147,6 +147,7 @@ public class OrderApiController {
 			  userOrderService.sendGiftCard(order, msg);
 		      return ResultModel.ok();
 		} catch (Exception e) {
+			logger.error("送出礼物接口异常，e:{}", e);
 			 return ResultModel.error(ResultStatus.SYSTEM_ERROR);
 		}
        
