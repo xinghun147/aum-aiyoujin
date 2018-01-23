@@ -98,9 +98,9 @@ public class TaskCenter {
                     orderLog.setUpdateTime(nowDate);
                     orderLog.setUpdateBy("schedule task");
 
-                    int updateOrderAndLog = orderLogService.updateOrderAndLog(orderLog, order);
+                    int updateOrderAndLog = orderLogService.updateProdOrderLog(orderLog, order, order.getProductId(), 1);
                     while (updateOrderAndLog < 0) {
-                        updateOrderAndLog = orderLogService.updateOrderAndLog(orderLog, order);
+                        updateOrderAndLog = orderLogService.updateProdOrderLog(orderLog, order, order.getProductId(), 1);
                     }
                     logger.info("更新订单表主键为:" + order.getId() + "----->订单号为:" + order.getStatus());
                 }
@@ -115,7 +115,7 @@ public class TaskCenter {
      * TODO 处理订单状态为 3送出待收
      * TODO 并设置为 已退回
      */
-    //@Scheduled(fixedRate  = 1000*1800,initialDelay = -10)
+    @Scheduled(fixedRate = 1000 * 1800, initialDelay = -10)
     public void selectTransferOrder() {
         logger.info("selectTransferOrder方法执行");
         List<Integer> integers = Arrays.asList(3);
