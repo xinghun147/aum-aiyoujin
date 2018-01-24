@@ -90,8 +90,8 @@
                     <td th:case="6" style="color: #01AAED">领取成功</td>
                 </th:block>
                 <th:block th:if="${item.orderStatus eq 3}">
-                    <td></td>
                     <td th:text="${item.sentTime}?${#dates.format(item.sentTime,'yyyy-MM-dd HH:mm:ss')}:''"></td>
+                    <td></td>
                     <td></td>
                 </th:block>
                 <th:block th:if="${item.orderStatus eq 4}">
