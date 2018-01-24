@@ -1,10 +1,10 @@
 package com.hjgj.aiyoujin.core.model.vo;
 
+import com.hjgj.aiyoujin.core.model.ProductPicture;
+
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
-
-import com.hjgj.aiyoujin.core.model.ProductPicture;
 
 public class OrderWebVo {
 
@@ -114,8 +114,39 @@ public class OrderWebVo {
      * 物流编号
      */
     private String expressNo;
-    
-    
+
+    /**
+     * 接收时间
+     */
+    private Date receiveTime;
+
+    /**
+     * 转送时间
+     */
+    private Date sentTime;
+
+    /**
+     * 变现时间
+     */
+    private Date sellTime;
+
+    /**
+     * 提货时间
+     */
+    private Date pickupTime;
+
+    /**
+     * 回滚时间
+     */
+    private Date backTime;
+
+    /**
+     * 完成时间
+     */
+    private Date finishTime;
+
+    private Date updateTime;
+
 
 	public Integer getStatusCode() {
 		return statusCode;
@@ -300,4 +331,60 @@ public class OrderWebVo {
 	public void setMiddlePictures(List<ProductPicture> middlePictures) {
 		this.middlePictures = middlePictures;
 	}
+
+    public Date getReceiveTime() {
+        return receiveTime;
+    }
+
+    public void setReceiveTime(Date receiveTime) {
+        this.receiveTime = receiveTime;
+    }
+
+    public Date getSentTime() {
+        return sentTime;
+    }
+
+    public void setSentTime(Date sentTime) {
+        this.sentTime = sentTime;
+    }
+
+    public Date getSellTime() {
+        return sellTime;
+    }
+
+    public void setSellTime(Date sellTime) {
+        this.sellTime = sellTime;
+    }
+
+    public Date getPickupTime() {
+        return pickupTime;
+    }
+
+    public void setPickupTime(Date pickupTime) {
+        this.pickupTime = pickupTime;
+    }
+
+    public Date getBackTime() {
+        return backTime;
+    }
+
+    public void setBackTime(Date backTime) {
+        this.backTime = backTime;
+    }
+
+    public Date getFinishTime() {
+        return finishTime;
+    }
+
+    public void setFinishTime(Date finishTime) {
+        this.finishTime = finishTime;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
 }

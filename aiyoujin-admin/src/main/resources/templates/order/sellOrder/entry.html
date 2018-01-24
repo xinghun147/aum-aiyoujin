@@ -76,10 +76,16 @@
                 <td th:text="${item.sellAmount}"></td>
                 <th:block th:switch="${item.orderStatus}">
                     <td th:case="7" style="color: #31A89D">待处理</td>
-                    <td th:case="8" style="color: #7fff00">变现成功</td>
+                    <td th:case="8" style="color: #00C800">变现成功</td>
                     <td th:case="9" style="color: #e47214">变现失败</td>
                 </th:block>
-                <td th:text="${item.createTime}?${#dates.format(item.createTime,'yyyy-MM-dd HH:mm:ss')}"></td>
+                <th:block th:if="${item.orderStatus eq 7}">
+                    <td th:text="${item.updateTime}?${#dates.format(item.updateTime,'yyyy-MM-dd HH:mm:ss')}:''"></td>
+                </th:block>
+                <th:block th:if="${item.orderStatus eq 8}">
+                    <td th:text="${item.sellTime}?${#dates.format(item.sellTime,'yyyy-MM-dd HH:mm:ss')}:''"></td>
+                </th:block>
+                <!--<td th:text="${item.sellTime}?${#dates.format(item.sellTime,'yyyy-MM-dd HH:mm:ss')}:''"></td>-->
                 <!--<td>
                     <a th:data="${item.orderId}" class="layui-btn layui-btn-mini message_edit"> <i class="layui-icon">&#xe642;</i>编辑</a>
                     &lt;!&ndash;<th:block th:if="${item.status == 0}">&ndash;&gt;

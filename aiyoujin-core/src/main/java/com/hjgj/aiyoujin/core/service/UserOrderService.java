@@ -58,7 +58,7 @@ public class UserOrderService {
 
     @Autowired
     private OrderMessageService orderMessageService;
-    
+
     @Autowired
     private ProductPictureService productPictureService;
 
@@ -68,13 +68,13 @@ public class UserOrderService {
 
 
     @Transactional
-    public int createOrder(Order order, OrderLog orderLog, OrderMessage orderMessage) throws BusinessException{
+    public int createOrder(Order order, OrderLog orderLog, OrderMessage orderMessage) throws BusinessException {
         int count = userOrderMapper.insert(order);
         if (count > 0) {
             orderLogMapper.insert(orderLog);
             orderMessageMapper.insert(orderMessage);
             //扣减库存
-             productService.updateQuantity(order.getProductId(), -1);
+            productService.updateQuantity(order.getProductId(), -1);
         }
         return count;
     }
@@ -99,6 +99,10 @@ public class UserOrderService {
         order.setId(orderId);
         order.setStatus(orderStatus);
         order.setUpdateTime(new Date());
+        return orderMapper.updateByPrimaryKeySelective(order);
+    }
+
+    public int updateOrderState(Order order) {
         return orderMapper.updateByPrimaryKeySelective(order);
     }
 
@@ -140,8 +144,8 @@ public class UserOrderService {
             return null;
         }
     }
-    
-    public Order getOrderBySourceOrderId(String orderId,String userId) {
+
+    public Order getOrderBySourceOrderId(String orderId, String userId) {
         OrderExample example = new OrderExample();
         OrderExample.Criteria criteria = example.createCriteria();
         criteria.andSourceOrderIdEqualTo(orderId);
@@ -192,20 +196,20 @@ public class UserOrderService {
     }
 
 
-    public OrderWebVo queryOrderDetail(String orderId,String userId) throws Exception {
+    public OrderWebVo queryOrderDetail(String orderId, String userId) throws Exception {
         Order order = userOrderMapper.selectByPrimaryKey(orderId);
         ProductVo product = productService.queryGoodsDetail(order.getProductId());
-        
+
         OrderWebVo orderVo = new OrderWebVo();
-        
+
         if (StringUtils.isNotBlank(order.getSourceOrderId())) {
             Order orderFrom = userOrderMapper.selectByPrimaryKey(order.getSourceOrderId());
             User userFrom = userService.getUserByUserId(orderFrom.getUserId());
             userId = userFrom.getId();
             orderId = orderFrom.getId();
         }
-        
-        List<ProductPicture> pics = productPictureService.queryProductPicture(order.getProductId(),Constants.prodPicType.middle.ordinal());
+
+        List<ProductPicture> pics = productPictureService.queryProductPicture(order.getProductId(), Constants.prodPicType.middle.ordinal());
         orderVo.setSellAmount(order.getSellAmount());
         orderVo.setProductName(product.getName());
         orderVo.setProductId(order.getProductId());
@@ -214,16 +218,16 @@ public class UserOrderService {
         orderVo.setOrderId(order.getId());
         orderVo.setUserId(order.getUserId());
         orderVo.setStatusCode(order.getStatus());
-        
-        if(order.getStatus() == 1 || order.getStatus() == 3 ||order.getStatus() == 4 ||order.getStatus() == 5){//状态为：送出待收、送出成功、已退回的状态，查询使用订单userId查询留言
-        	  userId = order.getUserId();
-        	  orderId=order.getId();
+
+        if (order.getStatus() == 1 || order.getStatus() == 3 || order.getStatus() == 4 || order.getStatus() == 5) {//状态为：送出待收、送出成功、已退回的状态，查询使用订单userId查询留言
+            userId = order.getUserId();
+            orderId = order.getId();
         }
-        
+
         User user = userService.getUserByUserId(userId);
         orderVo.setFromNickName(user.getNickname());
         orderVo.setFromAvatar(user.getAvatar());
-    	OrderMessage om = orderMessageService.queryMessage(orderId,userId);
+        OrderMessage om = orderMessageService.queryMessage(orderId, userId);
         if (om != null) {
             orderVo.setMessage(om.getContent());
             orderVo.setVideoUrl(om.getVideoUrl());
@@ -231,7 +235,7 @@ public class UserOrderService {
         }
         return orderVo;
     }
-    
+
     public OrderMessage queryOrderMessage(String orderId) throws Exception {
         Order order = userOrderMapper.selectByPrimaryKey(orderId);
         String userId = "";
@@ -240,10 +244,10 @@ public class UserOrderService {
             User userFrom = userService.getUserByUserId(orderFrom.getUserId());
             userId = userFrom.getId();
         }
-        if(order.getStatus() == 3||order.getStatus() == 4||order.getStatus() == 5){//状态为：送出待收、送出成功、已退回的状态，查询使用订单userId查询留言
-        	  userId = order.getUserId();
+        if (order.getStatus() == 3 || order.getStatus() == 4 || order.getStatus() == 5) {//状态为：送出待收、送出成功、已退回的状态，查询使用订单userId查询留言
+            userId = order.getUserId();
         }
-    	OrderMessage om = orderMessageService.queryMessage(order.getId(),userId);
+        OrderMessage om = orderMessageService.queryMessage(order.getId(), userId);
         return om;
     }
 
@@ -251,42 +255,46 @@ public class UserOrderService {
         int fromOrderResult = userOrderMapper.insert(order);
         return fromOrderResult;
     }
-    
+
     @Transactional
-    public int sendGiftCard(Order order,OrderMessage msg) throws Exception {
-    	msg.setCreateTime(new Date());
-    	msg.setOrderId(order.getId());
-    	msg.setOrderNo(order.getCode());
-    	msg.setUpdateTime(new Date());
-    	msg.setId(UUIDGenerator.generate());
-    	OrderMessage om = orderMessageService.queryMessage(msg.getOrderId(), msg.getUserId());
-    	if(om == null){
-    		orderMessageService.insert(msg);
-    	}else{
-    		om.setContent(msg.getContent());
-    		om.setImageUrl(msg.getImageUrl());
-    		om.setVideoUrl(msg.getVideoUrl());
-    		orderMessageService.update(om);
-    	}
-    	//更新订单状态
-        return updateOrderStauts(order.getId(), OrderStatusEnum.ORDER_STATUS_UNRECEIVE.getCode());
+    public int sendGiftCard(Order order, OrderMessage msg) throws Exception {
+        msg.setCreateTime(new Date());
+        msg.setOrderId(order.getId());
+        msg.setOrderNo(order.getCode());
+        msg.setUpdateTime(new Date());
+        msg.setId(UUIDGenerator.generate());
+        OrderMessage om = orderMessageService.queryMessage(msg.getOrderId(), msg.getUserId());
+        if (om == null) {
+            orderMessageService.insert(msg);
+        } else {
+            om.setContent(msg.getContent());
+            om.setImageUrl(msg.getImageUrl());
+            om.setVideoUrl(msg.getVideoUrl());
+            orderMessageService.update(om);
+        }
+        order.setStatus(OrderStatusEnum.ORDER_STATUS_UNRECEIVE.getCode());
+        order.setSentTime(new Date());
+        //更新订单状态
+        return updateOrderState(order);
     }
 
 
     @Transactional
     public String receiveOrder(Order order) throws Exception {
-        String orderNo = CommonUtils.generateOrderNo("TF");
+        String orderNo = CommonUtils.generateOrderNo("RV");
         order.setId(UUIDGenerator.generate());
         order.setCreateTime(new Date());
         order.setDeleted(Constants.DelFlag.NO.ordinal());
         order.setCode(orderNo);
         //添加新订单
         int count = userOrderMapper.insert(order);
-        if (count > 0) {
-            //更新订单状态为  领取成功
-            this.updateOrderStauts(order.getSourceOrderId(), OrderStatusEnum.ORDER_STATUS_SEND_SUCCESS.getCode());
+        int orderStauts = updateOrderStauts(order.getSourceOrderId(), OrderStatusEnum.ORDER_STATUS_SEND_SUCCESS.getCode());
+
+        if (count > 0 && orderStauts > 0) {
+            return order.getId();
+        } else {
+            return null;
         }
-        return order.getId();
     }
 
     /**
@@ -311,10 +319,14 @@ public class UserOrderService {
             map = wxMPService.promotionTransfers(openId, UUIDGenerator.generate(), order.getCode(), money, "商户向用户微信打款");
             if (map.get("code").equals("0")) {
                 //1、修改订单状态为  ：已变现
-                this.updateOrderStauts(order.getId(), OrderStatusEnum.ORDER_STATUS_CASH_SUCCESS.getCode());
+                order.setSellTime(new Date());
+                order.setStatus(OrderStatusEnum.ORDER_STATUS_CASH_SUCCESS.getCode());
+                updateOrderState(order);
                 log.setStatus(1);
             } else {
-                this.updateOrderStauts(order.getId(), OrderStatusEnum.ORDER_STATUS_CASH_FAIL.getCode());
+                order.setSellTime(new Date());
+                order.setStatus(OrderStatusEnum.ORDER_STATUS_CASH_FAIL.getCode());
+                updateOrderState(order);
                 log.setStatus(2);
             }
         } finally {

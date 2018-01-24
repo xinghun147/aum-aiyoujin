@@ -66,7 +66,6 @@ public class WxMPService {
         } else {
             hashMap.put("code", "1");
             hashMap.put("msg", transfersResult.getReturn_msg());
-            logger.error("打款失败");
         }
         //responseStr = JSON.toJSONString(hashMap);
         return hashMap;

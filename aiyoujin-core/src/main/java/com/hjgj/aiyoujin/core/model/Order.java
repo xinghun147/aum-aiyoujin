@@ -10,21 +10,25 @@ public class Order {
 
     private String userId;
 
-    private String productId;
-
-    private BigDecimal buyAmount;
-
-    private Integer status;
-
-    private Integer deleted;
-
-    private String reason;
-
     private Date createTime;
 
     private Date updateTime;
 
+    private Date sentTime;
+
+    private Date sellTime;
+
+    private Date pickupTime;
+
+    private Date backTime;
+
+    private Date finishTime;
+
+    private BigDecimal buyAmount;
+
     private BigDecimal sellAmount;
+
+    private Long expressFee;
 
     private String expressCompany;
 
@@ -36,9 +40,15 @@ public class Order {
 
     private String toOrderId;
 
-    private BigDecimal expressFee;
-
     private String address;
+
+    private String reason;
+
+    private String productId;
+
+    private Integer status;
+
+    private Integer deleted;
 
     public String getId() {
         return id;
@@ -64,46 +74,6 @@ public class Order {
         this.userId = userId == null ? null : userId.trim();
     }
 
-    public String getProductId() {
-        return productId;
-    }
-
-    public void setProductId(String productId) {
-        this.productId = productId == null ? null : productId.trim();
-    }
-
-    public BigDecimal getBuyAmount() {
-        return buyAmount;
-    }
-
-    public void setBuyAmount(BigDecimal buyAmount) {
-        this.buyAmount = buyAmount;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-
-    public Integer getDeleted() {
-        return deleted;
-    }
-
-    public void setDeleted(Integer deleted) {
-        this.deleted = deleted;
-    }
-
-    public String getReason() {
-        return reason;
-    }
-
-    public void setReason(String reason) {
-        this.reason = reason == null ? null : reason.trim();
-    }
-
     public Date getCreateTime() {
         return createTime;
     }
@@ -120,12 +90,68 @@ public class Order {
         this.updateTime = updateTime;
     }
 
+    public Date getSentTime() {
+        return sentTime;
+    }
+
+    public void setSentTime(Date sentTime) {
+        this.sentTime = sentTime;
+    }
+
+    public Date getSellTime() {
+        return sellTime;
+    }
+
+    public void setSellTime(Date sellTime) {
+        this.sellTime = sellTime;
+    }
+
+    public Date getPickupTime() {
+        return pickupTime;
+    }
+
+    public void setPickupTime(Date pickupTime) {
+        this.pickupTime = pickupTime;
+    }
+
+    public Date getBackTime() {
+        return backTime;
+    }
+
+    public void setBackTime(Date backTime) {
+        this.backTime = backTime;
+    }
+
+    public Date getFinishTime() {
+        return finishTime;
+    }
+
+    public void setFinishTime(Date finishTime) {
+        this.finishTime = finishTime;
+    }
+
+    public BigDecimal getBuyAmount() {
+        return buyAmount;
+    }
+
+    public void setBuyAmount(BigDecimal buyAmount) {
+        this.buyAmount = buyAmount;
+    }
+
     public BigDecimal getSellAmount() {
         return sellAmount;
     }
 
     public void setSellAmount(BigDecimal sellAmount) {
         this.sellAmount = sellAmount;
+    }
+
+    public Long getExpressFee() {
+        return expressFee;
+    }
+
+    public void setExpressFee(Long expressFee) {
+        this.expressFee = expressFee;
     }
 
     public String getExpressCompany() {
@@ -168,19 +194,43 @@ public class Order {
         this.toOrderId = toOrderId == null ? null : toOrderId.trim();
     }
 
-    public BigDecimal getExpressFee() {
-        return expressFee;
-    }
-
-    public void setExpressFee(BigDecimal expressFee) {
-        this.expressFee = expressFee;
-    }
-
     public String getAddress() {
         return address;
     }
 
     public void setAddress(String address) {
         this.address = address == null ? null : address.trim();
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason == null ? null : reason.trim();
+    }
+
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId == null ? null : productId.trim();
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public Integer getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Integer deleted) {
+        this.deleted = deleted;
     }
 }

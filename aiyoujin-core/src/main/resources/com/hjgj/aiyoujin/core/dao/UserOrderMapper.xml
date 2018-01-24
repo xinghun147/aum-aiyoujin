@@ -147,7 +147,13 @@
 			prod.`name` AS productName,
 			selfOrder.buy_amount AS buyAmount,
 			selfOrder.reason AS reason,
-		IF (selfOrder.`status` in (4,5,7,8,10,11,12) ,selfOrder.update_time,selfOrder.create_time) AS createTime,
+		selfOrder.create_time AS createTime,
+		selfOrder.sell_time AS sellTime,
+		selfOrder.sent_time AS sentTime,
+		selfOrder.update_time AS updateTime,
+		selfOrder.finish_time AS finishTime,
+		selfOrder.back_time AS backTime,
+		toOrder.create_time AS receiveTime,
 			selfOrder.sell_amount AS sellAmount,
 			oneProdPic.path AS productImgUrl
 		FROM

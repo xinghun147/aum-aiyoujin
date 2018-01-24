@@ -51,6 +51,16 @@ public class OrderVO {
 
     private Date receiveTime;
 
+    private Date sentTime;
+
+    private Date sellTime;
+
+    private Date pickupTime;
+
+    private Date backTime;
+
+    private Date finishTime;
+
     public String getOrderId() {
         return orderId;
     }
@@ -233,5 +243,45 @@ public class OrderVO {
 
     public void setReceiveTime(Date receiveTime) {
         this.receiveTime = receiveTime;
+    }
+
+    public Date getSentTime() {
+        return sentTime;
+    }
+
+    public void setSentTime(Date sentTime) {
+        this.sentTime = sentTime;
+    }
+
+    public Date getSellTime() {
+        return sellTime;
+    }
+
+    public void setSellTime(Date sellTime) {
+        this.sellTime = sellTime;
+    }
+
+    public Date getPickupTime() {
+        return pickupTime;
+    }
+
+    public void setPickupTime(Date pickupTime) {
+        this.pickupTime = pickupTime;
+    }
+
+    public Date getBackTime() {
+        return backTime;
+    }
+
+    public void setBackTime(Date backTime) {
+        this.backTime = backTime;
+    }
+
+    public Date getFinishTime() {
+        return finishTime;
+    }
+
+    public void setFinishTime(Date finishTime) {
+        this.finishTime = finishTime;
     }
 }

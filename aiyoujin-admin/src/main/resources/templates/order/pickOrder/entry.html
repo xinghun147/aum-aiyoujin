@@ -84,7 +84,13 @@
                 <td th:text="${item.expressCompany}"></td>
                 <td th:text="${item.expressNo}"></td>
                 <td th:text="${item.expressFee}"></td>
-                <td th:text="${item.updateTime}?${#dates.format(item.updateTime,'yyyy-MM-dd HH:mm:ss')}"></td>
+                <th:block th:if="${item.orderStatus ne 12}">
+                    <td th:text="${item.updateTime}?${#dates.format(item.updateTime,'yyyy-MM-dd HH:mm:ss')}:''"></td>
+                </th:block>
+                <th:block th:if="${item.orderStatus eq 12}">
+                    <td th:text="${item.finishTime}?${#dates.format(item.finishTime,'yyyy-MM-dd HH:mm:ss')}:''"></td>
+                </th:block>
+                <!--<td th:text="${item.updateTime}?${#dates.format(item.updateTime,'yyyy-MM-dd HH:mm:ss')}"></td>-->
                 <td>
                     <th:block th:switch="${item.orderStatus}">
                         <a  th:data="${item.orderNo}" th:case="10" class="layui-btn layui-btn-mini add_express order_no"> <i class="layui-icon">&#xe642;</i>填写物流信息</a>

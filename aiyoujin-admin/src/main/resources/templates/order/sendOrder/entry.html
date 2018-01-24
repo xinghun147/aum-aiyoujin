@@ -70,6 +70,7 @@
             <th>状态</th>
             <th>赠送时间</th>
             <th>接收时间</th>
+            <th>回滚时间</th>
         </tr>
         </thead>
         <tbody class="news_content">
@@ -88,13 +89,25 @@
                     <td th:case="5" style="color: #008000">送出成功</td>
                     <td th:case="6" style="color: #01AAED">领取成功</td>
                 </th:block>
+                <th:block th:if="${item.orderStatus eq 3}">
+                    <td></td>
+                    <td th:text="${item.sentTime}?${#dates.format(item.sentTime,'yyyy-MM-dd HH:mm:ss')}:''"></td>
+                    <td></td>
+                </th:block>
+                <th:block th:if="${item.orderStatus eq 4}">
+                    <td th:text="${item.sentTime}?${#dates.format(item.sentTime,'yyyy-MM-dd HH:mm:ss')}:''"></td>
+                    <td></td>
+                    <td th:text="${item.backTime}?${#dates.format(item.backTime,'yyyy-MM-dd HH:mm:ss')}:''"></td>
+                </th:block>
+                <th:block th:if="${item.orderStatus eq 5}">
+                    <td th:text="${item.sentTime}?${#dates.format(item.sentTime,'yyyy-MM-dd HH:mm:ss')}:''"></td>
+                    <td th:text="${item.receiveTime}?${#dates.format(item.receiveTime,'yyyy-MM-dd HH:mm:ss')}:''"></td>
+                    <td></td>
+                </th:block>
                 <th:block th:if="${item.orderStatus eq 6}">
                     <td></td>
                     <td th:text="${item.createTime}?${#dates.format(item.createTime,'yyyy-MM-dd HH:mm:ss')}:''"></td>
-                </th:block>
-                <th:block th:if="${item.orderStatus ne 6}">
-                    <td th:text="${item.createTime}?${#dates.format(item.createTime,'yyyy-MM-dd HH:mm:ss')}:''"></td>
-                    <td th:text="${item.receiveTime}?${#dates.format(item.receiveTime,'yyyy-MM-dd HH:mm:ss')}:''"></td>
+                    <td></td>
                 </th:block>
             </tr>
         </th:block>

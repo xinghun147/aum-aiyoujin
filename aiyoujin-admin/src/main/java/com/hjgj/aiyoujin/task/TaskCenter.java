@@ -159,11 +159,8 @@ public class TaskCenter {
         for (Order order : orderList) {
             order.setUpdateTime(nowDate);
             order.setStatus(OrderStatusEnum.ORDER_STATUS_RETURN.getCode());
-            order.setUpdateTime(nowDate);
+            order.setBackTime(nowDate);
             int updateOrderAndLog = adminOrderService.updateOrderbyCondition(order);
-//            while (updateOrderAndLog < 0) {
-//                updateOrderAndLog = adminOrderService.updateOrderbyCondition(order);
-//            }
             logger.info("更新订单表主键为:" + order.getId() + "----->订单号为:" + order.getStatus());
         }
 
