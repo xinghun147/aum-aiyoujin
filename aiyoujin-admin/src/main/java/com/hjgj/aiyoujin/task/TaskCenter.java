@@ -12,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import weixin.popular.api.PayMchAPI;
 import weixin.popular.bean.paymch.MchOrderInfoResult;
@@ -41,7 +40,7 @@ public class TaskCenter {
      *  TODO 处理订单状态为 失败,待支付的订单
      */
 //    @Scheduled(cron = "0 0/10 * * * ?")
-    @Scheduled(cron = "0/30 * * * * ? ")
+    //@Scheduled(cron = "0/30 * * * * ? ")
     private void selectWXPayOrder() {
         logger.info("selectWXPayOrder方法执行");
         List<Integer> integers = Arrays.asList(0);
@@ -147,7 +146,7 @@ public class TaskCenter {
 
      PAYERROR--支付失败(其他原因，如银行返回失败)
      */
-    @Scheduled(fixedRate = 1000 * 1800, initialDelay = -10)
+    //@Scheduled(fixedRate = 1000 * 1800, initialDelay = -10)
     public void selectTransferOrder() {
         logger.info("selectTransferOrder方法执行");
         List<Integer> integers = Arrays.asList(3);
