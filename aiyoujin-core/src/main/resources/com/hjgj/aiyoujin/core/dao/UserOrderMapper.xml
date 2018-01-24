@@ -139,6 +139,7 @@
 		SELECT
 			selfOrder.id AS orderId,
 			selfOrder.`status` AS orderStatus,
+		selfOrder.`status` AS statusCode,
 			selfOrder.user_id AS userId,
 			fromUser.nickname AS fromNickName,
 			toUser.nickname AS toNickName,
