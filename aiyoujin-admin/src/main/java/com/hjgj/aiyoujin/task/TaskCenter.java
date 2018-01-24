@@ -40,7 +40,8 @@ public class TaskCenter {
     /**
      *  TODO 处理订单状态为 失败,待支付的订单
      */
-    @Scheduled(cron = "0 0/10 * * * ?")
+//    @Scheduled(cron = "0 0/10 * * * ?")
+    @Scheduled(cron = "0/30 * * * * ? ")
     private void selectWXPayOrder() {
         logger.info("selectWXPayOrder方法执行");
         List<Integer> integers = Arrays.asList(0);
@@ -81,12 +82,9 @@ public class TaskCenter {
                     orderLog.setId(objectHashMap.get(order.getId()));
                     orderLog.setStatus(OrderStatusEnum.ORDER_STATUS_PAY_PAID.getCode());
                     orderLog.setUpdateTime(nowDate);
-                    orderLog.setUpdateBy("schedule task");
+                    orderLog.setUpdateBy("schedule task SUCCESS");
 
                     int updateOrderAndLog = orderLogService.updateOrderAndLog(orderLog, order);
-                    while (updateOrderAndLog < 0) {
-                        updateOrderAndLog = orderLogService.updateOrderAndLog(orderLog, order);
-                    }
                     logger.info("更新订单表主键为:" + order.getId() + "----->订单号为:" + order.getStatus());
                 } else if ("SUCCESS".equals(result_code) && "NOTPAY".equals(trade_state)) {
                     nopayList.add(orderInfoResult.getOut_trade_no());
@@ -96,12 +94,33 @@ public class TaskCenter {
                     orderLog.setId(objectHashMap.get(order.getId()));
                     orderLog.setStatus(OrderStatusEnum.ORDER_STATUS_PAY_ERROR.getCode());
                     orderLog.setUpdateTime(nowDate);
-                    orderLog.setUpdateBy("schedule task");
+                    orderLog.setUpdateBy("schedule task NOTPAY");
 
                     int updateOrderAndLog = orderLogService.updateProdOrderLog(orderLog, order, order.getProductId(), 1);
-//                    while (updateOrderAndLog < 0) {
-//                        updateOrderAndLog = orderLogService.updateProdOrderLog(orderLog, order, order.getProductId(), 1);
-//                    }
+                    logger.info("更新订单表主键为:" + order.getId() + "----->订单号为:" + order.getStatus());
+                } else if ("SUCCESS".equals(result_code) && "CLOSED".equals(trade_state)) {
+                    nopayList.add(orderInfoResult.getOut_trade_no());
+                    order.setStatus(OrderStatusEnum.ORDER_STATUS_PAY_ERROR.getCode());
+                    order.setUpdateTime(nowDate);
+                    OrderLog orderLog = new OrderLog();
+                    orderLog.setId(objectHashMap.get(order.getId()));
+                    orderLog.setStatus(OrderStatusEnum.ORDER_STATUS_PAY_ERROR.getCode());
+                    orderLog.setUpdateTime(nowDate);
+                    orderLog.setUpdateBy("schedule task CLOSED");
+
+                    int updateOrderAndLog = orderLogService.updateProdOrderLog(orderLog, order, order.getProductId(), 1);
+                    logger.info("更新订单表主键为:" + order.getId() + "----->订单号为:" + order.getStatus());
+                } else if ("SUCCESS".equals(result_code) && "PAYERROR".equals(trade_state)) {
+                    nopayList.add(orderInfoResult.getOut_trade_no());
+                    order.setStatus(OrderStatusEnum.ORDER_STATUS_PAY_ERROR.getCode());
+                    order.setUpdateTime(nowDate);
+                    OrderLog orderLog = new OrderLog();
+                    orderLog.setId(objectHashMap.get(order.getId()));
+                    orderLog.setUpdateTime(nowDate);
+                    orderLog.setStatus(OrderStatusEnum.ORDER_STATUS_PAY_ERROR.getCode());
+                    orderLog.setUpdateBy("schedule task PAYERROR");
+
+                    int updateOrderAndLog = orderLogService.updateProdOrderLog(orderLog, order, order.getProductId(), 1);
                     logger.info("更新订单表主键为:" + order.getId() + "----->订单号为:" + order.getStatus());
                 }
             } else {
@@ -114,6 +133,19 @@ public class TaskCenter {
     /**
      * TODO 处理订单状态为 3送出待收
      * TODO 并设置为 已退回
+     * SUCCESS—支付成功
+
+     REFUND—转入退款
+
+     NOTPAY—未支付
+
+     CLOSED—已关闭
+
+     REVOKED—已撤销（刷卡支付）
+
+     USERPAYING--用户支付中
+
+     PAYERROR--支付失败(其他原因，如银行返回失败)
      */
     @Scheduled(fixedRate = 1000 * 1800, initialDelay = -10)
     public void selectTransferOrder() {
