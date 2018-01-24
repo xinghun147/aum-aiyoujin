@@ -73,7 +73,7 @@ public class OrderApiController {
                     orderWebVo.setCreateTime(orderWebVo.getSentTime());
                 }
                 if (orderWebVo.getStatusCode() == 4) {
-                    orderWebVo.setCreateTime(orderWebVo.getBackTime());
+                    orderWebVo.setCreateTime(orderWebVo.getCreateTime());
                 }
                 if (orderWebVo.getStatusCode() == 5) {
                     orderWebVo.setCreateTime(orderWebVo.getReceiveTime());
