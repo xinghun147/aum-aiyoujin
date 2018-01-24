@@ -121,7 +121,8 @@ public class OrderApiController {
         	return ResultModel.error(ResultStatus.ORDER_NOT_TO_RECEIVE);
         }
         
-//        String orderNo = CommonUtils.generateOrderNo("TF");
+//        String orderNo = CommonUtils.generateOrderNo("
+// TF");
 //        Date nowDate = new Date();
 //        User byOpenId = userService.getUserByOpenId(openId);
 //        Order orderById = userOrderService.getOrderById(orderId);
@@ -136,10 +137,11 @@ public class OrderApiController {
 //        fromOrder.setCode(orderNo);
         // 3送出待收、4已退回、5送出成功、6领取成功
 //        fromOrder.setStatus(Integer.valueOf(3));
-        Order order = new Order();
+        Order order = userOrderService.getOrderById(orderId);
         order.setId(orderId);
         OrderMessage msg = new OrderMessage();
         msg.setContent(content);
+        msg.setOrderNo(order.getCode());
         msg.setImageUrl(imageUrl);
         msg.setUserId(userId);
         msg.setVideoUrl(videoUrl);
