@@ -6,9 +6,9 @@
 		</layout>
 	</appender>
 	<appender name="logfile" class="ch.qos.logback.core.rolling.RollingFileAppender">
-	  <file>/data/applogs/aum-platform/platform-server.log</file>
+	  <file>/data/applogs/aum-aiyoujin/aiyoujin-server.log</file>
 	  <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-	    <fileNamePattern>/data/applogs/aum-platform/platform-server.%d{yyyy-MM-dd}.log</fileNamePattern>
+	    <fileNamePattern>/data/applogs/aum-aiyoujin/aiyoujin-server.%d{yyyy-MM-dd}.log</fileNamePattern>
 	  </rollingPolicy>
 	  <encoder>
 	    <pattern>%date %relative [%thread] %level %logger - %msg%n</pattern>
