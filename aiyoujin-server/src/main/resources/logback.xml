@@ -22,6 +22,6 @@
 	
 	<root>
 		<level value="error"/>
-		<appender-ref ref="stdout"/>
+		<appender-ref ref="logfile"/>
 	</root>
 </configuration>
