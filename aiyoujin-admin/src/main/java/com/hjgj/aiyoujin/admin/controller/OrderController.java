@@ -1,5 +1,6 @@
 package com.hjgj.aiyoujin.admin.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.hjgj.aiyoujin.admin.common.utils.HttpUtil;
 import com.hjgj.aiyoujin.core.model.Express;
@@ -15,7 +16,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -139,14 +142,16 @@ public class OrderController extends BaseController {
      * @param orderVO
      * @return
      */
-    @RequestMapping("/addExpress.html")
+    @ResponseBody
+    @PostMapping("/addExpress.html")
     public String addExpress(HttpServletRequest request, OrderVO orderVO) {
+    	String code = "200";
         try {
             adminOrderService.addExpressToOrder(orderVO);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return "redirect:pickOrderEntry.html";
+        return JSON.toJSONString(code);
     }
     /**
 	 * 查看物流
