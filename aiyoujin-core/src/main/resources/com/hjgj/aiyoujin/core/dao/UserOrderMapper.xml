@@ -111,7 +111,6 @@
 		t_order AS selfOrder
 		LEFT JOIN t_user AS selfUser ON selfOrder.user_id = selfUser.id
 		LEFT JOIN t_product AS prod ON selfOrder.product_id = prod.id
-		LEFT JOIN t_product_picture AS oneProdPic ON prod.id = oneProdPic.product_id and oneProdPic.type=0
 		LEFT JOIN t_order AS toOrder ON toOrder.source_order_id = selfOrder.id
 		LEFT JOIN t_user AS toUser ON toOrder.user_id = toUser.id
 		LEFT JOIN t_order AS fromOrder ON fromOrder.id = selfOrder.source_order_id
@@ -155,13 +154,11 @@
 		selfOrder.finish_time AS finishTime,
 		selfOrder.back_time AS backTime,
 		toOrder.create_time AS receiveTime,
-			selfOrder.sell_amount AS sellAmount,
-			oneProdPic.path AS productImgUrl
+		selfOrder.sell_amount AS sellAmount
 		FROM
 		t_order AS selfOrder
 		LEFT JOIN t_user AS selfUser ON selfOrder.user_id = selfUser.id
 		LEFT JOIN t_product AS prod ON selfOrder.product_id = prod.id
-		LEFT JOIN t_product_picture AS oneProdPic ON prod.id = oneProdPic.product_id and oneProdPic.type=0
 		LEFT JOIN t_order AS toOrder ON toOrder.source_order_id = selfOrder.id
 		LEFT JOIN t_user AS toUser ON toOrder.user_id = toUser.id
 		LEFT JOIN t_order AS fromOrder ON fromOrder.id = selfOrder.source_order_id
@@ -181,7 +178,6 @@
 		<if test="types == 4">
 			AND selfOrder.status in (10,11,12)
 		</if>
-			GROUP BY selfOrder.id
 		order by selfOrder.create_time DESC
 	</select>
 
