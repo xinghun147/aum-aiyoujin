@@ -5,10 +5,13 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.RowBounds;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.alibaba.fastjson.JSON;
 import com.hjgj.aiyoujin.core.common.Constants;
 import com.hjgj.aiyoujin.core.common.utils.UUIDGenerator;
 import com.hjgj.aiyoujin.core.dao.UserMapper;
@@ -19,6 +22,8 @@ import com.hjgj.aiyoujin.core.model.vo.UserVO;
 
 @Service
 public class UserService {
+	
+    protected final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private UserMapper userMapper;
@@ -58,6 +63,7 @@ public class UserService {
     			currUser.setNickname(user.getNickname());
     		}
     	    userMapper.updateByPrimaryKeySelective(currUser);
+    	    logger.info("更新用户成功，user:{}", JSON.toJSONString(user));
     	    return currUser;
     	}else{
     		user.setId(UUIDGenerator.generate());
@@ -65,6 +71,7 @@ public class UserService {
     		user.setDeleted(Constants.DelFlag.NO.ordinal());
     		user.setUpdateTime(new Date());
     		userMapper.insert(user);
+    		logger.info("保存用户成功，user:{}", JSON.toJSONString(user));
     	}
         return user;
     }
