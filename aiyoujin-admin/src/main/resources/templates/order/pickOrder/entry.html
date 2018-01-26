@@ -106,11 +106,11 @@
 </div>
 <div id="paged" align="right"></div>
 <div id="addExpress" style="display: none; padding-top:20px ">
-    <form class="layui-form" action="/order/addExpress.html">
+    <form class="layui-form" action="">
         <div class="layui-form-item">
             <label class="layui-form-label">快递公司:</label>
             <div class="layui-input-inline">
-                <select name="expressCompany" lay-verify="required" lay-search="" data-placeholder="直接选择或搜索选择">
+                <select id="expressCompany" name="expressCompany" lay-verify="required" lay-search="" data-placeholder="直接选择或搜索选择">
                     <option th:each="express:${express}" th:value="${express.name}" th:text="${express.name}">快递公司名称
                     </option>
                 </select>
@@ -119,21 +119,21 @@
         <div class="layui-form-item">
             <label class="layui-form-label">快递单号:</label>
             <div class="layui-input-inline">
-                <input type="text" value="" name="expressNo" class="layui-input search_input"/>
+                <input type="text" value="" name="expressNo" id="expressNo" class="layui-input search_input"/>
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">快递费:</label>
             <div class="layui-input-inline">
-                <input type="text" value="" name="expressFee" class="layui-input search_input"/>
+                <input type="text" value="" name="expressFee" id="expressFee" class="layui-input search_input"/>
             </div>
         </div>
         <div class="layui-form-item" style="margin-top:40px;">
             <input type="hidden" name="orderId" id="orderId">
             <div class="layui-input-block">
                 <div class="layui-layer-btn layui-inline">
-                    <button class="layui-btn sendReason" lay-submit="" lay-filter="instantSubmitLog" name="type"
-                            value="1">提交
+                    <button class="layui-btn sendReason" lay-submit="" lay-filter="inSubmit" name="type"
+                        id="inSubmit" value="1">提交
                     </button>
                     <button type="reset" class="layui-btn">重置</button>
                 </div>
@@ -201,7 +201,7 @@
     layui.use('layer', function () {
         var layer = layui.layer, $ = layui.jquery;
         var form = layui.form;
-        //填写物流信息
+        //填写物流信息open面板
         $(".add_express").bind("click", function () {
             var orderNo = $(this).attr("data");
             $("#orderId").val(orderNo);
@@ -212,6 +212,30 @@
                 area: ['360px', '400px'],
                 yes: function (index, layero) {
                     if (!$(".desc").val()) return;
+                }
+            });
+        });
+        //填写物流信息
+        $("#inSubmit").bind("click", function(){
+        	var expressCompany = $("#expressCompany").val();
+        	var expressNo = $("#expressNo").val();
+        	var expressFee = $("#expressFee").val();
+        	var orderId = $("#orderId").val();
+            $.ajax({
+                type: "post",
+                url:"/order/addExpress.html",
+                async:false,
+                data: {
+                	expressCompany:expressCompany,
+                    expressNo:expressNo,
+                    expressFee:expressFee,
+                    orderId:orderId
+                },    
+                dataType: "json",
+                success:function (result) {
+                    if(result==200){
+                       location.href = "pickOrderEntry.html"
+                    }
                 }
             });
         });
