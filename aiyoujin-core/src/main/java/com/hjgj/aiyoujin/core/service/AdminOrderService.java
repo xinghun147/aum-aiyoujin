@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class AdminOrderService {
@@ -138,7 +137,7 @@ public class AdminOrderService {
         OrderExample example = new OrderExample();
         OrderExample.Criteria criteria = example.createCriteria();
         criteria.andStatusIn(statusList).andDeletedEqualTo(0);
-        criteria.andCreateTimeLessThanOrEqualTo(updateTime);
+        criteria.andSentTimeLessThanOrEqualTo(updateTime);
         List<Order> ordersList = orderMapper.selectByExample(example);
         return ordersList;
     }

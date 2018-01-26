@@ -73,7 +73,7 @@ public class OrderApiController {
                     orderWebVo.setCreateTime(orderWebVo.getSentTime());
                 }
                 if (orderWebVo.getStatusCode() == 4) {
-                    orderWebVo.setCreateTime(orderWebVo.getBackTime());
+                    orderWebVo.setCreateTime(orderWebVo.getCreateTime());
                 }
                 if (orderWebVo.getStatusCode() == 5) {
                     orderWebVo.setCreateTime(orderWebVo.getReceiveTime());
@@ -86,6 +86,7 @@ public class OrderApiController {
                 }
                 if (orderWebVo.getStatusCode() == 10 || orderWebVo.getStatusCode() == 11) {
                     orderWebVo.setCreateTime(orderWebVo.getUpdateTime());
+                    //orderWebVo.setCreateTime(orderWebVo.getPickupTime()); 二者可选其一
                 }
                 if (orderWebVo.getStatusCode() == 12) {
                     orderWebVo.setCreateTime(orderWebVo.getFinishTime());

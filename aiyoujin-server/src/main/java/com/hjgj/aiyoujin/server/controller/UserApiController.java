@@ -1,6 +1,4 @@
 package com.hjgj.aiyoujin.server.controller;
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.hjgj.aiyoujin.core.common.Constants;
 import com.hjgj.aiyoujin.core.model.User;
 import com.hjgj.aiyoujin.core.service.UserService;
 import com.hjgj.aiyoujin.server.common.ResultModel;
@@ -48,7 +45,7 @@ public class UserApiController{
 			User user = new User();
 			user.setAvatar(avatar);
 			user.setOpenId(openId);
-			user.setNickname(nickname);
+			user.setNickname(this.filterEmoji(nickname));
 			user = userService.insertUser(user);
 			return ResultModel.ok(user);
 		} catch (Exception e) {
@@ -56,5 +53,19 @@ public class UserApiController{
 			return ResultModel.error(ResultStatus.SYSTEM_ERROR);
 		}
 	}
+    
+    /**  
+     * 将emoji表情替换成空串  
+     *    
+     * @param source  
+     * @return 过滤后的字符串  
+     */    
+    private  String filterEmoji(String source) {    
+     if (source != null && source.length() > 0) {    
+      return source.replaceAll("[\ud800\udc00-\udbff\udfff\ud800-\udfff]", "");    
+     } else {    
+      return source;    
+     }    
+    } 
     
 }

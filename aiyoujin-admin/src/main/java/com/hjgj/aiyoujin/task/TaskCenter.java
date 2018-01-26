@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import weixin.popular.api.PayMchAPI;
 import weixin.popular.bean.paymch.MchOrderInfoResult;
@@ -39,8 +40,8 @@ public class TaskCenter {
     /**
      *  TODO 处理订单状态为 失败,待支付的订单
      */
-//    @Scheduled(cron = "0 0/10 * * * ?")
-    //@Scheduled(cron = "0/30 * * * * ? ")
+    @Scheduled(cron = "0 0/30 * * * ?")
+//    @Scheduled(cron = "0/30 * * * * ? ")
     private void selectWXPayOrder() {
         logger.info("selectWXPayOrder方法执行");
         List<Integer> integers = Arrays.asList(0);
@@ -84,7 +85,7 @@ public class TaskCenter {
                     orderLog.setUpdateBy("schedule task SUCCESS");
 
                     int updateOrderAndLog = orderLogService.updateOrderAndLog(orderLog, order);
-                    logger.info("更新订单表主键为:" + order.getId() + "----->订单号为:" + order.getStatus());
+                    logger.info("更新订单表主键为:" + order.getId() + "----->订单号为:" + order.getCode() + "更新状态为:" + order.getStatus());
                 } else if ("SUCCESS".equals(result_code) && "NOTPAY".equals(trade_state)) {
                     nopayList.add(orderInfoResult.getOut_trade_no());
                     order.setStatus(OrderStatusEnum.ORDER_STATUS_PAY_ERROR.getCode());
@@ -96,7 +97,7 @@ public class TaskCenter {
                     orderLog.setUpdateBy("schedule task NOTPAY");
 
                     int updateOrderAndLog = orderLogService.updateProdOrderLog(orderLog, order, order.getProductId(), 1);
-                    logger.info("更新订单表主键为:" + order.getId() + "----->订单号为:" + order.getStatus());
+                    logger.info("更新订单表主键为:" + order.getId() + "----->订单号为:" + order.getCode() + "更新状态为:" + order.getStatus());
                 } else if ("SUCCESS".equals(result_code) && "CLOSED".equals(trade_state)) {
                     nopayList.add(orderInfoResult.getOut_trade_no());
                     order.setStatus(OrderStatusEnum.ORDER_STATUS_PAY_ERROR.getCode());
@@ -108,7 +109,7 @@ public class TaskCenter {
                     orderLog.setUpdateBy("schedule task CLOSED");
 
                     int updateOrderAndLog = orderLogService.updateProdOrderLog(orderLog, order, order.getProductId(), 1);
-                    logger.info("更新订单表主键为:" + order.getId() + "----->订单号为:" + order.getStatus());
+                    logger.info("更新订单表主键为:" + order.getId() + "----->订单号为:" + order.getCode() + "更新状态为:" + order.getStatus());
                 } else if ("SUCCESS".equals(result_code) && "PAYERROR".equals(trade_state)) {
                     nopayList.add(orderInfoResult.getOut_trade_no());
                     order.setStatus(OrderStatusEnum.ORDER_STATUS_PAY_ERROR.getCode());
@@ -120,7 +121,7 @@ public class TaskCenter {
                     orderLog.setUpdateBy("schedule task PAYERROR");
 
                     int updateOrderAndLog = orderLogService.updateProdOrderLog(orderLog, order, order.getProductId(), 1);
-                    logger.info("更新订单表主键为:" + order.getId() + "----->订单号为:" + order.getStatus());
+                    logger.info("更新订单表主键为:" + order.getId() + "----->订单号为:" + order.getCode() + "更新状态为:" + order.getStatus());
                 }
             } else {
                 logger.info("通信错误,订单号为:" + order.getCode());
@@ -146,7 +147,7 @@ public class TaskCenter {
 
      PAYERROR--支付失败(其他原因，如银行返回失败)
      */
-    //@Scheduled(fixedRate = 1000 * 1800, initialDelay = -10)
+    @Scheduled(fixedRate = 1000 * 1800, initialDelay = -10)
     public void selectTransferOrder() {
         logger.info("selectTransferOrder方法执行");
         List<Integer> integers = Arrays.asList(3);
@@ -161,7 +162,7 @@ public class TaskCenter {
             order.setStatus(OrderStatusEnum.ORDER_STATUS_RETURN.getCode());
             order.setBackTime(nowDate);
             int updateOrderAndLog = adminOrderService.updateOrderbyCondition(order);
-            logger.info("更新订单表主键为:" + order.getId() + "----->订单号为:" + order.getStatus());
+            logger.info("更新订单表主键为:" + order.getId() + "----->订单号为:" + order.getCode() + "更新状态为:" + order.getStatus());
         }
 
     }
