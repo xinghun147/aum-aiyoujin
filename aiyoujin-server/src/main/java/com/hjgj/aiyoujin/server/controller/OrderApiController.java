@@ -275,6 +275,9 @@ public class OrderApiController {
 
         //校验状态是否可赠送
         Order tempOrder = userOrderService.getOrderById(orderId);
+        if (tempOrder == null) {
+            return ResultModel.error(ResultStatus.ERROR_NOT_FIND_DATA);
+        }
         if (!(tempOrder.getStatus() == OrderStatusEnum.ORDER_STATUS_PAY_PAID.getCode()
                 || tempOrder.getStatus() == OrderStatusEnum.ORDER_STATUS_RETURN.getCode()
                 || tempOrder.getStatus() == OrderStatusEnum.ORDER_STATUS_RECEIVED.getCode()
