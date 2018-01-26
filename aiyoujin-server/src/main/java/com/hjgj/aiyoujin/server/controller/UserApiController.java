@@ -42,6 +42,7 @@ public class UserApiController{
     		return ResultModel.error(ResultStatus.USER_NOT_OPENID);
     	}
     	try {
+    		logger.info("调用添加用户接口,openId:{},nickname:{},avatar:{}", openId,nickname,avatar);
 			User user = new User();
 			user.setAvatar(avatar);
 			user.setOpenId(openId);
