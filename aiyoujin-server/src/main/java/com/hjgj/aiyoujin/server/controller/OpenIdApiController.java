@@ -48,6 +48,7 @@ public class OpenIdApiController {
     				.build();
     		
     		 openIdResult = LocalHttpClient.executeJsonResult(httpUriRequest, OpenIdResult.class);
+            logger.info("获取openId请求,jsCode为:" + jsCode + "返回结果为:" + openIdResult);
 		} catch (Exception e) {
 			logger.error("获取OpenId异常，e:{},",e);
 		}
