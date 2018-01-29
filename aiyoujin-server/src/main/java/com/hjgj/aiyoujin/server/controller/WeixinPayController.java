@@ -135,6 +135,7 @@ public class WeixinPayController {
         wxOrder.setUserId(userBy.getId());
         wxOrder.setBuyAmount(product.getBuyPrice());
         wxOrder.setSellAmount(product.getSellPrice());
+        logger.info("微信预支付订单为:" + wxOrder);
         // 订单状态：0待支付、1支付成功、2支付失败、3送出待收、4已退回、5送出成功、
         //	  6领取成功、7变现待处理、8变现成功、9变现失败、10提货待处理、11物流中、12已收货
 
@@ -156,6 +157,7 @@ public class WeixinPayController {
         orderLog.setCreateBy("System");
         orderLog.setReqTime(createTime);
         orderLog.setRespTime(updateTime);
+        logger.info("微信预支付订单log为:" + orderLog);
 
         
         OrderMessage orderMessage = new OrderMessage();
@@ -168,6 +170,8 @@ public class WeixinPayController {
         orderMessage.setUserId(userBy.getId());
         orderMessage.setOrderId(wxOrder.getId());
         orderMessage.setOrderNo(orderNo);
+        logger.info("微信预支付订单log为:" + orderMessage);
+
         if (unifiedOrderRespose != null) {
 
             String prepayId = unifiedOrderRespose.getPrepay_id();
@@ -193,7 +197,7 @@ public class WeixinPayController {
                 }
             }
             sb.append("key=" + weixinOrder.getWeiXinProperty().getApiKey());
-            System.out.println("二次签名是" + sb.toString());
+            logger.info("二次签名是" + sb.toString());
             String paySign = MD5Util.MD5Encode(sb.toString(), "UTF-8").toUpperCase();
 //            String paySign = sb.toString();
 
