@@ -233,4 +233,34 @@ public class Order {
     public void setDeleted(Integer deleted) {
         this.deleted = deleted;
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Order{");
+        sb.append("id='").append(id).append('\'');
+        sb.append(", code='").append(code).append('\'');
+        sb.append(", userId='").append(userId).append('\'');
+        sb.append(", createTime=").append(createTime);
+        sb.append(", updateTime=").append(updateTime);
+        sb.append(", sentTime=").append(sentTime);
+        sb.append(", sellTime=").append(sellTime);
+        sb.append(", pickupTime=").append(pickupTime);
+        sb.append(", backTime=").append(backTime);
+        sb.append(", finishTime=").append(finishTime);
+        sb.append(", buyAmount=").append(buyAmount);
+        sb.append(", sellAmount=").append(sellAmount);
+        sb.append(", expressFee=").append(expressFee);
+        sb.append(", expressCompany='").append(expressCompany).append('\'');
+        sb.append(", expressNo='").append(expressNo).append('\'');
+        sb.append(", sourceOrderId='").append(sourceOrderId).append('\'');
+        sb.append(", fromOrderId='").append(fromOrderId).append('\'');
+        sb.append(", toOrderId='").append(toOrderId).append('\'');
+        sb.append(", address='").append(address).append('\'');
+        sb.append(", reason='").append(reason).append('\'');
+        sb.append(", productId='").append(productId).append('\'');
+        sb.append(", status=").append(status);
+        sb.append(", deleted=").append(deleted);
+        sb.append('}');
+        return sb.toString();
+    }
 }

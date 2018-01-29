@@ -112,4 +112,22 @@ public class OrderMessage {
     public void setOrderNo(String orderNo) {
         this.orderNo = orderNo == null ? null : orderNo.trim();
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("OrderMessage{");
+        sb.append("id='").append(id).append('\'');
+        sb.append(", orderId='").append(orderId).append('\'');
+        sb.append(", content='").append(content).append('\'');
+        sb.append(", imageUrl='").append(imageUrl).append('\'');
+        sb.append(", title='").append(title).append('\'');
+        sb.append(", deleted=").append(deleted);
+        sb.append(", createTime=").append(createTime);
+        sb.append(", updateTime=").append(updateTime);
+        sb.append(", videoUrl='").append(videoUrl).append('\'');
+        sb.append(", userId='").append(userId).append('\'');
+        sb.append(", orderNo='").append(orderNo).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
 }
