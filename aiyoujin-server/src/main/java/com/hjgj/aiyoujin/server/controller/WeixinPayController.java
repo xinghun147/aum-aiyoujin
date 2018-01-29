@@ -1,32 +1,5 @@
 package com.hjgj.aiyoujin.server.controller;
 
-import java.io.InputStream;
-import java.io.PrintWriter;
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.SortedMap;
-import java.util.TreeMap;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.util.Assert;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.alibaba.fastjson.JSON;
 import com.hjgj.aiyoujin.core.common.exception.BusinessException;
 import com.hjgj.aiyoujin.core.common.utils.CommonUtils;
@@ -51,9 +24,33 @@ import com.hjgj.aiyoujin.server.webBiz.WeixinPush;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.XmlFriendlyNameCoder;
 import com.thoughtworks.xstream.io.xml.XppDriver;
-
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.InputStream;
+import java.io.PrintWriter;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 @Controller
 @RequestMapping(value = "/weixin")
@@ -318,7 +315,7 @@ public class WeixinPayController {
                             PrintWriter out = response.getWriter();
                             out.print(builder.toString());
                             out.close();
-                            callbackResolved(selfOrder.getId(), payResultVo.getOpenid(), payResultVo.getTransaction_id(), 1);
+                            //callbackResolved(selfOrder.getId(), payResultVo.getOpenid(), payResultVo.getTransaction_id(), 1);
                         } else if ("FAIL".equals(result_code.trim())) {
                             callbackResolved(selfOrder.getId(), payResultVo.getOpenid(), payResultVo.getTransaction_id(), 2);
                         }
