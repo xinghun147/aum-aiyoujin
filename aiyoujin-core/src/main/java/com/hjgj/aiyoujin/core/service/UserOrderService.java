@@ -210,6 +210,7 @@ public class UserOrderService {
         }
 
         List<ProductPicture> pics = productPictureService.queryProductPicture(order.getProductId(), Constants.prodPicType.middle.ordinal());
+        orderVo.setBuyAmount(order.getBuyAmount());
         orderVo.setSellAmount(order.getSellAmount());
         orderVo.setProductName(product.getName());
         orderVo.setProductId(order.getProductId());
