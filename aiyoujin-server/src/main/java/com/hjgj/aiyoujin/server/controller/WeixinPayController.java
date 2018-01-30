@@ -244,6 +244,7 @@ public class WeixinPayController {
     @ApiOperation(value = "微信支付通知回调")
     @RequestMapping(value = "/wxPayCallback/{orderNo}", method = {RequestMethod.POST, RequestMethod.GET})
     public void paySuccessCallback(@PathVariable(value = "orderNo") String orderCode, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        logger.info("微信支付,请求回调,订单号为:" + orderCode);
         if (orderCode == null) {
             response.addHeader("Content-Length", "100");
             PrintWriter writer = response.getWriter();
@@ -262,6 +263,7 @@ public class WeixinPayController {
 
         InputStream inputStream = request.getInputStream();
         String postData = IOUtils.toString(inputStream, "UTF-8");
+        logger.info("微信支付,请求回调,回调数据为:" + postData);
         if (postData == null) {
             return;
         }
