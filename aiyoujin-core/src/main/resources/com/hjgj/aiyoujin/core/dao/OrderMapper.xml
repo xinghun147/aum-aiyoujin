@@ -580,6 +580,9 @@
 		LEFT JOIN t_product AS tprod ON torder.product_id = tprod.id
 		LEFT JOIN t_user AS tuser ON tuser.id = torder.user_id
 		WHERE torder.deleted = 0 AND ordLog.pay_type = 1
+		<if test="orderState != null">
+			AND torder.`status` = #{orderState,jdbcType=INTEGER}
+		</if>
 		<if test="startTime != null and endTime != null">
 			AND torder.create_time BETWEEN #{startTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
 		</if>
@@ -624,6 +627,9 @@
 		</if>
 		<if test="productName != null and productName != ''">
 			AND tprod.`name` = #{productName,jdbcType=VARCHAR}
+		</if>
+		<if test="orderState != null">
+			AND torder.`status` = #{orderState,jdbcType=INTEGER}
 		</if>
 		group by torder.id
 		ORDER BY torder.create_time desc

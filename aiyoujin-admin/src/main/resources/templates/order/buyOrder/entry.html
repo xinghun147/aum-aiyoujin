@@ -13,27 +13,36 @@
         <div class="layui-form-item" style="margin-left: -20px;margin-bottom: 2px;">
             <label class="layui-form-label">订单编号:</label>
             <div class="layui-input-inline">
-                <input type="text" class="layui-input" name="orderNo" th:value="${orderNo}"/>
+                <input type="text" class="layui-input" name="orderNo" th:value="${vo.orderNo}"/>
             </div>
             <label class="layui-form-label">用户名:</label>
             <div class="layui-input-inline">
-                <input type="text" class="layui-input" name="userName" th:value="${userName}"/>
+                <input type="text" class="layui-input" name="userName" th:value="${vo.userName}"/>
             </div>
             <label class="layui-form-label">产品名称:</label>
             <div class="layui-input-inline">
-                <input type="text" class="layui-input" name="productName" th:value="${productName}"/>
+                <input type="text" class="layui-input" name="productName" th:value="${vo.productName}"/>
+            </div>
+            <label class="layui-form-label">订单状态:</label>
+            <div class="layui-input-inline">
+                <select name="orderState" lay-filter="status">
+                    <option value="">请选择订单状态</option>
+                    <option value="0" th:selected="${vo}ne null  and ${vo.orderState == 0}">待支付</option>
+                    <option value="1" th:selected="${vo}ne null  and ${vo.orderState == 1}">支付成功</option>
+                    <option value="2" th:selected="${vo}ne null  and ${vo.orderState == 2}">支付失败</option>
+                </select>
             </div>
         </div>
         <div class="layui-form-item" style="margin-left: -30px;margin-bottom: 2px;margin-top: 12px;">
             <label class="layui-form-label" style="margin-left: 10px;">创建时间:</label>
             <div class="layui-input-inline">
                 <input type="text" class="layui-input" name="startTime" id="startTime" readonly="readonly"
-                       th:value="${startTime}?${#dates.format(startTime, 'yyyy-MM-dd HH:mm:ss')}"/>
+                       th:value="${vo.startTime}?${#dates.format(vo.startTime, 'yyyy-MM-dd HH:mm:ss')}"/>
             </div>
             <div class="layui-form-mid">-</div>
             <div class="layui-input-inline">
                 <input type="text" class="layui-input" name="endTime" id="endTime" readonly="readonly"
-                       th:value="${endTime}?${#dates.format(endTime, 'yyyy-MM-dd HH:mm:ss')}"/>
+                       th:value="${vo.endTime}?${#dates.format(vo.endTime, 'yyyy-MM-dd HH:mm:ss')}"/>
             </div>
             <button class="layui-btn search_btn"><i class="layui-icon">&#xe615;</i>查询</button>
             <!--<a class="layui-btn layui-btn-normal newsAdd_btn" id="add"><i class="layui-icon">&#xe608;</i>添加</a>-->

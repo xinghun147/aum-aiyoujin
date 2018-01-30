@@ -11,7 +11,6 @@ import com.hjgj.aiyoujin.core.service.AdminOrderService;
 import com.hjgj.aiyoujin.core.service.ExpressService;
 import com.hjgj.aiyoujin.core.vo.ExpressResultVo;
 import com.hjgj.aiyoujin.core.vo.ExpressVo;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,7 +21,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -64,9 +62,7 @@ public class OrderController extends BaseController {
         ModelAndView modelAndView = new ModelAndView();
         Page<OrderVO> orderVOMap = adminOrderService.getBuyOrderAllMap(requestVo, pageNum, pageSize);
         modelAndView.setViewName("order/buyOrder/entry");
-        modelAndView.addObject("userName", requestVo.getUserName());
-        modelAndView.addObject("orderNo", requestVo.getOrderNo());
-        modelAndView.addObject("productName", requestVo.getProductName());
+		modelAndView.addObject("vo", requestVo);
         modelAndView.addObject("page", orderVOMap);
         return modelAndView;
     }
