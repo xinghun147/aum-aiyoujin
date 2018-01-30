@@ -85,6 +85,9 @@
                 <th:block th:if="${item.orderStatus eq 8}">
                     <td th:text="${item.sellTime}?${#dates.format(item.sellTime,'yyyy-MM-dd HH:mm:ss')}:''"></td>
                 </th:block>
+                <th:block th:if="${item.orderStatus eq 9}">
+                    <td th:text="${item.updateTime}?${#dates.format(item.updateTime,'yyyy-MM-dd HH:mm:ss')}:''"></td>
+                </th:block>
                 <!--<td th:text="${item.sellTime}?${#dates.format(item.sellTime,'yyyy-MM-dd HH:mm:ss')}:''"></td>-->
                 <!--<td>
                     <a th:data="${item.orderId}" class="layui-btn layui-btn-mini message_edit"> <i class="layui-icon">&#xe642;</i>编辑</a>

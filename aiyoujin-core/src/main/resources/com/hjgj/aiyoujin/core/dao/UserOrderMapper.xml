@@ -235,20 +235,24 @@
 
 	<insert id="insert" parameterType="com.hjgj.aiyoujin.core.model.Order">
 		INSERT INTO t_order (id, code, user_id,
-							 product_id, buy_amount, status,
-							 deleted, reason, create_time,
-							 update_time, sell_amount, express_company,
-							 express_no, source_order_id, from_order_id,
-							 to_order_id)
+		create_time, update_time, sent_time,
+		sell_time, pickup_time, back_time,
+		finish_time, buy_amount, sell_amount,
+		express_fee, express_company, express_no,
+		source_order_id, from_order_id, to_order_id,
+		address, reason, product_id,
+		status, deleted)
 		VALUES (#{id,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR},
-										#{productId,jdbcType=VARCHAR}, #{buyAmount,jdbcType=DECIMAL},
-										#{status,jdbcType=INTEGER},
-										#{deleted,jdbcType=INTEGER}, #{reason,jdbcType=VARCHAR},
-										#{createTime,jdbcType=TIMESTAMP},
-										#{updateTime,jdbcType=TIMESTAMP}, #{sellAmount,jdbcType=DECIMAL},
-				#{expressCompany,jdbcType=VARCHAR},
-				#{expressNo,jdbcType=VARCHAR}, #{sourceOrderId,jdbcType=VARCHAR}, #{fromOrderId,jdbcType=VARCHAR},
-				#{toOrderId,jdbcType=VARCHAR})
+		#{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP},
+		#{sentTime,jdbcType=TIMESTAMP},
+		#{sellTime,jdbcType=TIMESTAMP}, #{pickupTime,jdbcType=TIMESTAMP},
+		#{backTime,jdbcType=TIMESTAMP},
+		#{finishTime,jdbcType=TIMESTAMP}, #{buyAmount,jdbcType=DECIMAL},
+		#{sellAmount,jdbcType=DECIMAL},
+		#{expressFee,jdbcType=DECIMAL}, #{expressCompany,jdbcType=VARCHAR}, #{expressNo,jdbcType=VARCHAR},
+		#{sourceOrderId,jdbcType=VARCHAR}, #{fromOrderId,jdbcType=VARCHAR}, #{toOrderId,jdbcType=VARCHAR},
+		#{address,jdbcType=VARCHAR}, #{reason,jdbcType=VARCHAR}, #{productId,jdbcType=VARCHAR},
+		#{status,jdbcType=INTEGER}, #{deleted,jdbcType=INTEGER})
 	</insert>
 
 	<insert id="batchInsertOrder" parameterType="java.util.List">
