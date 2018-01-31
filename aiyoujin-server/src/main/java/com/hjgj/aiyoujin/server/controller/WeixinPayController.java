@@ -112,6 +112,12 @@ public class WeixinPayController {
            map.put("msg", ResultStatus.PRODUCT_NO_STOCK.getMsg());
            return JSON.toJSONString(map);
         }
+        Integer productStatus = product.getStatus();
+        if (productStatus != 2 | productStatus != 3) {
+            map.put("code", "1");
+            map.put("msg", ResultStatus.PRODUCT_NO_SELLING.getMsg());
+            return JSON.toJSONString(map);
+        }
         WeiXinPrePayVo weixin = new WeiXinPrePayVo();
         weixin.setContent(content);
         weixin.setNonceStr(nonceStr);
@@ -245,6 +251,7 @@ public class WeixinPayController {
     @RequestMapping(value = "/wxPayCallback/{orderNo}", method = {RequestMethod.POST, RequestMethod.GET})
     public void paySuccessCallback(@PathVariable(value = "orderNo") String orderCode, HttpServletRequest request, HttpServletResponse response) throws Exception {
         logger.info("微信支付,请求回调,订单号为:" + orderCode);
+        System.out.println("----微信支付,请求回调,订单号为:" + orderCode);
         if (orderCode == null) {
             response.addHeader("Content-Length", "100");
             PrintWriter writer = response.getWriter();
