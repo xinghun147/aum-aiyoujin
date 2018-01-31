@@ -18,7 +18,8 @@ public enum ResultStatus {
     PRODUCT_PARAMS_ISNULL(-2001, "参数为空"),
     PRODUCT_NO_EXIST(-2002, "产品不存在"),
     PRODUCT_NO_STOCK(-2003, "商品库存不足"),
-    
+    PRODUCT_NO_SELLING(-2004, "商品未上架开售"),
+
     //订单类
     ORDER_PARAMS_ISNULL(-3001, "参数为空"),
     ORDER_PARAMS_AMOUNT_LTE_ZERO(-3002, "金额不能小于等于0"),
