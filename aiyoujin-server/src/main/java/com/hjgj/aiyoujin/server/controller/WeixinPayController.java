@@ -113,7 +113,7 @@ public class WeixinPayController {
            return JSON.toJSONString(map);
         }
         Integer productStatus = product.getStatus();
-        if (productStatus != 2 | productStatus != 3) {
+        if (productStatus != 2) {
             map.put("code", "1");
             map.put("msg", ResultStatus.PRODUCT_NO_SELLING.getMsg());
             return JSON.toJSONString(map);
