@@ -7,8 +7,10 @@ import com.hjgj.aiyoujin.core.model.UserAddress;
 import com.hjgj.aiyoujin.core.model.UserAddressExample;
 import com.hjgj.aiyoujin.core.model.UserAddressExample.Criteria;
 import com.hjgj.aiyoujin.core.model.vo.Page;
+import com.hjgj.aiyoujin.core.model.vo.UserAddressVo;
 import com.hjgj.aiyoujin.core.vo.AddressVo;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -128,4 +130,15 @@ public class AddressService extends BaseService {
         return userAddressMapper.updateByExampleSelective(userAddress, example);
     }
 
+    public Page<UserAddressVo> getAddressListVO(AddressVo addressVo, Integer pageNum, Integer pageSize) {
+        Page<UserAddressVo> page = new Page<>(pageNum, pageSize, true);
+        RowBounds rowBounds = new RowBounds(page.getStartRow(), pageSize);
+        int count = userAddressMapper.countAddressListVO(addressVo, rowBounds);
+        if (count > 0) {
+            List<UserAddressVo> list = userAddressMapper.selectAddressListVO(addressVo, rowBounds);
+            page.setTotal(count);
+            page.setList(list);
+        }
+        return page;
+    }
 }
