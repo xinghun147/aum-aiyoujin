@@ -2,8 +2,12 @@ package com.hjgj.aiyoujin.core.dao;
 
 import com.hjgj.aiyoujin.core.model.UserAddress;
 import com.hjgj.aiyoujin.core.model.UserAddressExample;
-import java.util.List;
+import com.hjgj.aiyoujin.core.model.vo.UserAddressVo;
+import com.hjgj.aiyoujin.core.vo.AddressVo;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.session.RowBounds;
+
+import java.util.List;
 
 public interface UserAddressMapper {
     int countByExample(UserAddressExample example);
@@ -29,4 +33,8 @@ public interface UserAddressMapper {
     int updateByPrimaryKeySelective(UserAddress record);
 
     int updateByPrimaryKey(UserAddress record);
+
+    int countAddressListVO(AddressVo addressVo, RowBounds rowBounds);
+
+    List<UserAddressVo> selectAddressListVO(AddressVo addressVo, RowBounds rowBounds);
 }
