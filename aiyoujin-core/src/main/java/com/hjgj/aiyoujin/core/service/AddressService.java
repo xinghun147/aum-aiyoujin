@@ -141,4 +141,9 @@ public class AddressService extends BaseService {
         }
         return page;
     }
+
+    public UserAddress getUserAddressById(String id) {
+        UserAddress userAddress = userAddressMapper.selectByPrimaryKey(id);
+        return userAddress;
+    }
 }

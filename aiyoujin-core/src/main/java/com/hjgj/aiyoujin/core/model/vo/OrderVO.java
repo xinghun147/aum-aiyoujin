@@ -61,6 +61,8 @@ public class OrderVO {
 
     private Date finishTime;
 
+    private String addressId;
+
     public String getOrderId() {
         return orderId;
     }
@@ -283,5 +285,13 @@ public class OrderVO {
 
     public void setFinishTime(Date finishTime) {
         this.finishTime = finishTime;
+    }
+
+    public String getAddressId() {
+        return addressId;
+    }
+
+    public void setAddressId(String addressId) {
+        this.addressId = addressId;
     }
 }

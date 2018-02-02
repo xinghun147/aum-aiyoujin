@@ -892,6 +892,7 @@
 		torder.express_company AS expressCompany,
 		torder.express_fee AS expressFee,
 		torder.update_time AS updateTime,
+		torder.address AS addressId,
 		torder.finish_time AS finishTime
 		FROM
 		t_order AS torder
