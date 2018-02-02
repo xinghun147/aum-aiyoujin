@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<form class="layui-form insertChannel">
+    <div class="layui-form-item">
+        <div class="layui-inline">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">收件人姓名</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input" readonly="readonly" th:value="${address.contact}">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">联系电话</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input" readonly="readonly" th:value="${address.telephone}">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item ">
+        <div class="layui-inline">
+            <label class="layui-form-label">收货地址</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input" readonly="readonly" th:value="${address.address}"
+                       style="width: 340px;">
+            </div>
+        </div>
+    </div>
+</form>
+<style>
+    .insertChannel .layui-form-label {
+        width: 140px;
+        text-align: right;
+    }
+</style>
+
+<script>
+    layui.use(['form'], function () {
+        var form = layui.form; //只有执行了这一步，部分表单元素才会自动修饰成功
+        form.render();
+    })
+</script>
+</body>
+</html>

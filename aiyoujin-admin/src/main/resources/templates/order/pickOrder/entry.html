@@ -60,6 +60,7 @@
             <th>产品名称</th>
             <th>产品金额</th>
             <th>提货状态</th>
+            <th>收货地址</th>
             <th>快递公司</th>
             <th>快递单号</th>
             <th>快递费用</th>
@@ -81,6 +82,9 @@
                     <td th:case="11" style="color: #009688">物流中</td>
                     <td th:case="12" style="color: #eb7350">已收货</td>
                 </th:block>
+                <td>
+                    <a class="viewBtn" style="cursor:pointer;color: #1E9FFF;" th:data="${item.addressId}">查看</a>
+                </td>
                 <td th:text="${item.expressCompany}"></td>
                 <td th:text="${item.expressNo}"></td>
                 <td th:text="${item.expressFee}"></td>
@@ -338,6 +342,22 @@
                 });
             });
         };
+        $(".viewBtn").bind('click', function () {
+            var attr = $(this).attr("data");
+            //Ajax获取
+            $.post('/user/viewAddress.html', {"addressId": attr}, function (data) {
+                layer.open({
+                    type: 1,
+                    title: "查看"
+                    , area: ['600px', '300px']
+                    , shade: 0
+                    , content: data
+                    , yes: function (index, layero) {
+                        layer.close(index);
+                    }
+                });
+            });
+        })
     });
 
     layui.use('form', function () {
