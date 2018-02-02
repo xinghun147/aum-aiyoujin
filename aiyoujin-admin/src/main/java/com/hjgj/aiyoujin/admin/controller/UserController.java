@@ -1,6 +1,7 @@
 package com.hjgj.aiyoujin.admin.controller;
 
 import com.hjgj.aiyoujin.core.model.User;
+import com.hjgj.aiyoujin.core.model.UserAddress;
 import com.hjgj.aiyoujin.core.model.vo.Page;
 import com.hjgj.aiyoujin.core.model.vo.UserAddressVo;
 import com.hjgj.aiyoujin.core.model.vo.UserVO;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -44,6 +46,15 @@ public class UserController extends BaseController {
         mav.setViewName("user/userAddress");
         mav.addObject("page", page);
         mav.addObject("vo", addressVo);
+        return mav;
+    }
+
+    @RequestMapping(value = "/viewAddress.html", method = RequestMethod.POST)
+    public ModelAndView getUserAddressById(String addressId) {
+        ModelAndView mav = new ModelAndView();
+        UserAddress address = addressService.getUserAddressById(addressId);
+        mav.addObject("address", address);
+        mav.setViewName("order/pickOrder/viewAddress");
         return mav;
     }
 //	@LoggerProfile(methodNote="冻结/解冻用户")
