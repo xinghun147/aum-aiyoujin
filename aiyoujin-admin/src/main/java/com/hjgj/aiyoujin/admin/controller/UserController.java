@@ -2,8 +2,11 @@ package com.hjgj.aiyoujin.admin.controller;
 
 import com.hjgj.aiyoujin.core.model.User;
 import com.hjgj.aiyoujin.core.model.vo.Page;
+import com.hjgj.aiyoujin.core.model.vo.UserAddressVo;
 import com.hjgj.aiyoujin.core.model.vo.UserVO;
+import com.hjgj.aiyoujin.core.service.AddressService;
 import com.hjgj.aiyoujin.core.service.UserService;
+import com.hjgj.aiyoujin.core.vo.AddressVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -17,6 +20,8 @@ public class UserController extends BaseController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private AddressService addressService;
 
     @RequestMapping("/userList.html")
     public ModelAndView userList(ModelMap modelMap, User user, Integer pageNum, Integer pageSize) {
@@ -30,6 +35,17 @@ public class UserController extends BaseController {
         return mav;
     }
 
+    @RequestMapping(value = "/addressEntry.html")
+    public ModelAndView userAddressEntry(AddressVo addressVo, Integer pageNum, Integer pageSize) {
+        pageNum = pageNum == null ? super.pageNum : pageNum;
+        pageSize = pageSize == null ? super.pageSize : this.pageSize;
+        Page<UserAddressVo> page = addressService.getAddressListVO(addressVo, pageNum, pageSize);
+        ModelAndView mav = new ModelAndView();
+        mav.setViewName("user/userAddress");
+        mav.addObject("page", page);
+        mav.addObject("vo", addressVo);
+        return mav;
+    }
 //	@LoggerProfile(methodNote="冻结/解冻用户")
 //	@ResponseBody
 //	@RequestMapping("/updateFrozen")
