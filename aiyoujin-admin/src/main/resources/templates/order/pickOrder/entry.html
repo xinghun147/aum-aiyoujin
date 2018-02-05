@@ -10,6 +10,7 @@
 <blockquote class="layui-elem-quote news_search" style="min-width: 1680px;">
     <form id="searchForm" name="searchForm" class="layui-form" action="pickOrderEntry.html">
         <input type="hidden" id="pageNum" name="pageNum" th:value="${page.pageNum}"/>
+        <input type="hidden" id="pageSize" name="pageSize" th:value="${page.pageSize}"/>
         <div class="layui-form-item" style="margin-left: -30px;margin-bottom: 2px;">
             <label class="layui-form-label">订单编号:</label>
             <div class="layui-input-inline">
@@ -97,11 +98,13 @@
                 <!--<td th:text="${item.updateTime}?${#dates.format(item.updateTime,'yyyy-MM-dd HH:mm:ss')}"></td>-->
                 <td>
                     <th:block th:switch="${item.orderStatus}">
-                        <a  th:data="${item.orderNo}" th:case="10" class="layui-btn layui-btn-mini add_express order_no"> <i class="layui-icon">&#xe642;</i>填写物流信息</a>
+                        <a th:data="${item.orderNo}" th:case="10" class="layui-btn layui-btn-mini add_express order_no">
+                            <i class="layui-icon">&#xe642;</i>填写物流信息</a>
                     </th:block>
                     <th:block th:switch="${item.orderStatus}">
- 						<a  th:case="11" th:data="${item.expressNo}"  class="layui-btn layui-btn-mini product_info">查看物流</a>
-                     </th:block>
+                        <a th:case="11" th:data="${item.expressNo}"
+                           class="layui-btn layui-btn-mini product_info">查看物流</a>
+                    </th:block>
                 </td>
             </tr>
         </th:block>
@@ -114,7 +117,8 @@
         <div class="layui-form-item">
             <label class="layui-form-label">快递公司:</label>
             <div class="layui-input-inline">
-                <select id="expressCompany" name="expressCompany" lay-verify="required" lay-search="" data-placeholder="直接选择或搜索选择">
+                <select id="expressCompany" name="expressCompany" lay-verify="required" lay-search=""
+                        data-placeholder="直接选择或搜索选择">
                     <option th:each="express:${express}" th:value="${express.name}" th:text="${express.name}">快递公司名称
                     </option>
                 </select>
@@ -137,7 +141,7 @@
             <div class="layui-input-block">
                 <div class="layui-layer-btn layui-inline">
                     <button class="layui-btn sendReason" lay-submit="" lay-filter="inSubmit" name="type"
-                        id="inSubmit" value="1">提交
+                            id="inSubmit" value="1">提交
                     </button>
                     <button type="reset" class="layui-btn">重置</button>
                 </div>
@@ -149,41 +153,51 @@
 <script type="text/javascript" th:src="@{/jquery/jquery-3.2.1.min.js}"></script>
 </body>
 <script th:inline="javascript">
-    layui.use('laypage', function () {
+    layui.use(['laypage', 'form'], function () {
         var laypage = layui.laypage;
         //执行一个laypage实例
         laypage.render({
             elem: 'paged', //注意，这里的 test1 是 ID，不用加 # 号
             curr: [[${page.pageNum}]],
             count: [[${page.total}]], //数据总数，从服务端得到
-            layout: ['count', 'prev', 'page', 'next'],
+            limit: [[${page.pageSize}]],
+            layout: ['count', 'prev', 'page', 'next', 'limit', 'skip'],
             jump: function (obj, first) {
                 //得到了当前页，用于向服务端请求对应数据
                 var curr = obj.curr;
+                var limit = obj.limit;
+                $("#pageSize").val(limit);
                 $("#pageNum").val(curr);
                 if (!first) {
                     $("#searchForm").submit();
                 }
             }
         });
+        var form = layui.form; //只有执行了这一步，部分表单元素才会自动修饰成功
+
+        //……
+
+        //但是，如果你的HTML是动态生成的，自动渲染就会失效
+        //因此你需要在相应的地方，执行下述方法来手动渲染，跟这类似的还有 element.init();
+        form.render();
     });
     //查询物流
-            $(".product_info").bind("click",function() {
-                var expressNo = $(this).attr("data");
-                //Ajax获取
-            	$.post('/order/expressView.html', {expressNo:expressNo}, function(data){
-            	  	layer.open({
-            	  	  type: 1,
-              		  title: '查看物流信息'
-              		  ,area: ['1000px', '460px']
-              		  ,shade: 0
-              		  ,content: data
-           			  ,yes: function(index, layero){
-           				  layer.close(index);
-           				}
-              		}); 
-            	}); 
+    $(".product_info").bind("click", function () {
+        var expressNo = $(this).attr("data");
+        //Ajax获取
+        $.post('/order/expressView.html', {expressNo: expressNo}, function (data) {
+            layer.open({
+                type: 1,
+                title: '查看物流信息'
+                , area: ['1000px', '460px']
+                , shade: 0
+                , content: data
+                , yes: function (index, layero) {
+                    layer.close(index);
+                }
             });
+        });
+    });
     layui.use('laydate', function () {
         var laydate = layui.laydate;
         //执行一个laydate实例
@@ -191,7 +205,7 @@
             elem: '#startTime' //指定元素
             , type: 'datetime'
             , format: 'yyyy-MM-dd HH:mm:ss'
-            , max :1
+            , max: 1
         });
         //执行一个laydate实例
         laydate.render({
@@ -220,25 +234,25 @@
             });
         });
         //填写物流信息
-        $("#inSubmit").bind("click", function(){
-        	var expressCompany = $("#expressCompany").val();
-        	var expressNo = $("#expressNo").val();
-        	var expressFee = $("#expressFee").val();
-        	var orderId = $("#orderId").val();
+        $("#inSubmit").bind("click", function () {
+            var expressCompany = $("#expressCompany").val();
+            var expressNo = $("#expressNo").val();
+            var expressFee = $("#expressFee").val();
+            var orderId = $("#orderId").val();
             $.ajax({
                 type: "post",
-                url:"/order/addExpress.html",
-                async:false,
+                url: "/order/addExpress.html",
+                async: false,
                 data: {
-                	expressCompany:expressCompany,
-                    expressNo:expressNo,
-                    expressFee:expressFee,
-                    orderId:orderId
-                },    
+                    expressCompany: expressCompany,
+                    expressNo: expressNo,
+                    expressFee: expressFee,
+                    orderId: orderId
+                },
                 dataType: "json",
-                success:function (result) {
-                    if(result==200){
-                       location.href = "pickOrderEntry.html"
+                success: function (result) {
+                    if (result == 200) {
+                        location.href = "pickOrderEntry.html"
                     }
                 }
             });
