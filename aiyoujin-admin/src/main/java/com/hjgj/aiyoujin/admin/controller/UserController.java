@@ -28,7 +28,7 @@ public class UserController extends BaseController {
     @RequestMapping("/userList.html")
     public ModelAndView userList(ModelMap modelMap, User user, Integer pageNum, Integer pageSize) {
         pageNum = pageNum == null ? super.pageNum : pageNum;
-        pageSize = pageSize == null ? super.pageSize : this.pageSize;
+        pageSize = pageSize == null ? super.pageSize : pageSize;
         Page<UserVO> page = userService.queryPageUser(user, pageNum, pageSize);
         ModelAndView mav = getModelAndView();
         mav.addObject("page", page);
@@ -40,12 +40,13 @@ public class UserController extends BaseController {
     @RequestMapping(value = "/addressEntry.html")
     public ModelAndView userAddressEntry(AddressVo addressVo, Integer pageNum, Integer pageSize) {
         pageNum = pageNum == null ? super.pageNum : pageNum;
-        pageSize = pageSize == null ? super.pageSize : this.pageSize;
+        pageSize = pageSize == null ? super.pageSize : pageSize;
         Page<UserAddressVo> page = addressService.getAddressListVO(addressVo, pageNum, pageSize);
         ModelAndView mav = new ModelAndView();
         mav.setViewName("user/userAddress");
         mav.addObject("page", page);
         mav.addObject("vo", addressVo);
+
         return mav;
     }
 
