@@ -4,9 +4,11 @@ import com.alibaba.fastjson.JSON;
 import com.hjgj.aiyoujin.core.common.OrderStatusEnum;
 import com.hjgj.aiyoujin.core.model.Order;
 import com.hjgj.aiyoujin.core.model.OrderMessage;
+import com.hjgj.aiyoujin.core.model.Product;
 import com.hjgj.aiyoujin.core.model.User;
 import com.hjgj.aiyoujin.core.model.vo.OrderWebVo;
 import com.hjgj.aiyoujin.core.model.vo.Page;
+import com.hjgj.aiyoujin.core.service.ProductService;
 import com.hjgj.aiyoujin.core.service.UserOrderService;
 import com.hjgj.aiyoujin.core.service.UserService;
 import com.hjgj.aiyoujin.server.common.ResultModel;
@@ -44,6 +46,10 @@ public class OrderApiController {
 
     @Autowired
     private WeixinPush weixinPush;
+
+    @Autowired
+    private ProductService productService;
+
     private Logger logger = LoggerFactory.getLogger(OrderApiController.class);
 
     /**
@@ -178,7 +184,8 @@ public class OrderApiController {
     @ResponseBody
     @RequestMapping(value = "/receiveGift", method = RequestMethod.POST)
     public ResultModel receiveGiftCard(@ApiParam(value = "领取礼品用户OpenId", required = true) @RequestParam String openId,
-                                       @ApiParam(value = "订单ID", required = true) @RequestParam String orderId) {
+                                       @ApiParam(value = "订单ID", required = true) @RequestParam String orderId,
+                                       @ApiParam(value = "formID", required = true) @RequestParam(required = false) String formId) {
         Assert.notNull(openId, "openId不可为空");
         Assert.notNull(orderId, "orderId 不可为空");
 
@@ -197,10 +204,12 @@ public class OrderApiController {
         }
         try {
             if (redisLockUtil.acquireLock(orderId + "_" + "receiveGift", 300 * 1000)) {
-                User byUser = userService.getUserByOpenId(openId);
+                User sourceUser = userService.getUserByUserId(order.getUserId());
+                User toUser = userService.getUserByOpenId(openId);
                 Order orderBy = userOrderService.getOrderById(orderId);
+                Product serviceProduct = productService.findProduct(order.getProductId());
                 Order fromOrder = new Order();
-                fromOrder.setUserId(byUser.getId());
+                fromOrder.setUserId(toUser.getId());
                 fromOrder.setBuyAmount(orderBy.getBuyAmount());
                 fromOrder.setSellAmount(orderBy.getSellAmount());
                 fromOrder.setProductId(orderBy.getProductId());
@@ -209,6 +218,7 @@ public class OrderApiController {
                 // 3送出待收、4已退回、5送出成功、6领取成功
                 fromOrder.setStatus(OrderStatusEnum.ORDER_STATUS_RECEIVED.getCode());
                 String oid = userOrderService.receiveOrder(fromOrder);
+                Map map = weixinPush.giftReceiveNotify(serviceProduct.getName(), formId, 1, fromOrder.getCreateTime(), toUser.getNickname(), sourceUser.getOpenId());
                 return ResultModel.ok(oid);
             } else {
                 return ResultModel.error(ResultStatus.ORDER_TO_RECEIVE_RECEIVED);

@@ -40,8 +40,8 @@ public class WeixinPush {
      * @param openId
      */
     @Async
-    public Map payResultNotify(String prodName, String payMoney, Date payTime, String prePayId, String openId,String orderId) {
-        Map<String,Object> resultMap = new HashMap<>();
+    public Map payResultNotify(String prodName, String payMoney, Date payTime, String prePayId, String openId, String orderId) {
+        Map<String, Object> resultMap = new HashMap<>();
         String weixinToken = null;
         while (weixinToken == null) {
             weixinToken = getRightAccessToken();
@@ -50,20 +50,20 @@ public class WeixinPush {
         TemplateMessageItem keyword1 = new TemplateMessageItem();
         keyword1.setValue(prodName);
         keyword1.setColor("#333333");
-        resultMap.put("prodName",prodName);
+        resultMap.put("prodName", prodName);
 
         // 付款金额
         TemplateMessageItem keyword2 = new TemplateMessageItem();
         keyword2.setValue(payMoney + "元");
         keyword2.setColor("#333333");
-        resultMap.put("payMoney",payMoney);
+        resultMap.put("payMoney", payMoney);
 
 
         // 付款时间
         TemplateMessageItem keyword3 = new TemplateMessageItem();
         keyword3.setValue(dateToString(payTime));
         keyword3.setColor("#333333");
-        resultMap.put("payTime",dateToString(payTime));
+        resultMap.put("payTime", dateToString(payTime));
 
 
         LinkedHashMap<String, TemplateMessageItem> linkedHashMap = new LinkedHashMap<String, TemplateMessageItem>();
@@ -77,14 +77,14 @@ public class WeixinPush {
         wxopenTemplateMessage.setForm_id(prePayId);
         wxopenTemplateMessage.setTemplate_id("xeZ-PIsudhp2uxzIng9iD6rIzBCwq7zg093tlpJ3Ev4");
         wxopenTemplateMessage.setPage("pages/index/index");
-        resultMap.put("tempId","xeZ-PIsudhp2uxzIng9iD6rIzBCwq7zg093tlpJ3Ev4");
+        resultMap.put("tempId", "xeZ-PIsudhp2uxzIng9iD6rIzBCwq7zg093tlpJ3Ev4");
 
         BaseResult baseResult = MessageAPI.messageWxopenTemplateSend(weixinToken, wxopenTemplateMessage);
         String errcode = baseResult.getErrcode();
         if (errcode != null && "0".equals(errcode)) {
-            resultMap.put("code",Integer.valueOf(0));
+            resultMap.put("code", Integer.valueOf(0));
         } else {
-            resultMap.put("code",Integer.valueOf(0));
+            resultMap.put("code", Integer.valueOf(0));
         }
         return resultMap;
     }
@@ -101,7 +101,7 @@ public class WeixinPush {
      */
     @Async
     public Map payResultNotifyFail(String prodName, String payMoney, String failCause, Date payTime, String prePayId, String openId) {
-        Map<String,Object> resultMap = new HashMap<>();
+        Map<String, Object> resultMap = new HashMap<>();
         String weixinToken = null;
         while (weixinToken == null) {
             weixinToken = getRightAccessToken();
@@ -110,24 +110,24 @@ public class WeixinPush {
         TemplateMessageItem keyword1 = new TemplateMessageItem();
         keyword1.setValue(prodName);
         keyword1.setColor("#333333");
-        resultMap.put("prodName",prodName);
+        resultMap.put("prodName", prodName);
 
         // 付款金额
         TemplateMessageItem keyword2 = new TemplateMessageItem();
         keyword2.setValue(payMoney + "元");
         keyword2.setColor("#333333");
-        resultMap.put("payMoney",payMoney);
+        resultMap.put("payMoney", payMoney);
 
         // 付款时间
         TemplateMessageItem keyword3 = new TemplateMessageItem();
         keyword3.setValue(dateToString(payTime));
         keyword3.setColor("#333333");
-        resultMap.put("payTime",dateToString(payTime));
-        //失败原因
+        resultMap.put("payTime", dateToString(payTime));
+        // 失败原因
         TemplateMessageItem keyword4 = new TemplateMessageItem();
-        keyword3.setValue(failCause);
-        keyword3.setColor("#333333");
-        resultMap.put("failCause",failCause);
+        keyword4.setValue(failCause);
+        keyword4.setColor("#333333");
+        resultMap.put("failCause", failCause);
 
         LinkedHashMap<String, TemplateMessageItem> linkedHashMap = new LinkedHashMap<String, TemplateMessageItem>();
         linkedHashMap.put("keyword1", keyword1);
@@ -143,14 +143,14 @@ public class WeixinPush {
         wxopenTemplateMessage.setTemplate_id("okd7M98Q7ZoqLGAVDwaxB9co9SxKLthkDg7kQ76XAVI");
         wxopenTemplateMessage.setPage("pages/index/index");
 
-        resultMap.put("tempId","okd7M98Q7ZoqLGAVDwaxB9co9SxKLthkDg7kQ76XAVI");
+        resultMap.put("tempId", "okd7M98Q7ZoqLGAVDwaxB9co9SxKLthkDg7kQ76XAVI");
 
         BaseResult baseResult = MessageAPI.messageWxopenTemplateSend(weixinToken, wxopenTemplateMessage);
         String errcode = baseResult.getErrcode();
         if (errcode != null && "0".equals(errcode)) {
-            resultMap.put("code",Integer.valueOf(0));
+            resultMap.put("code", Integer.valueOf(0));
         } else {
-            resultMap.put("code",Integer.valueOf(1));
+            resultMap.put("code", Integer.valueOf(1));
         }
         return resultMap;
     }
@@ -166,14 +166,14 @@ public class WeixinPush {
      */
     @Async
     public Map payResultNotifySell(String amount, String arrivalType, Date arrivalTime, String prePayId, String openId) {
-        Map<String,Object> resultMap = new HashMap<>();
+        Map<String, Object> resultMap = new HashMap<>();
         String weixinToken = null;
         while (weixinToken == null) {
             weixinToken = getRightAccessToken();
         }
         // 到账金额
         TemplateMessageItem keyword1 = new TemplateMessageItem();
-        keyword1.setValue("¥"+amount);
+        keyword1.setValue("¥" + amount);
         keyword1.setColor("#333333");
 
         // 到账方式
@@ -198,14 +198,14 @@ public class WeixinPush {
         wxopenTemplateMessage.setForm_id(prePayId);
         wxopenTemplateMessage.setTemplate_id("fAdgHURICCzNoYz8HbTA_fbLW-JUhjbicPSqofWNqwc");
         wxopenTemplateMessage.setPage("pages/index/index");
-        resultMap.put("tempId","fAdgHURICCzNoYz8HbTA_fbLW-JUhjbicPSqofWNqwc");
+        resultMap.put("tempId", "fAdgHURICCzNoYz8HbTA_fbLW-JUhjbicPSqofWNqwc");
 
         BaseResult baseResult = MessageAPI.messageWxopenTemplateSend(weixinToken, wxopenTemplateMessage);
         String errcode = baseResult.getErrcode();
         if (errcode != null && "0".equals(errcode)) {
-            resultMap.put("code",Integer.valueOf(0));
+            resultMap.put("code", Integer.valueOf(0));
         } else {
-            resultMap.put("code",Integer.valueOf(1));
+            resultMap.put("code", Integer.valueOf(1));
         }
         return resultMap;
     }
@@ -222,7 +222,7 @@ public class WeixinPush {
      */
     @Async
     public Map<String, Object> giftResultNotifyCarry(String prodName, String userName, String phoneNumber, String address, String prePayId, String openId) {
-        Map<String,Object> resultMap = new HashMap<>();
+        Map<String, Object> resultMap = new HashMap<>();
         String weixinToken = null;
         while (weixinToken == null) {
             weixinToken = getRightAccessToken();
@@ -244,8 +244,8 @@ public class WeixinPush {
 
         //收货地址
         TemplateMessageItem keyword4 = new TemplateMessageItem();
-        keyword3.setValue(address);
-        keyword3.setColor("#333333");
+        keyword4.setValue(address);
+        keyword4.setColor("#333333");
 
         LinkedHashMap<String, TemplateMessageItem> linkedHashMap = new LinkedHashMap<String, TemplateMessageItem>();
         linkedHashMap.put("keyword1", keyword1);
@@ -260,13 +260,13 @@ public class WeixinPush {
         wxopenTemplateMessage.setForm_id(prePayId);
         wxopenTemplateMessage.setTemplate_id("0P9JoND8UHherQDUJKPXjXR5s_xUTYxXYdlDCRbwPTk");
         wxopenTemplateMessage.setPage("pages/index/index");
-        resultMap.put("tempId","0P9JoND8UHherQDUJKPXjXR5s_xUTYxXYdlDCRbwPTk");
+        resultMap.put("tempId", "0P9JoND8UHherQDUJKPXjXR5s_xUTYxXYdlDCRbwPTk");
         BaseResult baseResult = MessageAPI.messageWxopenTemplateSend(weixinToken, wxopenTemplateMessage);
         String errcode = baseResult.getErrcode();
         if (errcode != null && "0".equals(errcode)) {
-            resultMap.put("code",Integer.valueOf(0));
+            resultMap.put("code", Integer.valueOf(0));
         } else {
-            resultMap.put("code",Integer.valueOf(1));
+            resultMap.put("code", Integer.valueOf(1));
         }
         return resultMap;
     }
@@ -274,7 +274,7 @@ public class WeixinPush {
 
     @Async
     public Map giftResultNotifyFail(String prodName, String number, Date receiveTime, String userName, String prePayId, String openId) {
-        Map<String,Object> resultMap = new HashMap<>();
+        Map<String, Object> resultMap = new HashMap<>();
         String weixinToken = null;
         while (weixinToken == null) {
             weixinToken = getRightAccessToken();
@@ -315,9 +315,71 @@ public class WeixinPush {
         BaseResult baseResult = MessageAPI.messageWxopenTemplateSend(weixinToken, wxopenTemplateMessage);
         String errcode = baseResult.getErrcode();
         if (errcode != null && "0".equals(errcode)) {
-            resultMap.put("code",Integer.valueOf(0));
+            resultMap.put("code", Integer.valueOf(0));
         } else {
-            resultMap.put("code",Integer.valueOf(1));
+            resultMap.put("code", Integer.valueOf(1));
+        }
+        return resultMap;
+    }
+
+    /**
+     * 礼物领取通知
+     *
+     * @param productName
+     * @param formId
+     * @param number
+     * @param receiveDate
+     * @param receiveName
+     * @param sourceOpenId
+     * @return
+     */
+    @Async
+    public Map giftReceiveNotify(String productName, String formId, Integer number, Date receiveDate, String receiveName, String sourceOpenId) {
+        Map<String, Object> resultMap = new HashMap<>();
+        String weixinToken = null;
+        while (weixinToken == null) {
+            weixinToken = getRightAccessToken();
+        }
+
+        // 物品名称
+        TemplateMessageItem keyword1 = new TemplateMessageItem();
+        keyword1.setValue(productName);
+        keyword1.setColor("#333333");
+
+        // 礼品数量
+        TemplateMessageItem keyword2 = new TemplateMessageItem();
+        keyword2.setValue(number + "份");
+        keyword2.setColor("#333333");
+
+        //收礼人
+        TemplateMessageItem keyword4 = new TemplateMessageItem();
+        keyword4.setValue(receiveName);
+        keyword4.setColor("#333333");
+
+        // 领取时间
+        TemplateMessageItem keyword3 = new TemplateMessageItem();
+        keyword3.setValue(dateTimeToString(receiveDate));
+        keyword3.setColor("#333333");
+
+        LinkedHashMap<String, TemplateMessageItem> linkedHashMap = new LinkedHashMap<String, TemplateMessageItem>();
+        linkedHashMap.put("keyword1", keyword1);
+        linkedHashMap.put("keyword2", keyword2);
+        linkedHashMap.put("keyword3", keyword3);
+        linkedHashMap.put("keyword4", keyword4);
+
+        WxopenTemplateMessage wxopenTemplateMessage = new WxopenTemplateMessage();
+        wxopenTemplateMessage.setTouser(sourceOpenId);
+        wxopenTemplateMessage.setData(linkedHashMap);
+        wxopenTemplateMessage.setEmphasis_keyword("keyword1.DATA");
+        wxopenTemplateMessage.setForm_id(formId);
+        wxopenTemplateMessage.setTemplate_id("iibwNplUljRfoYjSJ6SLxg1KhPCqMMlDiJNETBoA2_k");
+        wxopenTemplateMessage.setPage("pages/index/index");
+        BaseResult baseResult = MessageAPI.messageWxopenTemplateSend(weixinToken, wxopenTemplateMessage);
+        String errcode = baseResult.getErrcode();
+        if (errcode != null && "0".equals(errcode)) {
+            resultMap.put("code", Integer.valueOf(0));
+        } else {
+            resultMap.put("code", Integer.valueOf(1));
         }
         return resultMap;
     }
@@ -327,6 +389,14 @@ public class WeixinPush {
         String str = sdf.format(date);
         return str;
     }
+
+    private String dateTimeToString(Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
+        String str = sdf.format(date);
+        return str;
+    }
+
+
     /**
      * 获取可用的AccessToken
      *
