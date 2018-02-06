@@ -3,7 +3,11 @@ package com.hjgj.aiyoujin.core.service;
 import com.hjgj.aiyoujin.core.dao.OrderMapper;
 import com.hjgj.aiyoujin.core.model.Order;
 import com.hjgj.aiyoujin.core.model.OrderExample;
+import com.hjgj.aiyoujin.core.model.vo.OrderBuyExportVo;
+import com.hjgj.aiyoujin.core.model.vo.OrderPickExportVo;
 import com.hjgj.aiyoujin.core.model.vo.OrderRequestVo;
+import com.hjgj.aiyoujin.core.model.vo.OrderSellExportVo;
+import com.hjgj.aiyoujin.core.model.vo.OrderSendExportVo;
 import com.hjgj.aiyoujin.core.model.vo.OrderVO;
 import com.hjgj.aiyoujin.core.model.vo.Page;
 import org.apache.commons.lang3.StringUtils;
@@ -140,5 +144,85 @@ public class AdminOrderService {
         criteria.andSentTimeLessThanOrEqualTo(updateTime);
         List<Order> ordersList = orderMapper.selectByExample(example);
         return ordersList;
+    }
+
+    /**
+     * TODO 导出买入订单
+     *
+     * @param orderRequestVo
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    public Page<OrderBuyExportVo> getBuyOrderExportMap(OrderRequestVo orderRequestVo, Integer pageNum, Integer pageSize) {
+        Page<OrderBuyExportVo> page = new Page<>(pageNum, pageSize, true);
+        RowBounds rowBounds = new RowBounds(page.getStartRow(), pageSize);
+        int count = orderMapper.countBuyOrderVo(orderRequestVo, rowBounds);
+        if (count > 0) {
+            List<OrderBuyExportVo> orderVOList = orderMapper.selectBuyOrderExportVo(orderRequestVo, rowBounds);
+            page.setList(orderVOList);
+            page.setTotal(count);
+        }
+        return page;
+    }
+
+    /**
+     * TODO 导出变现订单
+     *
+     * @param orderRequestVo
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    public Page<OrderSellExportVo> getSellOrderExportMap(OrderRequestVo orderRequestVo, Integer pageNum, Integer pageSize) {
+        Page<OrderSellExportVo> page = new Page<>(pageNum, pageSize, true);
+        RowBounds rowBounds = new RowBounds(page.getStartRow(), pageSize);
+        int count = orderMapper.countSellOrderVo(orderRequestVo, rowBounds);
+        if (count > 0) {
+            List<OrderSellExportVo> orderVOList = orderMapper.selectSellOrderExportVo(orderRequestVo, rowBounds);
+            page.setList(orderVOList);
+            page.setTotal(count);
+        }
+        return page;
+    }
+
+    /**
+     * TODO 导出转送订单
+     *
+     * @param orderRequestVo
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    public Page<OrderSendExportVo> getSendOrderExportMap(OrderRequestVo orderRequestVo, Integer pageNum, Integer pageSize) {
+        Page<OrderSendExportVo> page = new Page<>(pageNum, pageSize, true);
+        RowBounds rowBounds = new RowBounds(page.getStartRow(), pageSize);
+        int count = orderMapper.countSendOrderVo(orderRequestVo, rowBounds);
+        if (count > 0) {
+            List<OrderSendExportVo> orderVOList = orderMapper.selectSendOrderExportVo(orderRequestVo, rowBounds);
+            page.setList(orderVOList);
+            page.setTotal(count);
+        }
+        return page;
+    }
+
+    /**
+     * TODO 导出提货订单
+     *
+     * @param orderRequestVo
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    public Page<OrderPickExportVo> getPickOrderExportMap(OrderRequestVo orderRequestVo, Integer pageNum, Integer pageSize) {
+        Page<OrderPickExportVo> page = new Page<>(pageNum, pageSize, true);
+        RowBounds rowBounds = new RowBounds(page.getStartRow(), pageSize);
+        int count = orderMapper.countPickOrderVo(orderRequestVo, rowBounds);
+        if (count > 0) {
+            List<OrderPickExportVo> orderVOList = orderMapper.selectPickOrderExportVo(orderRequestVo, rowBounds);
+            page.setList(orderVOList);
+            page.setTotal(count);
+        }
+        return page;
     }
 }

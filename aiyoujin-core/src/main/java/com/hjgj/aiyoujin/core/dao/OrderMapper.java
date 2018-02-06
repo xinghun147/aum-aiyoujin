@@ -2,7 +2,11 @@ package com.hjgj.aiyoujin.core.dao;
 
 import com.hjgj.aiyoujin.core.model.Order;
 import com.hjgj.aiyoujin.core.model.OrderExample;
+import com.hjgj.aiyoujin.core.model.vo.OrderBuyExportVo;
+import com.hjgj.aiyoujin.core.model.vo.OrderPickExportVo;
 import com.hjgj.aiyoujin.core.model.vo.OrderRequestVo;
+import com.hjgj.aiyoujin.core.model.vo.OrderSellExportVo;
+import com.hjgj.aiyoujin.core.model.vo.OrderSendExportVo;
 import com.hjgj.aiyoujin.core.model.vo.OrderVO;
 import com.hjgj.aiyoujin.core.model.vo.OrderWebVo;
 import org.apache.ibatis.annotations.Param;
@@ -138,4 +142,40 @@ public interface OrderMapper {
      * @param orderVO
      */
     void addExpressToOrder(OrderVO orderVO);
+
+    /**
+     * TODO 买入订单
+     *
+     * @param orderRequest
+     * @param rowBounds
+     * @return
+     */
+    List<OrderBuyExportVo> selectBuyOrderExportVo(OrderRequestVo orderRequest, RowBounds rowBounds);
+
+    /**
+     * TODO 变现订单
+     *
+     * @param orderRequest
+     * @param rowBounds
+     * @return
+     */
+    List<OrderSellExportVo> selectSellOrderExportVo(OrderRequestVo orderRequest, RowBounds rowBounds);
+
+    /**
+     * TODO 转送订单
+     *
+     * @param orderRequest
+     * @param rowBounds
+     * @return
+     */
+    List<OrderSendExportVo> selectSendOrderExportVo(OrderRequestVo orderRequest, RowBounds rowBounds);
+
+    /**
+     * TODO 提货订单
+     *
+     * @param orderRequest
+     * @param rowBounds
+     * @return
+     */
+    List<OrderPickExportVo> selectPickOrderExportVo(OrderRequestVo orderRequest, RowBounds rowBounds);
 }
