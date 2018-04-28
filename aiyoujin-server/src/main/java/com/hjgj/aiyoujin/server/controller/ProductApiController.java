@@ -1,4 +1,13 @@
 package com.hjgj.aiyoujin.server.controller;
+
+import com.hjgj.aiyoujin.core.model.Product;
+import com.hjgj.aiyoujin.core.model.vo.Page;
+import com.hjgj.aiyoujin.core.model.vo.ProductVo;
+import com.hjgj.aiyoujin.core.service.ProductService;
+import com.hjgj.aiyoujin.server.common.ResultModel;
+import com.hjgj.aiyoujin.server.common.ResultStatus;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,16 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.hjgj.aiyoujin.core.model.Product;
-import com.hjgj.aiyoujin.core.model.vo.Page;
-import com.hjgj.aiyoujin.core.model.vo.ProductVo;
-import com.hjgj.aiyoujin.core.service.ProductService;
-import com.hjgj.aiyoujin.server.common.ResultModel;
-import com.hjgj.aiyoujin.server.common.ResultStatus;
-
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 
 
 /**
@@ -40,7 +39,7 @@ public class ProductApiController{
     	Assert.notNull(pageNum, "页码 can not be empty");
     	Assert.notNull(pageSize, "每页条数 can not be empty");
 		try {
-			Page<ProductVo> data = productService.queryPageGoods(new Product(), pageNum, pageSize);
+            Page<ProductVo> data = productService.queryPageGoods(new Product(), pageNum, 100);
 			return ResultModel.ok(data);
 		} catch (Exception e) {
 			logger.error("查询商品列表接口异常,e:{}", e);
