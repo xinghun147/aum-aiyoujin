@@ -2,9 +2,9 @@ package com.hjgj.aiyoujin.core.dao;
 
 import com.hjgj.aiyoujin.core.model.User;
 import com.hjgj.aiyoujin.core.model.UserExample;
-import com.hjgj.aiyoujin.core.model.vo.UserVO;
-
 import java.util.List;
+
+import com.hjgj.aiyoujin.core.model.vo.UserVO;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
 
@@ -32,7 +32,7 @@ public interface UserMapper {
     int updateByPrimaryKeySelective(User record);
 
     int updateByPrimaryKey(User record);
-    
+
     int countUserVo(User user, RowBounds rowBounds);
 
     List<UserVO> selectUserVo(User user, RowBounds rowBounds);

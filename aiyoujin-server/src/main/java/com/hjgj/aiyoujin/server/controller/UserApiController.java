@@ -36,7 +36,8 @@ public class UserApiController{
 	@RequestMapping(value = "addUser", method = RequestMethod.GET)
 	public ResultModel queryGoodsDetail(@ApiParam(value = "微信openId", required = true)  @RequestParam String openId,
 										@ApiParam(value = "昵称") @RequestParam(required = false) String nickname,
-										@ApiParam(value = "头像地址") @RequestParam(required = false) String avatar) {
+										@ApiParam(value = "头像地址") @RequestParam(required = false) String avatar,
+										@ApiParam(value = "用户来源") @RequestParam(required = false) String source) {
     	Assert.notNull(openId, "微信openId can not be empty");
     	if(StringUtils.isBlank(openId)){
     		return ResultModel.error(ResultStatus.USER_NOT_OPENID);
@@ -47,6 +48,7 @@ public class UserApiController{
 			user.setAvatar(avatar);
 			user.setOpenId(openId);
 			user.setNickname(this.filterEmoji(nickname));
+			user.setSource(source);
 			user = userService.insertUser(user);
 			return ResultModel.ok(user);
 		} catch (Exception e) {

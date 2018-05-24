@@ -15,6 +15,7 @@
     <result column="deleted" property="deleted" jdbcType="INTEGER" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="source" property="source" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -76,7 +77,7 @@
   </sql>
   <sql id="Base_Column_List" >
     id, open_id, nickname, age, mobile, avatar, gender, email, province, city, deleted, 
-    create_time, update_time
+    create_time, update_time, source
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.hjgj.aiyoujin.core.model.UserExample" >
     select
@@ -116,12 +117,12 @@
       age, mobile, avatar, 
       gender, email, province, 
       city, deleted, create_time, 
-      update_time)
+      update_time, source)
     values (#{id,jdbcType=VARCHAR}, #{openId,jdbcType=VARCHAR}, #{nickname,jdbcType=VARCHAR}, 
       #{age,jdbcType=INTEGER}, #{mobile,jdbcType=VARCHAR}, #{avatar,jdbcType=VARCHAR}, 
       #{gender,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, 
       #{city,jdbcType=VARCHAR}, #{deleted,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP})
+      #{updateTime,jdbcType=TIMESTAMP}, #{source,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.hjgj.aiyoujin.core.model.User" >
     insert into t_user
@@ -165,6 +166,9 @@
       <if test="updateTime != null" >
         update_time,
       </if>
+      <if test="source != null" >
+        source,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -205,6 +209,9 @@
       </if>
       <if test="updateTime != null" >
         #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="source != null" >
+        #{source,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -256,6 +263,9 @@
       <if test="record.updateTime != null" >
         update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.source != null" >
+        source = #{record.source,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -275,7 +285,8 @@
       city = #{record.city,jdbcType=VARCHAR},
       deleted = #{record.deleted,jdbcType=INTEGER},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      source = #{record.source,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -319,6 +330,9 @@
       <if test="updateTime != null" >
         update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="source != null" >
+        source = #{source,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -335,46 +349,47 @@
       city = #{city,jdbcType=VARCHAR},
       deleted = #{deleted,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP}
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      source = #{source,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
   <select id="selectOneByExample" resultMap="BaseResultMap" parameterType="com.hjgj.aiyoujin.core.model.UserExample" >
     select <include refid="Base_Column_List" /> from t_user <if test="_parameter != null" >  <include refid="Example_Where_Clause" /> </if> <if test="orderByClause != null" >  order by ${orderByClause} </if>  limit 1
   </select>
-  
-  <select id="countUserVo" resultType="java.lang.Integer">
-      	SELECT
-			count(id)
-		FROM
-		 t_user
-		WHERE
-		 deleted = 0
-		<if test="openId != null and openId != ''">
-			AND open_id = #{openId,jdbcType=VARCHAR}
-		</if>
-		<if test="nickname != null and nickname != ''">
-			AND nickname = #{nickname,jdbcType=VARCHAR}
-		</if>
-	</select>
 
-	<!-- TODO 查询用户列表 -->
-	<select id="selectUserVo" resultType="com.hjgj.aiyoujin.core.model.vo.UserVO">
-        SELECT
-            tuser.id AS id,
-            tuser.open_id AS openId,
-            tuser.avatar AS avatar,
-			tuser.nickname AS nickname,
-			tuser.mobile AS mobile
-		FROM
-			t_user AS tuser
-		WHERE
-			tuser.deleted = 0
-		<if test="openId != null and openId != ''">
-			AND tuser.`open_id` = #{openId,jdbcType=VARCHAR}
-		</if>
-		<if test="nickname != null and nickname != ''">
-			AND tuser.`nickname` = #{nickname,jdbcType=VARCHAR}
-		</if>
-		ORDER BY tuser.create_time desc
-	</select>
+  <select id="countUserVo" resultType="java.lang.Integer">
+    SELECT
+    count(id)
+    FROM
+    t_user
+    WHERE
+    deleted = 0
+    <if test="openId != null and openId != ''">
+      AND open_id = #{openId,jdbcType=VARCHAR}
+    </if>
+    <if test="nickname != null and nickname != ''">
+      AND nickname = #{nickname,jdbcType=VARCHAR}
+    </if>
+  </select>
+
+  <!-- TODO 查询用户列表 -->
+  <select id="selectUserVo" resultType="com.hjgj.aiyoujin.core.model.vo.UserVO">
+    SELECT
+    tuser.id AS id,
+    tuser.open_id AS openId,
+    tuser.avatar AS avatar,
+    tuser.nickname AS nickname,
+    tuser.mobile AS mobile
+    FROM
+    t_user AS tuser
+    WHERE
+    tuser.deleted = 0
+    <if test="openId != null and openId != ''">
+      AND tuser.`open_id` = #{openId,jdbcType=VARCHAR}
+    </if>
+    <if test="nickname != null and nickname != ''">
+      AND tuser.`nickname` = #{nickname,jdbcType=VARCHAR}
+    </if>
+    ORDER BY tuser.create_time desc
+  </select>
 </mapper>

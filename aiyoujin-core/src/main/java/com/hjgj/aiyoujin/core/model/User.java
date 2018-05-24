@@ -29,6 +29,8 @@ public class User {
 
     private Date updateTime;
 
+    private String source;
+
     public String getId() {
         return id;
     }
@@ -131,5 +133,13 @@ public class User {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source == null ? null : source.trim();
     }
 }

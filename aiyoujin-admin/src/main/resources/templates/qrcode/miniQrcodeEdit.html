@@ -1,0 +1,128 @@
+<form id="editForm" name="editForm" class="layui-form editFixed"  action="/qrcode/miniQrcodeEdit.html">
+	<input type="hidden" name="id"  th:value="${miniQrcode}?${miniQrcode.id}"/>
+	<div class="layui-form-item">
+		<div class="layui-inline">		
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<div class="layui-inline">		
+			<label class="layui-form-label">渠道名称</label>
+			<div class="layui-input-inline">
+				<input type="text" id="name" name="channelName" th:value="${miniQrcode}?${miniQrcode.channelName}:''" class="layui-input" lay-verify="required" placeholder="请输入渠道名称"/>
+			</div>
+		</div>
+
+	</div>
+
+	<div class="layui-form-item">
+
+		<div class="layui-inline">
+			<label class="layui-form-label">渠道编号</label>
+			<div class="layui-input-inline">
+				<input type="text" id="code" name="code" th:value="${miniQrcode}?${miniQrcode.code}:''" class="layui-input" lay-verify="required|miniQrcode" placeholder="请输入渠道编号"/>
+			</div>
+		</div>
+	</div>
+
+<!--	<div class="layui-form-item">
+		<div class="layui-inline">
+			<label class="layui-form-label">场景值</label>
+			<div class="layui-input-inline">
+				<input type="text"  name="scene" th:value="${miniQrcode}?${miniQrcode.scene}:''" class="layui-input" lay-verify="required" placeholder="请输入场景值"/>
+			</div>
+		</div>
+
+	</div>-->
+
+	<div class="layui-form-item">
+
+		<div class="layui-inline">
+			<label class="layui-form-label">跳转页</label>
+			<div class="layui-input-inline">
+				<input type="text"  name="pages" th:value="${miniQrcode}?${miniQrcode.pages}:''" class="layui-input" lay-verify="required" placeholder="请输入跳转页"/>
+			</div>
+		</div>
+	</div>
+
+	<!--<div class="layui-form-item" pane="">
+		<div class="layui-inline">
+			<label class="layui-form-label">二维码宽度</label>
+			<div class="layui-input-inline">
+				<input type="text"  name="width" th:value="${miniQrcode}?${miniQrcode.width}:''" class="layui-input" lay-verify="required|width" placeholder="请输入二维码宽度"/>
+			</div>
+		</div>
+
+		<div class="layui-inline" >
+
+		</div>
+	</div>
+
+	<div class="layui-form-item" pane="">
+		<label class="layui-form-label">是否透明</label>
+		<div class="layui-input-block">
+			<input type="radio" th:selected="${miniQrcode}ne null  and ${miniQrcode.hyaline == 0}" name="hyaline" value="true" title="是" >
+			<input type="radio" th:selected="${miniQrcode}ne null  and ${miniQrcode.hyaline == 1}" name="hyaline" value="false" title="否" checked>
+		</div>
+	</div>
+
+	<div class="layui-form-item" pane="">
+		<label class="layui-form-label">是否自动配置线条颜色</label>
+		<div class="layui-input-block">
+			<input type="radio" th:selected="${miniQrcode}ne null  and ${miniQrcode.autoColor == 0}" name="autoColor" value="true" title="是" >
+			<input type="radio" th:selected="${miniQrcode}ne null  and ${miniQrcode.autoColor == 1}" name="autoColor" value="false" title="否" checked>
+		</div>
+	</div>-->
+	<div class="layui-form-item" >
+		<div class="layui-form-item">
+			<div class="layui-input-block" >
+				<button class="layui-btn" lay-submit="" lay-filter="addForm">保存</button>
+		    </div>
+		</div>
+	</div>
+</form>
+<style>
+	.editFixed .layui-form-label{width:140px;text-align: right;}
+</style>
+<script>
+      layui.use(['jquery','form', 'laydate'], function(){
+   	   var form = layui.form
+   	   ,layer = layui.layer
+   	   ,laydate = layui.laydate;
+   	   //日期
+   	   laydate.render({
+   	     elem: '#publishTime',
+		 type: 'datetime'
+   	   });
+          laydate.render({
+              elem: '#sellBeginTime',
+              type: 'datetime'
+          });
+          laydate.render({
+              elem: '#sellEndTime',
+              type: 'datetime'
+          });
+          laydate.render({
+              elem: '#removeTime',
+              type: 'datetime'
+          });
+    		//验证
+     		form.verify({
+                miniQrcode:function(value,item){  //value：表单的值、item：表单的DOM对象
+     				var codeRegex = /^[a-zA-Z]+$/;
+     				if(!codeRegex.test(value)){     //验证输入的产品编号是否合法
+     					return '产品编号必须是字母组合';
+     				}
+     			},
+                width:function(value,item){ // 验证库存
+     				if(!/^[0-9]*[1-9][0-9]*$/.test(value)){
+     					return '宽度必须为正整数';
+     				}
+     			}
+     		});
+   	   //监听提交
+   	   form.on('submit(editForm)', function(data){
+   	     return true;
+   	   });
+          form.render();
+   	});
+</script>
