@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hjgj.aiyoujin.core.dao.MiniQrcodeMapper" >
+  <resultMap id="BaseResultMap" type="com.hjgj.aiyoujin.core.model.MiniQrcode" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="channel_name" property="channelName" jdbcType="VARCHAR" />
+    <result column="scene" property="scene" jdbcType="VARCHAR" />
+    <result column="pages" property="pages" jdbcType="VARCHAR" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="width" property="width" jdbcType="INTEGER" />
+    <result column="auto_color" property="autoColor" jdbcType="VARCHAR" />
+    <result column="color_red" property="colorRed" jdbcType="INTEGER" />
+    <result column="color_green" property="colorGreen" jdbcType="INTEGER" />
+    <result column="color_blue" property="colorBlue" jdbcType="INTEGER" />
+    <result column="hyaline" property="hyaline" jdbcType="VARCHAR" />
+    <result column="img_url" property="imgUrl" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="deleted" property="deleted" jdbcType="INTEGER" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, channel_name, scene, pages, code, width, auto_color, color_red, color_green, 
+    color_blue, hyaline, img_url, create_time, update_time, deleted, remark
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.hjgj.aiyoujin.core.model.MiniQrcodeExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_mini_qrcode
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="limitRows != null and limitRows>0" >
+      limit #{limitOffset} , #{limitRows}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_mini_qrcode
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from t_mini_qrcode
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.hjgj.aiyoujin.core.model.MiniQrcodeExample" >
+    delete from t_mini_qrcode
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.hjgj.aiyoujin.core.model.MiniQrcode" >
+    insert into t_mini_qrcode (id, channel_name, scene, 
+      pages, code, width, 
+      auto_color, color_red, color_green, 
+      color_blue, hyaline, img_url, 
+      create_time, update_time, deleted, 
+      remark)
+    values (#{id,jdbcType=VARCHAR}, #{channelName,jdbcType=VARCHAR}, #{scene,jdbcType=VARCHAR}, 
+      #{pages,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{width,jdbcType=INTEGER}, 
+      #{autoColor,jdbcType=VARCHAR}, #{colorRed,jdbcType=INTEGER}, #{colorGreen,jdbcType=INTEGER}, 
+      #{colorBlue,jdbcType=INTEGER}, #{hyaline,jdbcType=VARCHAR}, #{imgUrl,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{deleted,jdbcType=INTEGER}, 
+      #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hjgj.aiyoujin.core.model.MiniQrcode" >
+    insert into t_mini_qrcode
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="channelName != null" >
+        channel_name,
+      </if>
+      <if test="scene != null" >
+        scene,
+      </if>
+      <if test="pages != null" >
+        pages,
+      </if>
+      <if test="code != null" >
+        code,
+      </if>
+      <if test="width != null" >
+        width,
+      </if>
+      <if test="autoColor != null" >
+        auto_color,
+      </if>
+      <if test="colorRed != null" >
+        color_red,
+      </if>
+      <if test="colorGreen != null" >
+        color_green,
+      </if>
+      <if test="colorBlue != null" >
+        color_blue,
+      </if>
+      <if test="hyaline != null" >
+        hyaline,
+      </if>
+      <if test="imgUrl != null" >
+        img_url,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="deleted != null" >
+        deleted,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="channelName != null" >
+        #{channelName,jdbcType=VARCHAR},
+      </if>
+      <if test="scene != null" >
+        #{scene,jdbcType=VARCHAR},
+      </if>
+      <if test="pages != null" >
+        #{pages,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="width != null" >
+        #{width,jdbcType=INTEGER},
+      </if>
+      <if test="autoColor != null" >
+        #{autoColor,jdbcType=VARCHAR},
+      </if>
+      <if test="colorRed != null" >
+        #{colorRed,jdbcType=INTEGER},
+      </if>
+      <if test="colorGreen != null" >
+        #{colorGreen,jdbcType=INTEGER},
+      </if>
+      <if test="colorBlue != null" >
+        #{colorBlue,jdbcType=INTEGER},
+      </if>
+      <if test="hyaline != null" >
+        #{hyaline,jdbcType=VARCHAR},
+      </if>
+      <if test="imgUrl != null" >
+        #{imgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleted != null" >
+        #{deleted,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.hjgj.aiyoujin.core.model.MiniQrcodeExample" resultType="java.lang.Integer" >
+    select count(*) from t_mini_qrcode
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_mini_qrcode
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.channelName != null" >
+        channel_name = #{record.channelName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.scene != null" >
+        scene = #{record.scene,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pages != null" >
+        pages = #{record.pages,jdbcType=VARCHAR},
+      </if>
+      <if test="record.code != null" >
+        code = #{record.code,jdbcType=VARCHAR},
+      </if>
+      <if test="record.width != null" >
+        width = #{record.width,jdbcType=INTEGER},
+      </if>
+      <if test="record.autoColor != null" >
+        auto_color = #{record.autoColor,jdbcType=VARCHAR},
+      </if>
+      <if test="record.colorRed != null" >
+        color_red = #{record.colorRed,jdbcType=INTEGER},
+      </if>
+      <if test="record.colorGreen != null" >
+        color_green = #{record.colorGreen,jdbcType=INTEGER},
+      </if>
+      <if test="record.colorBlue != null" >
+        color_blue = #{record.colorBlue,jdbcType=INTEGER},
+      </if>
+      <if test="record.hyaline != null" >
+        hyaline = #{record.hyaline,jdbcType=VARCHAR},
+      </if>
+      <if test="record.imgUrl != null" >
+        img_url = #{record.imgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.deleted != null" >
+        deleted = #{record.deleted,jdbcType=INTEGER},
+      </if>
+      <if test="record.remark != null" >
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_mini_qrcode
+    set id = #{record.id,jdbcType=VARCHAR},
+      channel_name = #{record.channelName,jdbcType=VARCHAR},
+      scene = #{record.scene,jdbcType=VARCHAR},
+      pages = #{record.pages,jdbcType=VARCHAR},
+      code = #{record.code,jdbcType=VARCHAR},
+      width = #{record.width,jdbcType=INTEGER},
+      auto_color = #{record.autoColor,jdbcType=VARCHAR},
+      color_red = #{record.colorRed,jdbcType=INTEGER},
+      color_green = #{record.colorGreen,jdbcType=INTEGER},
+      color_blue = #{record.colorBlue,jdbcType=INTEGER},
+      hyaline = #{record.hyaline,jdbcType=VARCHAR},
+      img_url = #{record.imgUrl,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      deleted = #{record.deleted,jdbcType=INTEGER},
+      remark = #{record.remark,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hjgj.aiyoujin.core.model.MiniQrcode" >
+    update t_mini_qrcode
+    <set >
+      <if test="channelName != null" >
+        channel_name = #{channelName,jdbcType=VARCHAR},
+      </if>
+      <if test="scene != null" >
+        scene = #{scene,jdbcType=VARCHAR},
+      </if>
+      <if test="pages != null" >
+        pages = #{pages,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null" >
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="width != null" >
+        width = #{width,jdbcType=INTEGER},
+      </if>
+      <if test="autoColor != null" >
+        auto_color = #{autoColor,jdbcType=VARCHAR},
+      </if>
+      <if test="colorRed != null" >
+        color_red = #{colorRed,jdbcType=INTEGER},
+      </if>
+      <if test="colorGreen != null" >
+        color_green = #{colorGreen,jdbcType=INTEGER},
+      </if>
+      <if test="colorBlue != null" >
+        color_blue = #{colorBlue,jdbcType=INTEGER},
+      </if>
+      <if test="hyaline != null" >
+        hyaline = #{hyaline,jdbcType=VARCHAR},
+      </if>
+      <if test="imgUrl != null" >
+        img_url = #{imgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleted != null" >
+        deleted = #{deleted,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hjgj.aiyoujin.core.model.MiniQrcode" >
+    update t_mini_qrcode
+    set channel_name = #{channelName,jdbcType=VARCHAR},
+      scene = #{scene,jdbcType=VARCHAR},
+      pages = #{pages,jdbcType=VARCHAR},
+      code = #{code,jdbcType=VARCHAR},
+      width = #{width,jdbcType=INTEGER},
+      auto_color = #{autoColor,jdbcType=VARCHAR},
+      color_red = #{colorRed,jdbcType=INTEGER},
+      color_green = #{colorGreen,jdbcType=INTEGER},
+      color_blue = #{colorBlue,jdbcType=INTEGER},
+      hyaline = #{hyaline,jdbcType=VARCHAR},
+      img_url = #{imgUrl,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      deleted = #{deleted,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <select id="selectOneByExample" resultMap="BaseResultMap" parameterType="com.hjgj.aiyoujin.core.model.MiniQrcodeExample" >
+    select <include refid="Base_Column_List" /> from t_mini_qrcode <if test="_parameter != null" >  <include refid="Example_Where_Clause" /> </if> <if test="orderByClause != null" >  order by ${orderByClause} </if>  limit 1
+  </select>
+</mapper>

@@ -46,7 +46,8 @@
 <!-- 		<table tableName="t_user" domainObjectName="User"></table>  -->
 <!-- 		<table tableName="t_express" domainObjectName="Express"></table>  -->
 <!-- 		<table tableName="t_order" domainObjectName="Order"></table>  -->
-		<table tableName="t_order_message" domainObjectName="OrderMessage"></table>
+	<!--	<table tableName="t_user" domainObjectName="User"></table>-->
+		<table tableName="t_mini_qrcode" domainObjectName="MiniQrcode"></table>
 
 
 	</context>
