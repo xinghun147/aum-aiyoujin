@@ -359,37 +359,58 @@
 
   <select id="countUserVo" resultType="java.lang.Integer">
     SELECT
-    count(id)
+    count(tuser.id)
     FROM
-    t_user
+    t_user tuser
+    LEFT JOIN t_mini_qrcode tmq ON tuser.source = tmq.`code`
     WHERE
-    deleted = 0
+      tuser.deleted = 0
     <if test="openId != null and openId != ''">
-      AND open_id = #{openId,jdbcType=VARCHAR}
+      AND tuser.open_id = #{openId,jdbcType=VARCHAR}
     </if>
     <if test="nickname != null and nickname != ''">
-      AND nickname = #{nickname,jdbcType=VARCHAR}
+      AND tuser.nickname = #{nickname,jdbcType=VARCHAR}
+    </if>
+    <if test="source != null and source != ''">
+      AND tuser.source = #{source,jdbcType=VARCHAR}
     </if>
   </select>
 
   <!-- TODO 查询用户列表 -->
-  <select id="selectUserVo" resultType="com.hjgj.aiyoujin.core.model.vo.UserVO">
-    SELECT
-    tuser.id AS id,
-    tuser.open_id AS openId,
-    tuser.avatar AS avatar,
-    tuser.nickname AS nickname,
-    tuser.mobile AS mobile
-    FROM
-    t_user AS tuser
-    WHERE
-    tuser.deleted = 0
-    <if test="openId != null and openId != ''">
-      AND tuser.`open_id` = #{openId,jdbcType=VARCHAR}
-    </if>
-    <if test="nickname != null and nickname != ''">
-      AND tuser.`nickname` = #{nickname,jdbcType=VARCHAR}
-    </if>
-    ORDER BY tuser.create_time desc
+  <select id="selectUserVo" parameterType="com.hjgj.aiyoujin.core.model.vo.UserVO" resultType="com.hjgj.aiyoujin.core.model.vo.UserVO">
+        SELECT
+        tuser.id AS id,
+        tuser.open_id AS openId,
+        tuser.avatar AS avatar,
+        tuser.nickname AS nickname,
+        tuser.mobile AS mobile,
+        tuser.source AS source,
+        tmq.channel_name AS sourceName
+        FROM
+        t_user AS tuser
+        LEFT JOIN t_mini_qrcode tmq ON tuser.source = tmq.`code`
+        WHERE
+        tuser.deleted = 0
+        <if test="openId != null and openId != ''">
+          AND tuser.`open_id` = #{openId,jdbcType=VARCHAR}
+        </if>
+        <if test="nickname != null and nickname != ''">
+          AND tuser.`nickname` = #{nickname,jdbcType=VARCHAR}
+        </if>
+        <if test="source != null and source != ''">
+          AND tuser.source = #{source,jdbcType=VARCHAR}
+        </if>
+        ORDER BY tuser.create_time desc
   </select>
+
+    <select id="querySource"  resultType="com.hjgj.aiyoujin.core.model.vo.UserVO">
+        SELECT DISTINCT
+            tu.source AS source,
+            tmq.channel_name AS sourceName
+        FROM
+            t_mini_qrcode tmq
+        LEFT JOIN t_user tu ON tmq.`code` = tu.source
+        WHERE
+            tu.source IS NOT NULL;
+    </select>
 </mapper>

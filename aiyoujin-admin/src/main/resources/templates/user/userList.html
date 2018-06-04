@@ -20,14 +20,13 @@
             <div class="layui-input-inline">
                 <input type="text" class="layui-input" name="nickname" th:value="${user}?${user.nickname}"/>
             </div>
-            <!--  <label class="layui-form-label">实名状态:</label>
-                 <div class="layui-input-inline">
-                     <select name="realnamed" id="realnamed" lay-filter="realnamed">
-                         <option value="">请选择查询认证状态</option>
-                         <option value="1" th:selected="${user} ne null  and ${user.realnamed == 1}">已实名</option>
-                         <option value="0" th:selected="${user} ne null  and ${user.realnamed == 0}">未实名</option>
-                     </select>
-                 </div> -->
+            <label class="layui-form-label">渠道来源:</label>
+            <div class="layui-input-inline">
+                <select name="source"  lay-verify="source">
+                    <option value="">请选择渠道来源</option>
+                    <option th:each="item:${sourceList}" th:value="${item.source}" th:text="${item.sourceName}"></option>
+                </select>
+            </div>
             <button class="layui-btn search_btn"><i class="layui-icon">&#xe615;</i>查询</button>
         </div>
     </form>
@@ -50,6 +49,7 @@
             <th>头像</th>
             <th>昵称</th>
             <th>手机号</th>
+            <th>渠道来源</th>
             <!-- <th>生日</th>
             <th>手机号</th>
             <th>邮箱</th>
@@ -66,6 +66,7 @@
                 <td><img th:src="${item.avatar}" style="width:70,height=70"></img></td>
                 <td th:text="${item.nickname}"></td>
                 <td th:text="${item.mobile}"></td>
+                <td th:text="${item.sourceName}"></td>
                 <!-- <td  th:text="${item.birth}"></td>
                 <td  th:text="${item.mobile}"></td>
                 <td  th:text="${item.email}"></td>

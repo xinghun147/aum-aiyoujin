@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/user")
 public class UserController extends BaseController {
@@ -26,13 +28,15 @@ public class UserController extends BaseController {
     private AddressService addressService;
 
     @RequestMapping("/userList.html")
-    public ModelAndView userList(ModelMap modelMap, User user, Integer pageNum, Integer pageSize) {
+    public ModelAndView userList(ModelMap modelMap, UserVO userVO, Integer pageNum, Integer pageSize) {
         pageNum = pageNum == null ? super.pageNum : pageNum;
         pageSize = pageSize == null ? super.pageSize : pageSize;
-        Page<UserVO> page = userService.queryPageUser(user, pageNum, pageSize);
+        Page<UserVO> page = userService.queryPageUser(userVO, pageNum, pageSize);
+		List<UserVO> sourceList = userService.querySource();
         ModelAndView mav = getModelAndView();
         mav.addObject("page", page);
-        mav.addObject("user", user);
+        mav.addObject("user", userVO);
+		mav.addObject("sourceList", sourceList);
         mav.setViewName("user/userList");
         return mav;
     }

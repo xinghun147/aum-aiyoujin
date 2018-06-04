@@ -33,7 +33,9 @@ public interface UserMapper {
 
     int updateByPrimaryKey(User record);
 
-    int countUserVo(User user, RowBounds rowBounds);
+    int countUserVo(UserVO userVO, RowBounds rowBounds);
 
-    List<UserVO> selectUserVo(User user, RowBounds rowBounds);
+    List<UserVO> selectUserVo(UserVO userVO, RowBounds rowBounds);
+
+	List<UserVO> querySource();
 }

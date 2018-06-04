@@ -31,22 +31,25 @@ public class UserService {
     /**
      * TODO 爱有金后台用户列表
      *
-     * @param user
      * @param pageNum
      * @param pageSize
      * @return
      */
-    public Page<UserVO> queryPageUser(User user, Integer pageNum, Integer pageSize) {
+    public Page<UserVO> queryPageUser(UserVO userVO, Integer pageNum, Integer pageSize) {
         Page<UserVO> page = new Page<>(pageNum, pageSize, true);
         RowBounds rowBounds = new RowBounds(page.getStartRow(), pageSize);
-        int count = userMapper.countUserVo(user, rowBounds);
+        int count = userMapper.countUserVo(userVO, rowBounds);
         if (count > 0) {
-            List<UserVO> orderVOList = userMapper.selectUserVo(user, rowBounds);
+            List<UserVO> orderVOList = userMapper.selectUserVo(userVO, rowBounds);
             page.setList(orderVOList);
             page.setTotal(count);
         }
         return page;
     }
+
+	public List<UserVO> querySource() {
+		return userMapper.querySource();
+	}
     
     @Transactional
     public User insertUser(User user) throws Exception {
